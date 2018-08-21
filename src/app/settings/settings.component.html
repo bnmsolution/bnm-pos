@@ -1,0 +1,83 @@
+<form class="app-form" [formGroup]="settingsForm" (ngSubmit)="onSubmit()" novalidate>
+  <app-create-content-header title="설정" returnUrl="/"></app-create-content-header>
+  <mat-tab-group (selectedTabChange)="tabChange($event)">
+    <mat-tab label="스토어 설정">
+      <section class="accordion" *ngIf="selectedTabIndex === 0">
+        <mat-accordion multi="true">
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+              기본 설정
+            </mat-expansion-panel-header>
+            <section fxLayout="column">
+              <mat-form-field>
+                <input matInput formControlName="storeName" placeholder="스토어 이름" required>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-select formControlName="currencyCode" placeholder="기본통화">
+                  <mat-option *ngFor="let currency of currencies" [value]="currency.code">
+                    {{currency.code + '(' + currency.symbol + ')'}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-select formControlName="defaultTaxId" placeholder="기본과세">
+                  <mat-option *ngFor="let tax of taxes" [value]="tax.id">
+                    {{tax.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-select formControlName="discountPriceAdjust" placeholder="할인가격 단위 버림 사용">
+                  <mat-option value="noAdjust">사용 안함</mat-option>
+                  <mat-option value="drop1">원단위 버림</mat-option>
+                  <mat-option value="drop10">십단위 버림</mat-option>
+                  <mat-option value="drop100">백단위 버림</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </section>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </section>
+    </mat-tab>
+    <mat-tab label="리워드 포인트">
+      <section class="accordion" *ngIf="selectedTabIndex === 1">
+        <mat-accordion multi="true">
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+              기본 설정
+            </mat-expansion-panel-header>
+            <section fxLayout="column">
+              <mat-slide-toggle formControlName="useReward">리워드 포인트 사용</mat-slide-toggle>
+              <mat-form-field>
+                <input type="number" matInput formControlName="rewardRateForCash" placeholder="현금 결제시 적립율(%)">
+                <span matSuffix>%</span>
+              </mat-form-field>
+
+              <mat-form-field>
+                <input type="number" matInput formControlName="rewardRateForCredit" placeholder="카드 결제시 적립율(%)">
+                <span matSuffix>%</span>
+              </mat-form-field>
+
+              <mat-form-field>
+                <input type="number" matInput formControlName="mininumPointsToUse" placeholder="사용 가능 최소 포인트">
+              </mat-form-field>
+
+              <mat-form-field>
+                <input type="number" matInput formControlName="bounsPointUponRegisteration" placeholder="고객 등록시 보너스 포인트">
+              </mat-form-field>
+            </section>
+          </mat-expansion-panel>
+
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+              고객 등급별 설정
+            </mat-expansion-panel-header>
+            <section fxLayout="column">
+
+            </section>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </section>
+    </mat-tab>
+  </mat-tab-group>
+</form>

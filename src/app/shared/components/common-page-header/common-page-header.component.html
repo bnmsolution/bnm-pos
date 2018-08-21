@@ -1,0 +1,10 @@
+<section class="pageHeader">
+  <h1 class="title">{{title}}</h1>
+  <div class="description">{{desc}}</div>
+  <span flex></span>
+  <div>
+    <!--<button mat-button>들여오기</button>-->
+    <button mat-raised-button color="primary" *ngIf="!buttonLink" (click)="buttonClick.emit()">{{buttonTitle}}</button>
+    <button mat-raised-button color="primary" *ngIf="buttonLink" [routerLink]="buttonLink">{{buttonTitle}}</button>
+  </div>
+</section>

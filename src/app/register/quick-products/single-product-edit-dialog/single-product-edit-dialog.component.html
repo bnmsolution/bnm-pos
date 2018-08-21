@@ -1,0 +1,30 @@
+<h1 mat-dialog-title>단축상품 수정</h1>
+<div mat-dialog-content>
+  <div class="review">
+    <div class="quick-product">
+      <div [style.border-color]="quickProduct.background">
+        <span class="label">{{quickProduct.label}}</span></div>
+    </div>
+    <div class="product-info">
+      <div class="title">{{product.name}}</div>
+      <div class="description">{{product.description}}</div>
+    </div>
+  </div>
+  <mat-form-field>
+    <input matInput [(ngModel)]="quickProduct.label" name="label" placeholder="단축상품명" required>
+  </mat-form-field>
+  <div>
+    <div>단축상품 색상</div>
+    <div class="colors">
+      <span class="color" *ngFor="let color of colors" 
+        (click)="onColorClick(color)"
+        [style.border-color]="quickProduct.background === color ? color : 'transparent'">
+        <span [style.background-color]="color"></span>
+      </span>
+    </div>
+  </div>
+</div>
+<div class="actions" mat-dialog-actions>
+  <button mat-button (click)="dialogRef.close('delete')">삭제</button>
+  <button mat-button (click)="dialogRef.close('update')">저장</button>
+</div>

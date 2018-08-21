@@ -1,0 +1,18 @@
+@import '../shared/common-style';
+
+[mat-button] {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  color: #fff;
+  min-height: 45px;
+  font-family: $base-font-family;
+}
+
+
+.menu-icon {
+  color: #BEBEBE !important;
+  margin-right: 12px;
+}
+

@@ -1,0 +1,27 @@
+@import '../../shared/common-style';
+:host {
+  display: flex;
+  flex: 1;
+}
+
+.sidenav-wrapper {
+  display: flex;
+  height: 100%;
+}
+
+.main-content {
+  display: flex;
+  height: 100%;
+}
+
+.search-products {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 24px;
+}
+
+.wrapper {
+  display: flex;
+  flex: 1;
+}

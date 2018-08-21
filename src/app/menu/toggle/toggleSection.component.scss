@@ -1,0 +1,32 @@
+@import '../common';
+
+.button-wrapper {
+  display: flex; 
+  align-items: center;
+}
+
+.toggle-icon {
+  position: absolute;
+  right: 8px;
+  color: white;
+}
+
+.toggle-list {
+  list-style: none;
+  padding: 0;
+  max-width: 100%;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  -webkit-transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
+  -webkit-transition-property: height;
+  -moz-transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
+  -moz-transition-property: height;
+  transition: 0.75s cubic-bezier(0.35, 0, 0.25, 1);
+  transition-property: height;
+
+  > li {
+    display: flex;
+    flex-direction: column;
+  }
+}

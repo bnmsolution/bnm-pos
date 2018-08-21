@@ -1,0 +1,14 @@
+<form class="app-form" (ngSubmit)="onSubmit()" #form="ngForm">
+  <app-create-content-header [title]="mode === 'add' ? '카테고리 추가' : '카테고리 수정'" returnUrl="/category" [canSubmit]="form.dirty" ></app-create-content-header>
+  <mat-card>
+    <mat-card-content>
+      <mat-form-field>
+        <input matInput [(ngModel)]="category.name" name="name" placeholder="카테고리명" required [disabled]="isReadOnly"
+          #spy>
+      </mat-form-field>
+      <mat-form-field>
+        <textarea matInput [(ngModel)]="category.description" name="description" placeholder="카테고리 설명"></textarea>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+</form>

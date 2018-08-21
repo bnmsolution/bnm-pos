@@ -1,0 +1,20 @@
+<h1 mat-dialog-title>단축그룹 수정</h1>
+<div mat-dialog-content>
+  <mat-form-field>
+    <input matInput [(ngModel)]="quickProduct.label" name="label" placeholder="단축그룹명" required>
+  </mat-form-field>
+  <div>
+    <div>단축그룹 색상</div>
+    <div class="colors">
+      <span class="color" *ngFor="let color of colors" 
+        (click)="onColorClick(color)"
+        [style.border-color]="quickProduct.background === color ? color : 'transparent'">
+        <span [style.background-color]="color"></span>
+      </span>
+    </div>
+  </div>
+</div>
+<div class="actions" mat-dialog-actions>
+  <button mat-button (click)="dialogRef.close('delete')">삭제</button>
+  <button mat-button (click)="dialogRef.close('update')">저장</button>
+</div>

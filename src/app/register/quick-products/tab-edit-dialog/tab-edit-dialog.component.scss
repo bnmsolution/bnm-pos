@@ -1,0 +1,12 @@
+@import '../../../shared/common-style';
+.content {
+  padding-bottom: 20px;
+}
+
+mat-icon {
+  color: $icon-color-default;
+}
+
+.actions {
+  justify-content: flex-end;
+}

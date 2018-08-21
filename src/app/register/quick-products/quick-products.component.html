@@ -1,0 +1,9 @@
+<mat-tab-group (selectedTabChange)="handleTabChange($event)">
+  <mat-tab *ngFor="let tab of registerTabs" [label]="tab.name">
+    <div class="quick-products-wrapper">
+      <app-quick-product *ngFor="let qp of tab.quickProducts; let i = index; trackBy: index" [isSelected]="selectedPosition === i"
+        [showEmpty]="showEmpty" [quickProduct]="qp" (quickProductClick)="handleQuickProductClick($event)" (quickProductDrop)="handleQuickProductDrop($event)">
+      </app-quick-product>
+    </div>
+  </mat-tab>
+</mat-tab-group>

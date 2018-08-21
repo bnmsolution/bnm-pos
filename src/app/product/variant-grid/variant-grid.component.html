@@ -1,0 +1,44 @@
+<!-- <kendo-grid [data]="gridView" [pageSize]="pageSize" [skip]="skip" [pageable]="true" (pageChange)="pageChange($event)">
+  <kendo-grid-column width="50" *ngIf="!readOnly">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <mat-checkbox [(ngModel)]="dataItem.activated"></mat-checkbox>
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column *ngFor="let vo of variantOptions; let i=index" title="{{vo.name}}" width="80">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <div>{{dataItem['option' + (i + 1)]}}</div>
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column field="sku" title="SKU">
+    <ng-template kendoGridCellTemplate let-dataItem *ngIf="!readOnly">
+      <input [(ngModel)]="dataItem.sku" />
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column field="barcode" title="Barcode" *ngIf="!readOnly">>
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <input [(ngModel)]="dataItem.barcode" />
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column field="retailPrice" title="Retail Price">
+    <ng-template kendoGridCellTemplate let-dataItem *ngIf="!readOnly">
+      <input [(ngModel)]="dataItem.retailPrice" currencyMask/>
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column *ngIf="trackInventory" field="count" title="Count" width="70">
+    <ng-template kendoGridCellTemplate let-dataItem *ngIf="!readOnly">
+      <input [(ngModel)]="dataItem.count" />
+    </ng-template>
+  </kendo-grid-column>
+
+  <kendo-grid-column *ngIf="trackInventory && !readOnly" field="reOrderPoint" title="Reorder Point" width="70">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <input [(ngModel)]="dataItem.reOrderPoint" />
+    </ng-template>
+  </kendo-grid-column>
+
+</kendo-grid> -->

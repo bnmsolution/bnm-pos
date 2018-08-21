@@ -1,0 +1,30 @@
+<!-- <button type="button" kendoButton (click)="addVariant()" [primary]="true" [bare]="true">Add Variant</button>
+<kendo-grid [data]="variantOptions">
+  <kendo-grid-column field="name" title="Option Name" width="120">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <input type="text" [(ngModel)]="dataItem.name" placeholder="Enter name" />
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column title="Values">
+    <ng-template kendoGridCellTemplate let-dataItem>
+ 
+      <mat-form-field class="demo-chip-list">
+        <mat-chip-list #chipList>
+          <mat-chip *ngFor="let value of dataItem.values" [selectable]="selectable" [removable]="removable" (remove)="remove(option)">
+            {{value}}
+            <mat-icon matChipRemove *ngIf="removable" svgIcon="cancelIcon">cancel</mat-icon>
+          </mat-chip>
+          <input placeholder="New Option..." [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+            (matChipInputTokenEnd)="add(dataItem, $event)" />
+        </mat-chip-list>
+      </mat-form-field>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column width="50">
+    <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+      <button type="button" kendoButton [primary]="true" [bare]="true" (click)="onVariantRemove.emit(dataItem.id); $event.preventDefault()">
+        <mat-icon svgIcon="deleteIcon"></mat-icon>
+      </button>
+    </ng-template>
+  </kendo-grid-column>
+</kendo-grid> -->

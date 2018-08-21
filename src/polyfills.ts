@@ -78,3 +78,9 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+
+(window as any).global = window;
+
+String.prototype.contains = function(needle) {
+  return this.toLowerCase().trim().indexOf(needle.toLowerCase().trim()) === -1 ? false : true;
+};

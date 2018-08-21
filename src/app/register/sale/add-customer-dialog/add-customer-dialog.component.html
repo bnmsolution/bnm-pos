@@ -1,0 +1,25 @@
+<form #form="ngForm">
+  <h1 mat-dialog-title>고객 등록</h1>
+  <div mat-dialog-content fxLayout="column" class="content">
+    <mat-form-field>
+      <input matInput [(ngModel)]="name" #customerName="ngModel" name="name" placeholder="고객명" required>
+      <mat-error *ngIf="phoneNumber.errors?.required">
+        고객명을 입력해 주세요.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <input type="text" matInput [(ngModel)]="phone" #phoneNumber="ngModel" name="phone" placeholder="전화번호" [textMask]="{mask: masks.phoneNumber, showMask: true}"
+        required appCustomerPhoneNumberNotTaken>
+      <mat-error *ngIf="phoneNumber.errors?.takenNumber">
+        이미 등록된 전화번호 입니다.
+      </mat-error>
+      <mat-error *ngIf="phoneNumber.errors?.required">
+        전화번호를 입력해 주세요.
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="actions" mat-dialog-actions>
+    <button mat-button (click)="dialogRef.close()">취소</button>
+    <button mat-button (click)="add()">저장</button>
+  </div>
+</form>

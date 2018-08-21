@@ -1,0 +1,107 @@
+<app-common-page-header title="고객" buttonTitle="고객 추가" buttonLink="/customer/add"></app-common-page-header>
+
+<section>
+  <mat-table #table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>고객명</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.name}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="phone">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>전화번호</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.phone}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="currentStorePoint">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>포인트</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.currentStorePoint | number}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="totalSalesAmount">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>총매출</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.totalSalesAmount | appCurrency}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="averageSalesAmount">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>평균매출</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.averageSalesAmount | appCurrency}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell class="actions" *matCellDef="let row">
+        <mat-icon class="listIcon" svgIcon="viewListIcon" matTooltip="고객매출" [routerLink]="'/sales'"
+                  [queryParams]="{customerId: row.id}"></mat-icon>
+        <mat-icon class="editIcon" svgIcon="editIcon" matTooltip="수정" [routerLink]="'/customer/edit/' + row.id"></mat-icon>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+    <mat-row *matRowDef="let row; columns: displayedColumns;" class="element-row" [cdkDetailRow]="row"
+             [cdkDetailRowTpl]="tpl">
+    </mat-row>
+
+  </mat-table>
+  <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
+                 [pageSizeOptions]="[5, 10, 20]">
+  </mat-paginator>
+</section>
+
+<ng-template #tpl let-element>
+  <div class="mat-row detail-row" [@detailExpand] style="overflow: hidden">
+    <div class="detail">
+      <div fxFlex>
+        <section>
+          <div class="detail-header">고객정보</div>
+          <div class="detail-line">
+            <div>고객분류</div>
+            <div>{{element.type === 0 ? '개인고객' : '기업고객'}}</div>
+          </div>
+        </section>
+        <section>
+          <div class="detail-header">연락처</div>
+          <div class="detail-line" *ngIf="element.phone">
+            <div>전화번호</div>
+            <div>{{element.phone}}</div>
+          </div>
+          <div class="detail-line" *ngIf="element.email">
+            <div>이메일</div>
+            <div>{{element.email}}</div>
+          </div>
+        </section>
+      </div>
+      <div fxFlex>
+        <section>
+          <div class="detail-header">구매정보</div>
+          <div class="detail-line">
+            <div>구매횟수</div>
+            <div>{{element.totalSalesCount}}</div>
+          </div>
+          <div class="detail-line">
+            <div>마지막구매</div>
+            <div>{{element.lastPurchasedDate | appDate}}</div>
+          </div>
+          <div class="detail-line">
+            <div>가입일</div>
+            <div>{{element.dateOfJoin | appDate}}</div>
+          </div>
+
+          <div class="detail-line">
+            <div>적립 포인트</div>
+            <div>{{element.totalStorePoint | number}}</div>
+          </div>
+          <div class="detail-line">
+            <div>사용포인트</div>
+            <div>{{element.totalStorePoint - element.currentStorePoint | number}}</div>
+          </div>
+          <div class="detail-line">
+            <div>남은포인트</div>
+            <div>{{element.currentStorePoint | number}}</div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</ng-template>

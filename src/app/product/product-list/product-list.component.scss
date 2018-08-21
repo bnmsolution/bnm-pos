@@ -1,0 +1,25 @@
+@import '../../shared/common-style';
+:host {
+  @extend .gridViewContainer;
+}
+
+.mat-column-name {
+  padding-right: 15px;
+}
+
+.mat-column-created {
+  flex: 0 0 100px;
+}
+
+.mat-column-category,
+.mat-column-vendor {
+  flex: 0 0 100px;
+}
+
+.mat-column-retailPrice {
+  flex: 0 0 100px;
+}
+
+.mat-column-count {
+  flex: 0 0 40px;
+}

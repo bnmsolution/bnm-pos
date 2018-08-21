@@ -1,0 +1,65 @@
+<app-common-page-header title="상품" buttonTitle="상품 추가" buttonLink="/product/add"></app-common-page-header>
+
+<app-product-filter [filter]="filter" [filterChange]="filterChange" [categories]="categories" [vendors]="vendors" (clearFilter)="onFilterCleared()"></app-product-filter>
+
+<section>
+  <mat-table #table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>상품명</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="created">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>생성일</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.created | appDate: 'YYYY-MM-DD'}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="category">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>카테고리</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.category ? row.category.name : '-'}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="vendor">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>공급처</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.vendor ? row.vendor.name : '-'}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="option">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>옵션</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.variants ? row.variants.length : "-"}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="retailPrice">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>판매가</mat-header-cell>
+      <mat-cell *matCellDef="let row"><div>{{row.retailPrice | appCurrency}} </div> </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="count">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>재고</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.count}} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
+      <mat-cell class="actions" *matCellDef="let row">
+        <mat-icon class="editIcon" svgIcon="previewIcon" matTooltip="자세히" [routerLink]="'/product/detail/' + row.id"></mat-icon>
+        <mat-icon class="editIcon" svgIcon="editIcon" matTooltip="수정" [routerLink]="'/product/edit/' + row.id"></mat-icon>
+        <mat-slide-toggle [checked]="row.activated"></mat-slide-toggle>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+    <mat-row *matRowDef="let row; columns: displayedColumns;" class="element-row" [cdkDetailRow]="row" [cdkDetailRowTpl]="tpl">
+    </mat-row>
+  </mat-table>
+  <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
+  </mat-paginator>
+</section>
+
+<!-- Product detail row -->
+<ng-template #tpl let-element>
+  <!-- <div class="mat-row detail-row" [@detailExpand] style="overflow: hidden">
+  </div> -->
+</ng-template>

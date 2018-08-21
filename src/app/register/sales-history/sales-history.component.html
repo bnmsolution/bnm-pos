@@ -1,0 +1,78 @@
+<table>
+  <thead>
+    <th>판매일자</th>
+    <th>직원명</th>
+    <th>고객명</th>
+    <th>금액</th>
+    <th>상태</th>
+  </thead>
+  <tbody>
+    <ng-template ngFor let-sale [ngForOf]="sales" let-i="index">
+      <tr (click)="openDetail(i)">
+        <td>{{sale.salesDate | date:'medium'}}</td>
+        <td>{{sale.userName}}</td>
+        <td>{{sale.customer}}</td>
+        <td>{{sale.totalPrice | number}}</td>
+        <td>{{sale.status}}</td>
+      </tr>
+      <tr>
+        <td colspan="5">
+          <div class="sales-detail" [appToggleSection]="openedDetailIndex === i">
+            <div class="sales-detail__content">
+              <div class="sales-detail__line-items">
+                <div class="sd-line-item sd-line-item--header">
+                  <div class="sd-line-item__quantity">수량</div>
+                  <div class="sd-line-item__name">상품명</div>
+                  <div class="sd-line-item__unit-price">판매가</div>
+                  <div class="sd-line-item__tax">부가세</div>
+                  <div class="sd-line-item__total-price">합계</div>
+                </div>
+                <div class="sd-line-item" *ngFor="let lineItem of sale.lineItems">
+                  <div class="sd-line-item__quantity">{{lineItem.quantity}}</div>
+                  <div class="sd-line-item__name">{{lineItem.name}}</div>
+                  <div class="sd-line-item__unit-price">{{lineItem.retailPrice | number}}</div>
+                  <div class="sd-line-item__tax">
+                    {{lineItem.totalTax | number}}
+                  </div>
+                  <div class="sd-line-item__total-price">{{lineItem.totalPrice | number}}</div>
+                </div>
+              </div>
+              <div class="sales-detail__summary">
+                <div class="sd-note"></div>
+                <div class="sd-totals">
+                  <div class="sd-totals__subtotal">
+                    <div>합계</div>
+                    <div>{{sale.totalPrice | number}}</div>
+                  </div>
+                  <div class="sd-totals__discount" *ngIf="sale.totalDiscount > 0">
+                    <div>할인</div>
+                    <div>{{sale.totalDiscount | number}}</div>
+                  </div>
+                  <div class="sd-totals__tax">
+                    <div>부가세</div>
+                    <div>{{sale.totalTax | number}}</div>
+                  </div>
+
+                  <div class="sd-totals__total">
+                    <div>합계</div>
+                    <div>{{sale.totalPrice | number}}</div>
+                  </div>
+                  <div class="sd-totals__payment" *ngFor="let payment of sale.payments">
+                    <div>{{payment.paymentType}}</div>
+                    <div>{{payment.amount | number}}</div>
+                  </div>
+                  <div class="sd-totals__balance">
+                    <div>잔액</div>
+                    <div>{{sale.getBalance() | number}}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sales-detail__actions">
+            </div>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </tbody>
+</table>

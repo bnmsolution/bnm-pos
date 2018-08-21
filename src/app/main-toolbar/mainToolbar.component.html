@@ -1,0 +1,26 @@
+<mat-toolbar class="mat-elevation-z0">
+  <div class="path">
+    <div routerLink="/">BNMM</div>
+    <div>{{url === '/' ? 'Dashboard' : getMainPath()}}</div>
+    <div *ngIf="getSubPath()">{{getSubPath()}}</div>
+  </div>
+  <span fxFlex></span>
+  <button mat-button >{{appState.currentUser.name}}</button>
+  <!-- <button mat-icon-button [matMenuTriggerFor]="menu">
+  <mat-icon svgIcon="moreVertIcon"></mat-icon> -->
+<!-- </button> -->
+  <!-- <mat-menu #menu="matMenu">
+    <button mat-menu-item>
+    <mat-icon svgIcon="moreVertIcon"></mat-icon>
+    <span>Redial</span>
+  </button>
+    <button mat-menu-item disabled>
+    <mat-icon>voicemail</mat-icon>
+    <span>Check voicemail</span>
+  </button>
+    <button mat-menu-item>
+    <mat-icon>notifications_off</mat-icon>
+    <span>Disable alerts</span>
+  </button>
+  </mat-menu> -->
+</mat-toolbar>

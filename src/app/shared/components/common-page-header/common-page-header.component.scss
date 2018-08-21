@@ -1,0 +1,19 @@
+@import '../../common-style';
+
+.pageHeader {
+  padding: 24px 48px;
+  display: flex;
+  align-items: baseline;
+}
+
+.title {
+  margin: 0 12px 0 0;
+  font-weight: 500;
+  color: $accent-color;
+  font-size: 22px;
+}
+
+.description {
+  font-size: 14px;
+  color: $text-color-secondary;
+}

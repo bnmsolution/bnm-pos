@@ -1,0 +1,82 @@
+@import '_variables';
+.app-form {
+  // make input-container full width and enough space for error message
+  mat-form-field {
+    width: 100%;
+    margin-bottom: 15px;
+    font-size: 16px;
+  }
+  mat-select {
+    width: 100%;
+  }
+  mat-card {
+    margin: 24px;
+  }
+
+  .accordion {
+    padding: 24px;
+  }
+}
+
+.cardWidthDescription {
+  position: relative;
+  display: flex;
+  >div:first-child {
+    min-width: 60%;
+    max-width: 60%;
+    margin-right: 40px;
+    @media #{$media-sm} {
+      max-width: initial;
+    }
+  }
+  >div:last-child {
+    position: relative;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.38);
+    padding: 24px 0;
+    @media #{$media-sm} {
+      display: none;
+    }
+    >p {
+      position: absolute;
+      left: 0;
+      top: 0;
+      padding-right: 24px;
+    }
+  }
+}
+
+.radioGroup {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-top: 10px;
+  >div {
+    width: 80px;
+    font-size: 16px;
+    color: $form-input-label-color;
+    margin-right: 25px;
+  }
+  .mat-radio-button {
+    width: 90px;
+    margin-right: 15px;
+  }
+}
+
+.inputWithBox {
+  padding: .375rem .75rem;
+  line-height: 1.5;
+  border: 1px solid #ced4da;
+  border-radius: .25rem;
+  color: $text-color-primary;
+}
+
+// Wrapping multile form fields in horizontal
+.h-form-fields {
+  display: flex;
+  margin: 0 -12px;
+
+  mat-form-field {
+    padding: 0 12px;
+  }
+}

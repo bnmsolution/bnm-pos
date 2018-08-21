@@ -1,0 +1,65 @@
+@import '../../shared/common-style';
+@import '../quick-products/quick-products.component.scss';
+
+.sections {
+  margin: 24px;
+}
+
+.section {
+  display: flex;
+  padding-bottom: 12px;
+  margin-bottom: 25px;
+  border-bottom: $border;
+}
+
+.label {
+  width: 140px;
+}
+
+.content {
+  flex: 1;
+}
+
+mat-card {
+  margin-bottom: 15px;
+}
+
+mat-input-container {
+  max-width: 400px;
+  width: 100%;
+}
+
+.product-option {
+  display: flex;
+}
+
+.group-quick-products-wrapper {
+  @extend .quick-products-wrapper;
+  width: $quick-products-width;
+  margin: 0 auto;
+  border-radius: 4px;
+  padding: 0;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  width: 100%;
+  color: $text-color-white-primary;
+  padding: 0 10px;
+  border-radius: 3px 3px 0 0;
+
+  mat-icon {
+    cursor: pointer;
+  }
+}
+
+.quick-products {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  border: $border;
+  padding: 4px;
+}

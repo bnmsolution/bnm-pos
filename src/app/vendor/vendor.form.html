@@ -1,0 +1,56 @@
+<form class="app-form" [formGroup]="vendorForm" (ngSubmit)="onSubmit()">
+  <app-create-content-header [title]="title" returnUrl="/vendor"></app-create-content-header>
+  <div class="cardWidthDescription">
+    <div fxFlex>
+      <mat-card>
+        <mat-card-content>
+          <mat-form-field>
+            <input matInput formControlName="name" placeholder="거래처명">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="ownerName" placeholder="사업자명" >
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="businessNumber" placeholder="사업자 등록번호" >
+          </mat-form-field>
+
+          <div class="h-form-fields">
+            <mat-form-field>
+              <input matInput formControlName="businessType1" placeholder="업종" >
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput formControlName="businessType2" placeholder="업태" >
+            </mat-form-field>
+          </div>
+          <mat-form-field>
+            <input matInput formControlName="address" placeholder="주소" >
+          </mat-form-field>
+
+          <div class="h-form-fields">
+            <mat-form-field>
+              <input matInput formControlName="phone" placeholder="전화번호" >
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput formControlName="fax" placeholder="팩스" >
+            </mat-form-field>
+          </div>
+
+          <div class="h-form-fields">
+            <mat-form-field>
+              <input type="email" matInput formControlName="email" placeholder="이메일" >
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput formControlName="web" placeholder="웹사이트" >
+            </mat-form-field>
+          </div>
+
+          <mat-form-field>
+            <textarea matInput formControlName="description" placeholder="거래처 설명"></textarea>
+          </mat-form-field>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex>
+    </div>
+  </div>
+</form>

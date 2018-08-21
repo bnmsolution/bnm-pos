@@ -1,0 +1,20 @@
+<div class="wrapper">
+  <div class="image">IMG</div>
+  <div flex>
+    <div class="header">
+      <div class="product-name">{{product.name}}</div>
+      <div class="product-price">{{product.retailPrice | number}}</div>
+    </div>
+    <div class="description">{{product.description}}</div>
+  </div>
+</div>
+<div class="wrapper">
+  <div class="category">
+    <div>Vendor</div>
+    <div>{{product.vendor ? product.vendor.name : "TEST"}}</div>
+  </div>
+  <div class="category">
+    <div>Category</div>
+    <div>{{product.category ? product.category.name : '-'}}</div>
+  </div>
+</div>

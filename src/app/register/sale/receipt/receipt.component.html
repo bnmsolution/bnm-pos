@@ -1,0 +1,58 @@
+<section *ngIf="sale">
+  <div class="header">
+    <pre>아티제 디큐브 시티점<br/>220-87-92541 이재영<br/>02-2618-2080<br/>서울 구로구 경인로 662 (신도림동)<br/>현대백화점 디큐브시티 지하2층</pre>
+  </div>
+  <div class="line-items-header">
+    <div class="name">상품명</div>
+    <div class="price">단가</div>
+    <div class="quantity">수량</div>
+    <div class="total">금액</div>
+  </div>
+  <div>
+    <div class="line-item" *ngFor="let lineItem of sale.lineItems; let i = index;">
+      <div class="name">{{lineItem.name}}</div>
+      <div class="price">{{lineItem.retailPrice | number:0}}</div>
+      <div class="quantity">{{lineItem.quantity | number:0}}</div>
+      <div class="total">{{lineItem.totalPrice | number:0}}</div>
+    </div>
+  </div>
+  <div>
+    <div class="receipt-total">
+      <div class="label">과세물품</div>
+      <div class="value">{{getTotalTaxablePrice(sale) | number}}</div>
+    </div>
+    <div class="receipt-total">
+      <div class="label">부가세</div>
+      <div class="value">{{sale.totalTax | number}}</div>
+    </div>
+    <div class="receipt-total" *ngIf="getTotalTaxFreePrice(sale) > 0">
+      <div class="label">면세물품</div>
+      <div class="value">{{getTotalTaxFreePrice(sale) | number}}</div>
+    </div>
+    <div class="receipt-total">
+      <div class="label">구매금액</div>
+      <div class="value">{{sale.totalPrice | number}}</div>
+    </div>
+  </div>
+
+  <div class="payments">
+    <div class="payment-line" *ngFor="let payment of sale.payments">
+
+      <div><span>{{payment.amount > 0 ? '결제' : '환불'}}({{getTypeNameKo(payment.paymentType)}})</span></div>
+      <div>{{payment.amount | number}}</div>
+    </div>
+    <div *ngIf="sale.change > 0">
+      <div><span>거스름돈</span></div>
+      <div>{{sale.change | number}}</div>
+    </div>
+  </div>
+  <div class="balance">
+    <div>잔액</div>
+    <div>{{sale.balance| number}}</div>
+  </div>
+
+  <div class="receipt__barcode">
+  </div>
+  <div class="receipt__footer">
+  </div>
+</section>

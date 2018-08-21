@@ -1,0 +1,13 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+mat-slide-toggle {
+  margin-bottom: 24px;
+}
+
+mat-form-field {
+  width: 240px;
+}

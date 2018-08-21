@@ -1,0 +1,122 @@
+<form class="app-form" [formGroup]="productForm" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()" novalidate>
+  <app-create-content-header [title]="title" returnUrl="/product"></app-create-content-header>
+  <section class="accordion">
+    <mat-accordion multi="true">
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          기본정보
+        </mat-expansion-panel-header>
+        <div class="cardWidthDescription">
+          <div fxFlex>
+            <mat-form-field #nameField>
+              <input matInput formControlName="name" placeholder="상품명" >
+            </mat-form-field>
+            <mat-form-field #skuField>
+              <input matInput formControlName="sku" placeholder="재고관리코드" >
+            </mat-form-field>
+            <mat-form-field #barcodeField>
+              <input matInput formControlName="barcode" placeholder="바코드" >
+            </mat-form-field>
+            <mat-form-field #categoryField>
+              <mat-select formControlName="categoryId" placeholder="카테고리">
+                <mat-option *ngFor="let category of categories" [value]="category.id">
+                  {{category.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field #vendorField>
+              <mat-select formControlName="vendorId" name="vendorId" placeholder="거래처">
+                <mat-option *ngFor="let vendor of vendors" [value]="vendor.id">
+                  {{vendor.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field #descriptionField>
+              <textarea matInput formControlName="description" placeholder="상품설명"></textarea>
+            </mat-form-field>
+          </div>
+          <div fxFlex>
+            <p appInputDescription [target]="nameField"> 상품명을 입력해 주세요.</p>
+            <p appInputDescription [target]="skuField">재고 관리 코드를 입력해 주세요. 재고 관리 목적으로 사용하는 최소단위로 사용됩니다.</p>
+            <p appInputDescription [target]="barcodeField">상품 고유 바코드를 입력해 주세요. EAN-8, EAN-13, UPC, Code 39 등을 지원합니다.</p>
+            <p appInputDescription [target]="categoryField">상품 카테고리를 선택해 주세요.</p>
+            <p appInputDescription [target]="vendorField">상품 거래처명을 선택해 주세요.</p>
+            <p appInputDescription [target]="descriptionField">상품 설명을 입력해 주세요. 최대 500자까지 입력가능 합니다.</p>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          가격정보
+        </mat-expansion-panel-header>
+        <div class="cardWidthDescription">
+          <div fxFlex>
+            <mat-form-field #taxField>
+              <mat-select formControlName="taxId" placeholder="과세여부">
+                <mat-option *ngFor="let tax of taxes" [value]="tax.id">
+                  {{tax.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field #supplyPriceField>
+              <input type="number" matInput currencyMask formControlName="supplyPrice" placeholder="공급가">
+            </mat-form-field>
+            <mat-form-field #retailPriceField>
+              <input type="number" matInput currencyMask formControlName="retailPrice" placeholder="판매가">
+            </mat-form-field>
+            <mat-form-field #markupField>
+              <input type="number" matInput currencyMask formControlName="markup" placeholder="마진율">
+            </mat-form-field>
+            <mat-form-field #productPriceField>
+              <input matInput currencyMask formControlName="productPrice" placeholder="소비자가">
+            </mat-form-field>
+            <mat-form-field #taxAmountField>
+              <input matInput currencyMask formControlName="taxAmount" placeholder="과세">
+            </mat-form-field>
+
+          </div>
+          <div fxFlex>
+            <p appInputDescription [target]="taxField">과세 종류를 선택해 주세요.</p>
+            <p appInputDescription [target]="supplyPriceField">부가가치세를 제외한 공급가(원가)를 입력해 주세요.</p>
+            <p appInputDescription [target]="retailPriceField">부가가치세를 포함한 판매 가격을 입력해 주세요.</p>
+            <p appInputDescription [target]="markupField">공급가 대비 마진율을 입력해 주세요. (0~99.99%)</p>
+            <p appInputDescription [target]="productPriceField">부가가치세를 제외한 소비자 가격입니다. 자동으로 계산됩니다.</p>
+            <p appInputDescription [target]="taxAmountField">부가가치세를 제외한 소비자 가격입니다. 자동으로 계산됩니다.</p>
+          </div>
+        </div>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel [expanded]="true">
+        <mat-expansion-panel-header>
+          재고
+        </mat-expansion-panel-header>
+        <div class="cardWidthDescription">
+          <div fxFlex>
+            <mat-form-field #trackInventoryField>
+              <mat-select formControlName="trackInventory" placeholder="재고관리">
+                <mat-option [value]="true">자동 관리</mat-option>
+                <mat-option [value]="false">관리 안함</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field #countField>
+              <input matInput formControlName="count" placeholder="재고량">
+            </mat-form-field>
+            <mat-form-field #reOrderPointField>
+              <input matInput formControlName="reOrderPoint" placeholder="적정재고">
+            </mat-form-field>
+            <!-- <app-variant-options id="variantOptionsField" [variantOptions]="product.variantOptions" (onVariantAdd)="product.addVariantOption()"
+              (onVariantRemove)="product.removeVariantOption($event)" (onOptionUpdated)="product.onVariantOptionValueModified()"></app-variant-options>
+            <app-variant-grid id="variantsField" [variants]="product.variants" [variantOptions]="product.variantOptions" [trackInventory]="product.trackInventory"></app-variant-grid> -->
+          </div>
+          <div fxFlex>
+            <p appInputDescription [target]="countField">현재 재고 수량을 입력해 주세요. 상품 옵션이 있는경우 옵션별로 재고를 입력해 주세요.</p>
+            <p appInputDescription [target]="reOrderPointField">적정재고 수량을 입력해 주세요. 상품 재고가 적정재고 수량 이하일경우 자동 알림이 발송됩니다.</p>
+            <!-- <p appInputDescription targetId="variantOptionsField">상품 옵션을 통해 다양한 옵션의 상품들은 단일 상품으로 관리할 수 있습니다. 옵션값을 입력후 엔터키를 눌러 주세요. 예) 상품에 사이즈가 있는경우 옵션명: 사이즈, 옵션값: S, M, L</p>
+            <p appInputDescription targetId="variantsField">상품 옵션을 통해 다양한 옵션의 상품들은 단일 상품으로 관리할 수 있습니다.</p> -->
+          </div>
+        </div>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </section>
+</form>

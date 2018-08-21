@@ -1,0 +1,70 @@
+<!-- Default action buttons -->
+<div class="actions">
+  <button mat-button (click)="hold.emit()" [disabled]="!holdable()">
+    <mat-icon svgIcon="holdIcon"></mat-icon>
+    <span>{{buttonLabels[0]}}</span>
+  </button>
+  <button mat-button (click)="void.emit()" [disabled]="!voidable()">
+    <mat-icon svgIcon="deleteIcon"></mat-icon>
+    <span>{{buttonLabels[1]}}</span>
+  </button>
+</div>
+
+<mat-card flex>
+  <mat-card-content>
+    <div class="add-customer" fxLayout fxLayoutAlign="start center" *ngIf="!sale || !sale.customer">
+      <button mat-button (click)="openAddCustomerDialog()">
+        <mat-icon svgIcon="addCustomerIcon"></mat-icon>
+        <span>고객등록</span>
+      </button>
+    </div>
+    <div class="customer" fxLayout fxLayoutAlign="start center" *ngIf="sale && sale.customer">
+      <mat-icon svgIcon="customerIcon"></mat-icon>
+      <div fxFlex>
+        <div>{{sale.customer.name}}</div>
+        <div class="phone">{{sale.customer.phone}} {{sale.customer.email}}</div>
+      </div>
+      <mat-icon svgIcon="closeIcon" (click)="removeCustomer.emit()"></mat-icon>
+    </div>
+    <div class="lineItems scroller" #lineItems *ngIf="sale">
+      <ul>
+        <li *ngFor="let lineItem of sale.originalLineItems; let i = index; trackBy:lineItemTrack ">
+          <app-line-item [lineItem]="lineItem" [isOpen]="openedLineItemId === lineItem.id"></app-line-item>
+        </li>
+        <li *ngFor="let lineItem of sale.lineItems; let i = index; trackBy:lineItemTrack ">
+          <app-line-item #li [lineItem]="lineItem" [isOpen]="openedLineItemId === lineItem.id"
+                         [isReturn]="isReturnItem(lineItem.productId)" [maxReturnQuantity]="getMaxReturnQuantity(lineItem.productId)"
+                         (remove)="removeLineItem.emit($event)" (update)="updateLineItem.emit($event)"
+                         (lineItemClick)="openLineItemDetail(lineItem.id)"></app-line-item>
+        </li>
+      </ul>
+      <pre>{{sale | json}}</pre>
+    </div>
+    <div flex></div>
+    <mat-form-field class="note">
+      <textarea matInput [(ngModel)]="note" name="note" placeholder="판매노트"></textarea>
+    </mat-form-field>
+    <app-totals [sale]="sale"></app-totals>
+  </mat-card-content>
+  <mat-card-actions>
+    <div *ngIf="sale">
+      <button mat-button [ngClass]="{'refundButton': sale.status === salesStatus.Return}" (click)="pay.emit()"
+              [disabled]="!isValid()">
+        <div fxLayout fxLayoutAlign="space-between">
+          <div [ngSwitch]="sale.status">
+            <span *ngSwitchCase="salesStatus.Open">결제</span>
+            <span *ngSwitchCase="salesStatus.Return">환불</span>
+            <span *ngSwitchCase="salesStatus.Exchange">교환</span>
+          </div>
+          <span>{{sale.balance | appCurrency}}</span>
+        </div>
+      </button>
+    </div>
+    <button mat-button *ngIf="!sale">
+      <div fxLayout fxLayoutAlign="space-between">
+        <span>결제</span>
+        <span>0</span>
+      </div>
+    </button>
+  </mat-card-actions>
+</mat-card>

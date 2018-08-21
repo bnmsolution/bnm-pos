@@ -1,0 +1,57 @@
+import {NgModule} from '@angular/core';
+import {RouterModule} from '@angular/router';
+
+import {LayoutComponent} from './layout/layout.component';
+import {AuthGuardService, CallbackComponent} from './auth';
+import {DashboardComponent} from './dashboard';
+import {SettingsComponent} from './settings/settings.component';
+import {SettingsResolverService} from './services/settings.resolver.service';
+import {TaxResolverService} from './services/tax-resolver.service';
+
+@NgModule({
+  imports: [
+    RouterModule.forRoot([
+      /* define app module routes here, e.g., to lazily load a module
+         (do not place feature module routes here, use an own -routing.module.ts in the feature instead)
+       */
+      // {
+      //   path: 'open-shift',
+      //   component: OpenShiftComponent,
+      //   canActivate: [AuthGuardService]
+      // },
+      {
+        path: 'callback',
+        component: CallbackComponent
+      },
+      {
+        path: '',
+        component: LayoutComponent,
+        canActivate: [AuthGuardService],
+        children: [
+          {path: 'category', loadChildren: 'src/app/category/category.module#CategoryModule'},
+          {path: 'product', loadChildren: 'src/app/product/product.module#ProductModule'},
+          {path: 'register', loadChildren: 'src/app/register/register.module#RegisterModule'},
+          {path: 'sales', loadChildren: 'src/app/sales/sales.module#SalesModule'},
+          {path: 'customer', loadChildren: 'src/app/customer/customer.module#CustomerModule'},
+          {path: 'employee', loadChildren: 'src/app/employee/employee.module#EmployeeModule'},
+          {path: 'vendor', loadChildren: 'src/app/vendor/vendor.module#VendorModule'},
+          {
+            path: 'settings',
+            component: SettingsComponent,
+            resolve: {
+              settings: SettingsResolverService,
+              taxes: TaxResolverService
+            }
+          },
+          {
+            path: '',
+            component: DashboardComponent
+          }
+        ]
+      },
+    ], {enableTracing: false})
+  ],
+  exports: [RouterModule]
+})
+export class AppRoutingModule {
+}

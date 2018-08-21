@@ -1,0 +1,37 @@
+<mat-tab-group [selectedIndex]="selectedRegisterTabIndex"
+               (selectedIndexChange)="handleTabSelectChange($event)"
+               *ngIf="register">
+  <mat-tab *ngFor="let tab of register.tabs"
+           [label]="tab.name">
+    <!-- Displays non-group quick products -->
+    <div class="quick-products-wrapper"
+         *ngIf="!quickProductGroup">
+      <app-quick-product *ngFor="let qp of tab.quickProducts; let i = index; trackBy: index"
+                         (quickProductClick)="handleQuickProductClick($event)"
+                         [showEmpty]="false"
+                         [draggable]="false"
+                         [quickProduct]="qp">
+      </app-quick-product>
+    </div>
+
+    <!-- Displays quick products in the group -->
+    <div class="group-products-wrapper"
+         *ngIf="quickProductGroup">
+      <div class="group-header"
+           [style.background-color]="quickProductGroup.background">
+        <span>{{quickProductGroup.label}}</span>
+        <mat-icon svgIcon="closeIcon"
+                  (click)="quickProductGroup = null"></mat-icon>
+      </div>
+      <div class="quick-products-wrapper">
+        <app-quick-product *ngFor="let qp of quickProductGroup.members; let i = index; trackBy: index"
+                           (quickProductClick)="handleQuickProductClick($event)"
+                           [showEmpty]="false"
+                           [draggable]="false"
+                           [quickProduct]="qp">
+        </app-quick-product>
+      </div>
+    </div>
+
+  </mat-tab>
+</mat-tab-group>

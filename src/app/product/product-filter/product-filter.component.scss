@@ -1,0 +1,23 @@
+section {
+  padding: 12px 48px;
+  background-color: white;
+}
+
+.searchInputs {
+  mat-form-field {
+    margin-right: 12px;
+  }
+
+  > div:not(:last-child) {
+    margin-bottom: 12px;
+  }
+}
+
+.searchInput {
+  width: 450px;
+}
+
+.buttons {
+  padding-bottom: 1.25em;
+}
+

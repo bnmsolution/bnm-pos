@@ -1,0 +1,40 @@
+<!-- Editalbe Quick Product -->
+<div class="quick-product" (click)="onClick()" *ngIf="draggable">
+  <div class="empty" [class.selected]="isSelected" appDroppable 
+    (dropped)="onDrop($event, quickProduct)" *ngIf="quickProduct.isEmpty() && showEmpty">
+    {{quickProduct.label}}
+  </div>
+  <div class="single" appDraggable [data]="quickProduct" 
+    appDroppable (dropped)="onDrop($event, quickProduct)" 
+    [style.border-color]="quickProduct.background"
+    *ngIf="quickProduct.isSingle()">
+    <span>{{quickProduct.label}}</span>
+    <div class="overlay"></div>
+  </div>
+  <div class="group" appDraggable [data]="quickProduct" 
+      appDroppable (dropped)="onDrop($event, quickProduct)" 
+      [style.background-color]="quickProduct.background" *ngIf="quickProduct.isGroup()">
+    <span class="member-count">{{getNonEmptyMemberCount(quickProduct)}}</span>
+    <span>{{quickProduct.label}}</span>
+    <div class="overlay"></div>
+  </div>
+</div>
+
+<!-- Non-editable Quick Product -->
+<div class="quick-product" (click)="onClick()" *ngIf="!draggable">
+  <div class="empty" [class.selected]="isSelected" *ngIf="quickProduct.isEmpty() && showEmpty">
+    {{quickProduct.label}}
+  </div>
+  <div class="single"  
+    [style.border-color]="quickProduct.background"
+    *ngIf="quickProduct.isSingle()">
+    <span>{{quickProduct.label}}</span>
+    <div class="overlay"></div>
+  </div>
+  <div class="group"
+      [style.background-color]="quickProduct.background" *ngIf="quickProduct.isGroup()">
+    <span class="member-count">{{getNonEmptyMemberCount(quickProduct)}}</span>
+    <span>{{quickProduct.label}}</span>
+    <div class="overlay"></div>
+  </div>
+</div>

@@ -1,0 +1,126 @@
+<section *ngIf="summary">
+  <div class="header">
+    <div class="headerLabel">대시보드<span class="date">{{formatDate(summary.dates.startDate, 'YYYY. MM. dd iiii')}}</span></div>
+    <mat-button-toggle-group #group="matButtonToggleGroup" [value]="period" (change)="periodChange($event.value)">
+      <mat-button-toggle value="days">오늘</mat-button-toggle>
+      <mat-button-toggle value="week">이번주</mat-button-toggle>
+      <mat-button-toggle value="month">이번달</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+</section>
+
+<section class="overview">
+  <canvas #chart width="500" height="300"></canvas>
+  <div class="performance" *ngIf="summary">
+    <div class="period">{{performanceLabel[0]}}</div>
+    <div class="total">{{summary.current.salesAmount | appCurrency}}</div>
+    <div class="compare" *ngIf="salesDiff.totalSalesAmountDiff !== 0">{{performanceLabel[1]}} 보다
+      <span [ngClass]="salesDiff.totalSalesAmountDiff > 0 ? 'increase' : 'decrease'">{{salesDiff.totalSalesAmountDiff | appCurrency}} {{salesDiff.totalSalesAmountDiff > 0 ? '증가' : '감소'}}</span>
+      하였습니다.
+    </div>
+    <div class="compare" *ngIf="salesDiff.totalSalesAmountDiff === 0">{{performanceLabel[1]}} 매출과 같습니다.
+    </div>
+    <div class="averageLabel">평균 매출액</div>
+    <div class="average">{{summary.current.avgPerSaleAmount | appCurrency}}</div>
+    <div class="compare" *ngIf="salesDiff.averageSaleAmountDiff !== 0">{{performanceLabel[1]}} 보다
+      <span [ngClass]="salesDiff.averageSaleAmountDiff > 0 ? 'increase' : 'decrease'">{{salesDiff.averageSaleAmountDiff | appCurrency}} {{salesDiff.averageSaleAmountDiff > 0 ? '증가' : '감소'}}</span>
+      하였습니다.
+    </div>
+    <div class="compare" *ngIf="salesDiff.averageSaleAmountDiff === 0">{{performanceLabel[1]}} 매출과 같습니다.
+    </div>
+  </div>
+</section>
+
+<div class="others">
+  <section class="card">
+    <div class="cardLabel">매출순위</div>
+    <!--<div class="cardContent rank">-->
+      <!--<mat-tab-group>-->
+        <!--<mat-tab label="매출순">-->
+          <!--<mat-list>-->
+            <!--<mat-list-item *ngFor="let item of performance.rank; index as i">-->
+              <!--<span>{{i + 1}}. {{item.productName}}</span>-->
+              <!--<span fxFlex></span>-->
+              <!--<span>{{item.revenue | appCurrency}}</span>-->
+            <!--</mat-list-item>-->
+          <!--</mat-list>-->
+        <!--</mat-tab>-->
+        <!--<mat-tab label="판매량순">-->
+          <!--<mat-list>-->
+            <!--<mat-list-item *ngFor="let item of performance.rank">-->
+              <!--<span>{{item.productName}}</span>-->
+              <!--<span>{{item.quantity | number}}</span>-->
+            <!--</mat-list-item>-->
+          <!--</mat-list>-->
+        <!--</mat-tab>-->
+      <!--</mat-tab-group>-->
+    <!--</div>-->
+  </section>
+
+  <section class="card" fxFlex *ngIf="summary">
+    <div class="cardLabel">결제수단별 매출</div>
+    <div class="cardContent payments">
+      <div class="paymentLine">
+        <div></div>
+        <div>현금</div>
+        <div>신용카드</div>
+        <div>포인트</div>
+        <div>할인</div>
+      </div>
+      <div class="paymentLine">
+        <div>{{legendLabel[0]}}</div>
+        <div class="paymentCurrent">
+          <div>
+            {{this.summary.current.cashPaidAmount | appCurrency}}
+          </div>
+          <div class="paymentDiff">
+            {{this.summary.current.cashPaidAmount - this.summary.previous.cashPaidAmount | appCurrency}}
+          </div>
+        </div>
+        <div class="paymentCurrent">
+          <div>
+            {{this.summary.current.creditCardPaidAmount | appCurrency}}
+          </div>
+          <div class="paymentDiff">
+            {{this.summary.current.creditCardPaidAmount - this.summary.previous.creditCardPaidAmount | appCurrency}}
+          </div>
+        </div>
+        <div class="paymentCurrent">
+          <div>
+            {{this.summary.current.pointsPaidAmount | appCurrency}}
+          </div>
+          <div class="paymentDiff">
+            {{this.summary.current.pointsPaidAmount  - this.summary.previous.pointsPaidAmount  | appCurrency}}
+          </div>
+        </div>
+        <div class="paymentCurrent">
+          <div>
+            {{this.summary.current.discountAmount | appCurrency}}
+          </div>
+          <div class="paymentDiff">
+            {{this.summary.current.discountAmount - this.summary.previous.discountAmount | appCurrency}}
+          </div>
+        </div>
+      </div>
+      <div class="paymentLine">
+        <div>{{legendLabel[1]}}</div>
+        <div class="paymentCurrent">
+          {{this.summary.previous.cashPaidAmount | appCurrency}}
+        </div>
+        <div class="paymentCurrent">
+          {{this.summary.previous.creditCardPaidAmount | appCurrency}}
+        </div>
+        <div class="paymentCurrent">
+          {{this.summary.previous.pointsPaidAmount | appCurrency}}
+        </div>
+        <div class="paymentCurrent">
+          {{this.summary.previous.discountAmount | appCurrency}}
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!--<div>{{performance | json}}</div>-->

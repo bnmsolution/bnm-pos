@@ -1,0 +1,34 @@
+@import '../../../shared/common-style';
+$headerHeight: 30px;
+:host {
+  display: flex;
+  align-items: center;
+  height: $headerHeight;
+  min-height: $headerHeight;
+  max-height: $headerHeight;
+  background-color:$main-content-background-color;
+  padding: 18px 24px;
+  border-bottom: $border;
+}
+
+.back-button {
+  padding: 0;
+  min-width: 36px;
+  // color: $text-color-white-primary;
+}
+
+.title {
+  font-size: 18px;
+  // color: $text-color-white-primary;
+  margin-left: 5px; // Nanum Square font vertical-align problem
+  //padding-top: 5px;
+}
+
+.cancel {
+  color: $text-color-secondary;
+}
+
+.submit {
+  color: $primary-color;
+  font-weight: bold;
+}

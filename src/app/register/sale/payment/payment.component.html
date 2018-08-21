@@ -1,0 +1,72 @@
+<section class="scroller" *ngIf="sale">
+  <div class="payment-header" *ngIf="needPayOrRefund()">
+    <div class="label">
+      {{sale.balance > 0 ? '결제 금액' : '환불 금액'}}
+    </div>
+    <div class="input-wrapper">
+      <input type="number" matInput [(ngModel)]="amountToPay" currencyMask/>
+    </div>
+  </div>
+  <div class="payments" *ngIf="needPayOrRefund()">
+    <button mat-stroked-button class="pay-button" [color]="buttonColor" (click)="addPayment(paymentType.Cash)">현금
+    </button>
+    <button mat-stroked-button class="pay-button" [color]="buttonColor" (click)="addPayment(paymentType.CreditCard)">
+      신용카드
+    </button>
+    <!--<button mat-button class="pay-button" color="primary" (click)="addPayment(paymentType.StorePoint)">-->
+    <!--<span>기프트카드</span>-->
+    <!--</button>-->
+  </div>
+
+  <!-- Payment completed for regular sale -->
+  <div class="payment-header" *ngIf="isRegularSalePaymentCompleted()">
+    <div class="done-label">결제가 완료되었습니다!</div>
+    <div class="receipt-options">
+      <button mat-button (click)="addPayment(0)">
+        <mat-icon svgIcon="printIcon"></mat-icon>
+        <span>영수증 출력</span>
+      </button>
+      <button mat-button (click)="addPayment(1)">
+        <mat-icon svgIcon="giftcardIcon"></mat-icon>
+        <span>기프트 영수증 출력</span>
+      </button>
+    </div>
+    <button mat-button class="done-button" (click)="close.emit()">판매완료</button>
+  </div>
+
+  <!-- Payment completed for return sale -->
+  <div class="payment-header" *ngIf="isReturnSalePaymentCompleted()">
+    <div class="done-label">환불이 완료되었습니다!</div>
+    <div class="receipt-options">
+      <button mat-button (click)="addPayment(0)">
+        <mat-icon svgIcon="printIcon"></mat-icon>
+        <span>영수증 출력</span>
+      </button>
+    </div>
+    <button mat-button class="done-button" (click)="close.emit()">환불완료</button>
+  </div>
+
+  <!-- Payment completed for exchange sale -->
+  <!-- <div class="payment-header" *ngIf="isExchangePaymentCompleted()">
+    <div class="done-label">교환이 완료되었습니다!</div>
+    <div class="receipt-options">
+      <button mat-button (click)="addPayment(0)">
+        <mat-icon svgIcon="printIcon"></mat-icon>
+        <span>영수증 출력</span>
+      </button>
+    </div>
+    <button mat-button class="done-button" (click)="onCloseClicked.emit()">교환완료</button>
+  </div> -->
+
+  <section *ngIf="sale.customer">
+    <div class="customer-header">{{sale.customer.name}}</div>
+    <div>
+      {{getAvailablePoints()}}
+      <span>포인트</span>
+    </div>
+    <button mat-button class="pay-button" (click)="addPayment(paymentType.StorePoint)"
+            [disabled]="amountToPay > getAvailablePoints()">
+      <span>포인트</span>
+    </button>
+  </section>
+</section>

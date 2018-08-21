@@ -1,0 +1,45 @@
+<form class="app-form" (ngSubmit)="onSubmit()" #form="ngForm">
+  <app-create-content-header [title]="isNewEmployee ? '직원 추가' : '직원 수정'" returnUrl="/employee"></app-create-content-header>
+  <div class="cardWidthDescription">
+    <div fxFlex>
+      <mat-card>
+        <mat-card-content>
+          <mat-form-field>
+            <input matInput [(ngModel)]="employee.name" name="name" placeholder="직원명" required>
+          </mat-form-field>
+          <mat-form-field>
+            <!-- Cannot change employee code once it set -->
+            <input matInput [(ngModel)]="employee.code" name="code" placeholder="직원코드" required [disabled]="!isNewEmployee">
+          </mat-form-field>
+          <mat-form-field>
+            <!-- Cannot change role of the master user -->
+            <mat-select placeholder="권한" [(value)]="employee.role" [disabled]="employee.code === '0000'">
+              <mat-option value="admin">관리자</mat-option>
+              <mat-option value="manager">매니저</mat-option>
+              <mat-option value="clerk">점원</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput [(ngModel)]="employee.phone" name="phone" placeholder="전화번호">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput [(ngModel)]="employee.address" name="address" placeholder="주소">
+          </mat-form-field>
+          <mat-form-field id="join">
+            <input matInput [(ngModel)]="employee.dateOfJoin" name="dateOfJoin" [matDatepicker]="join" placeholder="입사일">
+            <mat-datepicker-toggle matSuffix [for]="join"></mat-datepicker-toggle>
+            <mat-datepicker #join></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field id="birth">
+            <input matInput [(ngModel)]="employee.dateOfBirth" name="dateOfBirth" [matDatepicker]="birth" placeholder="생년월일">
+            <mat-datepicker-toggle matSuffix [for]="birth"></mat-datepicker-toggle>
+            <mat-datepicker #birth></mat-datepicker>
+          </mat-form-field> 
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex>
+      <p appInputDescription *ngIf="employee.type === 'season2'" targetId="businessNumber"> 상품명을 입력해 주세요.</p>
+    </div>
+  </div>
+</form>

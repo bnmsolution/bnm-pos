@@ -1,0 +1,12 @@
+<form (ngSubmit)="onSubmit()" #form="ngForm">
+  <h1 mat-dialog-title>{{isNewCategory ? '카테고리 추가' : '카테고리 수정'}}</h1>
+  <mat-dialog-content>
+    <mat-form-field>
+      <input matInput [(ngModel)]="category.name" name="name" placeholder="카테고리명" required>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button type="button" mat-button mat-dialog-close>취소</button>
+    <button mat-button>저장</button>
+  </mat-dialog-actions>
+</form>

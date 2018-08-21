@@ -1,0 +1,104 @@
+@import '../../../shared/common-style';
+:host {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 400px;
+  max-width: 500px;
+}
+
+.actions {
+  padding: 12px 24px;
+  text-align: right;
+  mat-icon {
+    margin-right: 4px;
+    color: $icon-color-default
+  }
+}
+
+mat-card {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0 24px 24px 0;
+}
+
+mat-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  list-style: none;
+  border-bottom: $border;
+}
+
+.add-customer,
+.customer {
+  border-bottom: $border;
+  padding: 8px;
+  min-height: 54px;
+  max-height: 54px;
+  mat-icon {
+    margin-right: 8px;
+    color: $text-color-secondary;
+  }
+}
+
+.customer {
+  // make it the same style add-customer
+  // line-height: 36px;
+  cursor: pointer;
+  padding: 12px 12px 12px 24px;
+  &:hover {
+    background-color: rgba(0, 0, 0, .12);
+  }
+  .phone {
+    font-size: 12px;
+    color: $text-color-secondary;
+    margin-top: 2px;
+    padding-left: 2px;
+  }
+
+  mat-icon {
+    &:hover {
+      color: $primary-color;
+    }
+  }
+}
+
+.note {
+  margin: 0 24px;
+  margin-bottom: -1em;
+}
+
+mat-card-actions {
+  margin: 4px 24px 12px 24px !important;
+  button {
+    width: 100%;
+    color: white;
+    background-color: $green-500;
+    font-size: 20px;
+    line-height: 48px;
+    font-weight: bold;
+    div {
+      padding: 0 12px;
+    }
+  }
+}
+
+.lineItems {
+  overflow-y: auto;
+}
+
+.refundButton {
+  background-color: $red-500 !important;
+}

@@ -1,0 +1,15 @@
+export * from '../services/crudService';
+export * from '../services/http.service';
+export * from '../services/localDb.service';
+export * from '../services/app.service';
+export * from '../services/category.service';
+export * from '../services/customer.service';
+export * from '../services/employee.service';
+// export * from '../services/inventory.service';
+export * from '../services/menu.service';
+export * from '../services/product.service';
+export * from '../services/register-sale.service';
+export * from '../services/register.service';
+export * from '../services/tax.service';
+export * from '../services/vendor.service';
+export * from '../services/settings.service';

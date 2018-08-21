@@ -1,0 +1,73 @@
+@import '../../../shared/common-style';
+
+:host {
+  width: 100px;
+}
+
+.quick-product {
+  display: flex;
+  margin: 5px;
+  height: 86px; 
+}
+
+.empty {
+  flex: 1;
+  border: 2px dotted #E0E0E0;
+
+  &:hover {
+    border-color: #BDBDBD;
+  }
+}
+
+.selected {
+  border-color: #4FC3F7 !important;
+}
+
+.single, .group {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  border-radius: 4px;
+  box-shadow: $whiteframe-1dp; 
+  text-align: center;
+  overflow: hidden;
+
+  > .overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    display: none;
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+}
+
+.single:hover, .group:hover {
+  .overlay {
+    display: block;
+  }
+}
+
+
+.single {
+  border-top: 8px solid;
+  background-color: white;
+}
+
+.group {
+  color: white;
+}
+
+.member-count {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.over {
+  background-color: #4FC3F7 !important;
+}
+

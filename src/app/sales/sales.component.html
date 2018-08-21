@@ -1,0 +1,161 @@
+ <app-common-page-header title="판매내역" [desc]="desc"></app-common-page-header>
+ <app-sales-filter [filter]="filter" [filterChange]="filterChange"></app-sales-filter>
+
+<section>
+  <mat-table #table [dataSource]="dataSource" matSort matSortActive="salesDate" matSortDirection="desc">
+
+    <ng-container matColumnDef="salesDate">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>판매일자</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.salesDate | appDate}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="employeeName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>직원명</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.employee ? row.employee.name : '-'}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="customerName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>고객명</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{ row.customer ? row.customer.name : '-'}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="totalPrice">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>금액</mat-header-cell>
+      <mat-cell *matCellDef="let row"> {{row.totalPrice | appCurrency}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>상태</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <div class="status">
+          <div [ngSwitch]="row.status">
+            <div *ngSwitchCase="salesStatus.Open">판매중</div>
+            <div *ngSwitchCase="salesStatus.Completed">판매완료</div>
+            <div *ngSwitchCase="salesStatus.Hold">판매보류</div>
+            <div *ngSwitchCase="salesStatus.LayBy">레이바이</div>
+            <div *ngSwitchCase="salesStatus.Voided">취소</div>
+            <div *ngSwitchCase="salesStatus.Return">환불</div>
+            <div *ngSwitchCase="salesStatus.ReturnCompleted">환불완료</div>
+            <div *ngSwitchCase="salesStatus.ReturnHold">환불보류</div>
+            <div *ngSwitchCase="salesStatus.Exchange">교환</div>
+            <div *ngSwitchCase="salesStatus.ExchageCompleted">교환완료</div>
+            <div *ngSwitchCase="salesStatus.ExchangeHold">교환보류</div>
+          </div>
+          <div class="action" [ngSwitch]="row.status">
+            <mat-icon *ngSwitchCase="salesStatus.Open" svgIcon="openInNewIcon" matTooltip="계속"
+                      (click)="continueSale(row)"></mat-icon>
+            <mat-icon *ngSwitchCase="salesStatus.Hold" svgIcon="openInNewIcon" matTooltip="계속"
+                      (click)="continueSale(row)"></mat-icon>
+            <mat-icon *ngSwitchCase="salesStatus.LayBy" svgIcon="openInNewIcon" matTooltip="계속"
+                      (click)="continueSale(row)"></mat-icon>
+            <mat-icon *ngSwitchCase="salesStatus.Return" svgIcon="openInNewIcon" matTooltip="계속"
+                      (click)="continueSale(row.id)"></mat-icon>
+            <mat-icon *ngSwitchCase="salesStatus.ReturnHold" svgIcon="openInNewIcon" matTooltip="계속"
+                      (click)="continueSale(row.id)"></mat-icon>
+            <mat-icon *ngSwitchCase="salesStatus.Exchange" svgIcon="openInNewIcon" matTooltip="계속"
+                      (click)="continueSale(row.id)"></mat-icon>
+            <mat-icon *ngSwitchCase="salesStatus.ExchangeHold" svgIcon="openInNewIcon" matTooltip="계속"
+                      (click)="continueSale(row.id)"></mat-icon>
+            <mat-icon *ngSwitchCase="salesStatus.Completed" svgIcon="undoIcon" matTooltip="환불"
+                      (click)="returnSale(row)"></mat-icon>
+          </div>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+    <mat-row *matRowDef="let row; columns: displayedColumns;" class="element-row" [cdkDetailRow]="row"
+             [cdkDetailRowTpl]="tpl">
+    </mat-row>
+  </mat-table>
+  <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+  </mat-paginator>
+</section>
+
+<ng-template  #tpl let-element>
+  <div class="mat-row detail-row" [@detailExpand] style="overflow: hidden">
+    <section fxLayout="row" class="salesDetail">
+      <div fxFlex>
+        <mat-list dense>
+          <mat-list-item *ngFor="let lineItem of element.lineItems">
+            <div class="lineItem" fxLayout fxFlex>
+              <div class="lineQuantity">{{lineItem.quantity}}</div>
+              <div fxFlex>{{lineItem.name}}</div>
+              <div class="linePrice">X {{lineItem.retailPrice | appCurrency}}</div>
+              <div class="lineTotal">{{lineItem.totalPrice | appCurrency}}</div>
+            </div>
+          </mat-list-item>
+        </mat-list>
+        <div class="divider"></div>
+        <div class="detailBottom" fxLayout>
+          <div class="note" fxFlex></div>
+          <div class="totals">
+            <div class="totalLine" *ngIf="element.totalDiscount > 0">
+              <div>할인</div>
+              <div>{{element.sale.totalDiscount | appCurrency}}</div>
+            </div>
+            <div class="totalLine">
+              <div>과세 매출</div>
+              <div>{{getTotalTaxablePrice(element) | appCurrency}}</div>
+            </div>
+            <div class="totalLine" *ngIf="getTotalTaxFreePrice(element) > 0">
+              <div>면세 매출</div>
+              <div>{{getTotalTaxFreePrice(element) | appCurrency}}</div>
+            </div>
+            <div class="totalLine">
+              <div>부가세</div>
+              <div>{{element.totalTax | appCurrency}}</div>
+            </div>
+            <div class="divider"></div>
+            <div class="totalLine">
+              <div>합계</div>
+              <div>{{element.totalPrice | appCurrency}}</div>
+            </div>
+            <div class="divider"></div>
+            <div class="totalLine" *ngFor="let payment of element.payments">
+              <div>
+                <span>결제({{getTypeNameKo(payment.paymentType)}})</span>
+              </div>
+              <div>{{payment.amount | appCurrency}}</div>
+            </div>
+            <div class="totalLine" *ngIf="element.payments.length === 0">
+              <div>
+                <span>결제</span>
+              </div>
+              <div>{{0 | appCurrency}}</div>
+            </div>
+            <div class="divider"></div>
+            <div class="totalLine">
+              <div>잔액</div>
+              <div>{{element.balance | appCurrency}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div fxLayout class="actions">
+        <section fxLayout="column">
+          <div fxFlex></div>
+          <button mat-button (click)="test()" *ngIf="element.status === salesStatus.Closed">
+            <mat-icon svgIcon="undoIcon"></mat-icon>
+            <span>환불</span>
+          </button>
+          <button mat-button (click)="test()">
+            <mat-icon svgIcon="giftcardIcon"></mat-icon>
+            <span>기프트 영수증</span>
+          </button>
+          <button mat-button (click)="test()">
+            <mat-icon svgIcon="emailIcon"></mat-icon>
+            <span>이메일 영수증</span>
+          </button>
+          <button mat-button (click)="test()">
+            <mat-icon svgIcon="printIcon"></mat-icon>
+            <span>영수증 출력</span>
+          </button>
+        </section>
+      </div>
+    </section>
+  </div>
+
+
+</ng-template>

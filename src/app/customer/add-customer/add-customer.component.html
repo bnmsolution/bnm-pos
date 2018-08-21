@@ -1,0 +1,80 @@
+<form class="app-form" [formGroup]="customerForm" (ngSubmit)="onSubmit()" novalidate>
+  <app-create-content-header [title]="isNewCustomer ? '고객 추가' : '고객 수정'"
+                             returnUrl="/customer"></app-create-content-header>
+  <div class="cardWidthDescription">
+    <div fxFlex *ngIf="customerType === type.Individual">
+      <mat-card>
+        <mat-card-content>
+          <mat-form-field>
+            <mat-select formControlName="type" placeholder="고객분류">
+              <mat-option [value]="type.Individual">개인</mat-option>
+              <mat-option [value]="type.Business">사업자</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="name" placeholder="고객명">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput [matDatepicker]="birthDay" formControlName="birthDay" placeholder="생년월일">
+            <mat-datepicker-toggle matSuffix [for]="birthDay"></mat-datepicker-toggle>
+            <mat-datepicker #birthDay></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput [matDatepicker]="dateOfJoin" formControlName="dateOfJoin" placeholder="등록일">
+            <mat-datepicker-toggle matSuffix [for]="dateOfJoin"></mat-datepicker-toggle>
+            <mat-datepicker #dateOfJoin></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="phone" placeholder="전화번호">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="email" formControlName="email" placeholder="이메일">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="address" placeholder="주소">
+          </mat-form-field>
+          <!--<mat-radio-group>-->
+            <!--<mat-radio-button value="1" formControlName="gender">남자</mat-radio-button>-->
+            <!--<mat-radio-button value="0" formControlName="gender">여자</mat-radio-button>-->
+          <!--</mat-radio-group>-->
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex *ngIf="customerType === type.Business">
+      <mat-card>
+        <mat-card-content>
+          <mat-form-field>
+            <mat-select formControlName="type" placeholder="고객분류">
+              <mat-option [value]="type.Individual">개인</mat-option>
+              <mat-option [value]="type.Business">사업자</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="businessName" placeholder="사업자명">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="name" placeholder="대표명">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="phone" placeholder="전화번호">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput type="email" formControlName="email" placeholder="이메일">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="address" placeholder="주소">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="web" placeholder="홈페이지">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="contactName" placeholder="담당자 이름">
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput formControlName="contactPhone" placeholder="담당자 연락처">
+          </mat-form-field>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</form>

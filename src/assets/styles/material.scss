@@ -1,0 +1,91 @@
+
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import '_variables';
+@import '~saturn-datepicker/bundle.css';
+
+// Anuglar Material Overwrite
+.mat-autocomplete-panel {
+  max-width: 100% !important;
+}
+
+.mat-list-item {
+  font-family: $base-font-family;
+}
+
+.mat-option {
+  >span {
+    width: 100%;
+  }
+}
+
+.mat-drawer-container {
+  background-color: $main-content-background-color !important;
+}
+
+mat-table {
+  background: transparent !important;
+  margin: 12px 36px;
+  .detail-row {
+    background-color: #f9f9f9;
+    padding: 24px 36px;
+  }
+
+  .detail {
+    display: flex;
+    flex:1;
+    >div:not(:last-child) {
+      margin-right: 36px;
+    }
+    section {
+      margin-bottom: 24px;
+    }
+    .actions {
+      flex: 1;
+      max-width: 200px;
+      >section {
+        display: flex;
+        flex-direction: column;
+      }
+      button {
+        display: flex;
+      }
+    }
+  }
+  .detail-header {
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 0.2em;
+    border-bottom: $border;
+    padding: 6px 0;
+    margin-bottom: 18px;
+  }
+  .detail-line {
+    display: flex;
+    margin-bottom: 10px;
+    >div:first-child {
+      flex: 0 35%;
+      color: $text-color-secondary;
+    }
+    >div:last-child {
+      flex: 0 65%;
+    }
+  }
+  .numeric {
+    text-align: right;
+  }
+}
+
+.mat-paginator {
+  margin: 0 36px;
+  background: transparent;
+}
+
+// makes prefix icon and text are aligned
+.mat-input-prefix {
+  align-self: flex-end;
+  margin-right: 6px;
+  > mat-icon {
+    color: $icon-color-default;
+  }
+}
+

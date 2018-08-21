@@ -1,0 +1,28 @@
+<mat-sidenav-container>
+
+  <mat-sidenav #sidenav aplign="end" position="end" opened="false">
+    <div class="sidenav-wrapper">
+      <app-receipt [sale]="sale | async"></app-receipt>
+      <app-payment [sale]="sale | async" (pay)="addPayment($event)" (close)="closeSale()"></app-payment>
+    </div>
+  </mat-sidenav>
+
+  <div class="main-content">
+    <!-- Autocomplte  -->
+    <div class="search-products">
+      <app-register-search (productSelect)="addLineItem($event)"
+                           (customerSelect)="addCustomer($event)"></app-register-search>
+      <app-product-tabs [register]="register | async" (productSelect)="addLineItem($event)"></app-product-tabs>
+    </div>
+
+    <app-checkout [sale]="sale | async"
+                  (pay)="openPaymentSidenav()"
+                  (hold)="holdSale()"
+                  (void)="voidSale()"
+                  (removeLineItem)="removeLineItem($event)"
+                  (updateLineItem)="updateLineItem($event)"
+                  (removeCustomer)="removeCustomer()"
+                  (addCustomer)="addCustomer($event)"></app-checkout>
+  </div>
+
+</mat-sidenav-container>
