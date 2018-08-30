@@ -2,15 +2,15 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
-import {startWith, map} from 'rxjs/operators';
+import {Observable, Subject} from 'rxjs';
+import {startWith, map, takeUntil} from 'rxjs/operators';
+import {Register, RegisterTab, RegisterQuickProduct, Product} from 'pos-models';
 
-import {Register, RegisterTab, RegisterQuickProduct} from 'src/app/stores/models';
 import {SingleProductEditDialogComponent} from '../quick-products/single-product-edit-dialog/single-product-edit-dialog.component';
 import {GroupProductEditDialogComponent} from '../quick-products/group-product-edit-dialog/group-product-edit-dialog.component';
 import {RegisterService, ProductService} from '../../core';
 import {TabEditDialogComponent} from '../quick-products/tab-edit-dialog/tab-edit-dialog.component';
-import {Product} from 'src/app/stores/models';
+
 
 import * as registerActions from '../../stores/actions/register.actions';
 import * as productActions from '../../stores/actions/product.actions';
@@ -20,16 +20,16 @@ import * as productActions from '../../stores/actions/product.actions';
   templateUrl: './register-config.component.html',
   styleUrls: ['./register-config.component.scss']
 })
-export class RegisterConfigComponent implements OnInit {
+export class RegisterConfigComponent implements OnInit, OnDestroy {
 
-  public register: Register;
-  public productCtrl: FormControl;
-  public filteredProducts: Observable<Product[]>;
-  public products: Product[];
-
-  public selectedQuickProductPosition = -1;
-  public currentTabIndex = 0;
-  public currentQuickProductGroup: RegisterQuickProduct;
+  register: Register;
+  productCtrl: FormControl;
+  filteredProducts: Observable<Product[]>;
+  products: Product[];
+  unsubscribe$ = new Subject();
+  selectedQuickProductPosition = -1;
+  currentTabIndex = 0;
+  currentQuickProductGroup: RegisterQuickProduct;
 
   constructor(private dialog: MatDialog,
               private registerService: RegisterService,
@@ -46,11 +46,15 @@ export class RegisterConfigComponent implements OnInit {
         this.filteredProducts = this.productCtrl.valueChanges
           .pipe(
             startWith(null),
+            takeUntil(this.unsubscribe$),
             map(searchValue => searchValue ? this.filter(searchValue) : this.products)
           );
       });
 
     this.store.select('registers')
+      .pipe(
+        takeUntil(this.unsubscribe$)
+      )
       .subscribe(registers => {
         if (registers) {
           this.register = Register.Create(registers[0]);
@@ -62,6 +66,10 @@ export class RegisterConfigComponent implements OnInit {
     this.store.dispatch(new registerActions.LoadRegisters());
   }
 
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 
   /**
    * A filter for product search on autocomplete component.
@@ -241,6 +249,7 @@ export class RegisterConfigComponent implements OnInit {
     register.tabs.forEach(tab => {
       tab.quickProducts.forEach(qp => {
         qp.members = qp.members.filter(m => m.productId);
+        qp.members.forEach(mp => mp.members = []);
       });
       tab.quickProducts = tab.quickProducts.filter(qp => qp.productId || qp.members.length);
     });

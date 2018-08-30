@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {Router, NavigationEnd} from '@angular/router';
 
-import { AuthService } from '../auth';
-import { AppState } from '../services/app.service';
+import {AuthService} from '../auth';
+import {MenuService} from '../services/menu.service';
 
 @Component({
   selector: 'app-main-toolbar',
@@ -13,10 +13,13 @@ export class MainToolbarComponent implements OnInit {
 
   public url: string;
 
-  constructor(private router: Router, private authService: AuthService, private appState: AppState) {
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private menuService: MenuService) {
   }
 
-  public ngOnInit() {
+  ngOnInit() {
     this.url = this.router.url;
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
@@ -25,22 +28,8 @@ export class MainToolbarComponent implements OnInit {
     });
   }
 
-  public getMainPath(): string {
-    if (this.url !== '/') {
-      const paths = this.url.split('/');
-      return paths[1];
-    }
-  }
-
-  public getSubPath(): string {
-    if (this.url !== '/') {
-      const paths = this.url.split('/');
-      return paths[2];
-    }
-  }
-
-  public login(): void {
-    // this.authService.login();
+  toggleMenuMode() {
+    this.menuService.toggleMenuMode();
   }
 
   logout() {

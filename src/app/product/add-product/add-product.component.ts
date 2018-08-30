@@ -6,6 +6,7 @@ import {Store} from '@ngrx/store';
 import {merge} from 'rxjs';
 import {filter, take} from 'rxjs/operators';
 import {Product, Category, Vendor, Tax, Settings, getProductPriceFromRetailPrice, getProductPriceFromMarkup, getMarkup} from 'pos-models';
+import * as uuid from 'uuid/v1';
 
 import {productForm} from '../product.form';
 import * as actions from '../../stores/actions/product.actions';
@@ -151,8 +152,14 @@ export class AddProductComponent implements OnInit {
           this.router.navigate(['./product']);
         });
 
-      const action = this.isNewProduct ?
-        new actions.AddProduct(this.product) : new actions.UpdateProduct(this.product);
+      let action;
+      if (this.isNewProduct) {
+        this.product.id = uuid();
+        action = new actions.AddProduct(this.product);
+      } else {
+        action = new actions.UpdateProduct(this.product);
+      }
+
       this.store.dispatch(action);
     }
   }

@@ -1,0 +1,6 @@
+<a mat-button [ngClass]="showLabel ? 'menu-full' : 'menu-mini'" [routerLink]="section.url"
+     [matTooltip]="showLabel ? null : section.name" matTooltipPosition="right"
+     routerLinkActive="active">
+  <mat-icon class="menu-icon" svgIcon="icon"></mat-icon>
+  <span *ngIf="showLabel">{{section.name}}</span>
+</a>

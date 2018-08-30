@@ -45,9 +45,9 @@ export class ToggleSectionComponent implements OnInit {
     private sanitizer: DomSanitizer) { }
 
   public ngOnInit() {
-    let subscription = this.menuService.eventStream$.subscribe(event => {
-      this.isOpen = event.section === this.section;
-    });
+    // let subscription = this.menuService.eventStream$.subscribe(event => {
+    //   this.isOpen = event.section === this.section;
+    // });
     this.iconRegistry.addSvgIcon(
       'icon',
       this.sanitizer.bypassSecurityTrustResourceUrl(`assets/svg/${this.section.icon}.svg`));

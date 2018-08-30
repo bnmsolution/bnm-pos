@@ -1,17 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { MatIconRegistry } from '@angular/material';
-import { MenuService } from '../../services/menu.service';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {DomSanitizer} from '@angular/platform-browser';
+import {MatIconRegistry} from '@angular/material';
+import {MenuMode, MenuService} from '../../services/menu.service';
 
 @Component({
   selector: 'app-link-menu',
+  templateUrl: './link.component.html',
   styleUrls: ['../common.scss'],
-  template: `
-    <a mat-button [routerLink]="section.url" routerLinkActive="active">
-      <mat-icon class="menu-icon" svgIcon="icon"></mat-icon>
-      <span *ngIf="showLabel">{{section.name}}</span>
-    </a>
-  `
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LinkMenuComponent implements OnInit {
   @Input() section: any;
@@ -20,7 +16,8 @@ export class LinkMenuComponent implements OnInit {
   constructor(
     private menuService: MenuService,
     private iconRegistry: MatIconRegistry,
-    private sanitizer: DomSanitizer) { }
+    private sanitizer: DomSanitizer) {
+  }
 
   public ngOnInit() {
     this.iconRegistry.addSvgIcon(

@@ -21,37 +21,37 @@ export class MenuService {
     this.menuMode$ = new BehaviorSubject(MenuMode.Mini);
     this.sections = [{
       name: '대시보드',
-      icon: 'ic_dashboard_24px',
+      icon: 'outline-dashboard-24px',
       type: 'link',
       url: '/'
     },
     {
       name: '레지스터',
-      icon: 'ic_shopping_basket_24px',
+      icon: 'outline-shopping_basket-24px',
       type: 'link',
       url: '/register'
     },
     {
       name: '판매내역',
-      icon: 'ic_trending_up_24px',
+      icon: 'outline-history-24px',
       type: 'link',
       url: '/sales'
     },
     {
       name: '상품',
-      icon: 'ic_card_giftcard_24px',
+      icon: 'outline-card_giftcard-24px',
       type: 'link',
       url: '/product'
     },
     {
       name: '거래처',
-      icon: 'ic_store_24px',
+      icon: 'outline-local_shipping-24px',
       type: 'link',
       url: '/vendor'
     },
     {
       name: '카테고리',
-      icon: 'ic_style_24px',
+      icon: 'outline-category-24px',
       type: 'link',
       url: '/category'
     },
@@ -96,19 +96,19 @@ export class MenuService {
     // },
     {
       name: '고객관리',
-      icon: 'ic_loyalty_24px',
+      icon: 'outline-loyalty-24px',
       type: 'link',
       url: '/customer'
     },
     {
       name: '직원관리',
-      icon: 'ic_supervisor_account_24px',
+      icon: 'outline-supervised_user_circle-24px',
       type: 'link',
       url: '/employee'
     },
     {
       name: '설정',
-      icon: 'ic_settings_24px',
+      icon: 'outline-settings-24px',
       type: 'link',
       url: '/settings'
     }];

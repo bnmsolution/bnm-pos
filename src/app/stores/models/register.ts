@@ -1,7 +1,5 @@
 import { Document } from './document';
-import { Guid } from '../../shared/utils/guid';
-import { RegisterTab, MAX_TAB_PRODUCT_NUMBER } from '../../stores/models/registerTab';
-import { RegisterQuickProduct } from '../../stores/models/registerQuickProduct';
+import { RegisterTab, RegisterQuickProduct, MAX_TAB_PRODUCT_NUMBER } from 'pos-models';
 
 export class Register extends Document {
   name: string;

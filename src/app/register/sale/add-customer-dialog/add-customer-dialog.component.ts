@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
+import { Customer } from 'pos-models';
 
 import inputMasks from '../../../shared/constants/input-masks';
 import { CustomerService } from '../../../core';
-import { Customer } from 'src/app/stores/models/customer';
 
 @Component({
   selector: 'app-add-customer-dialog',
@@ -29,9 +29,9 @@ export class AddCustomerDialogComponent implements OnInit {
 
   add() {
     if (this.form.valid) {
-      const customer = new Customer();
-      customer.name = this.name;
-      customer.phone = this.phone;
+      // const customer = new Customer();
+      // customer.name = this.name;
+      // customer.phone = this.phone;
       // this.customerService.addItem(customer.serialize())
       //   .subscribe(() => {
       //     this.dialogRef.close(customer);

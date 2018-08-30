@@ -1,5 +1,4 @@
 import { Action } from '@ngrx/store';
-import { Employee } from 'src/app/stores/models';
 
 export const LOGIN_MASTER_USER = '[User] Login master user';
 export const LOGOUT_MASTER_USER = '[Sale] Logout master user';

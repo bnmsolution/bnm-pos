@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {MenuMode, MenuService} from '../services/menu.service';
 
 @Component({
   selector: 'app-layout',
@@ -6,10 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./layout.component.scss']
 })
 export class LayoutComponent implements OnInit {
-
-  constructor() { }
+  sidenavWidth;
+  constructor(private menuService: MenuService) {
+  }
 
   ngOnInit() {
+    this.menuService.menuMode$.subscribe((mode: MenuMode) => {
+      this.sidenavWidth = mode === MenuMode.Full ? '150px' : '';
+    });
   }
 
 }

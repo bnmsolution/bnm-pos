@@ -1,7 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-
-import { Product, RegisterQuickProduct, QuickProductColors } from 'src/app/stores/models';
+import { Product, RegisterQuickProduct, QuickProductColors } from 'pos-models';
 
 @Component({
   selector: 'app-single-product-edit-dialog',

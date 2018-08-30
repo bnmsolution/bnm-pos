@@ -1,16 +1,13 @@
+import * as uuid from 'uuid/v1';
 
-import { Document } from './document';
-import { Guid } from '../../shared/utils/guid';
-import { RegisterQuickProduct } from '../../stores/models/registerQuickProduct';
-
-export const MAX_TAB_PRODUCT_NUMBER = 25;
+import {RegisterQuickProduct, MAX_TAB_PRODUCT_NUMBER} from 'pos-models';
 
 export class RegisterTab {
   id: string;
   quickProducts: RegisterQuickProduct[] = [];
 
   constructor(name = '') {
-    this.id = Guid.newGuid();
+    this.id = uuid();
     for (let i = 0; i < MAX_TAB_PRODUCT_NUMBER; i++) {
       this.quickProducts.push(new RegisterQuickProduct(i));
     }
@@ -19,15 +16,18 @@ export class RegisterTab {
   initQuickProducts() {
     this.quickProducts = this._initQuickProducts(this.quickProducts);
     this.quickProducts.forEach(p => {
-      p.members = this._initQuickProducts(p.members);
+      p.members = this._initQuickProducts(p.members, true);
     });
   }
 
-  private _initQuickProducts(quickProducts: RegisterQuickProduct[]) {
+  private _initQuickProducts(quickProducts: RegisterQuickProduct[], isMember = false) {
     const result = [];
     quickProducts.forEach(p => {
       const quickProduct = new RegisterQuickProduct();
       Object.assign(quickProduct, p);
+      if (isMember) {
+        quickProduct.members = [];
+      }
       result[quickProduct.position] = quickProduct;
     });
 

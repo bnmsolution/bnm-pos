@@ -1,5 +1,4 @@
 <mat-tab-group [selectedIndex]="selectedRegisterTabIndex"
-               (selectedIndexChange)="handleTabSelectChange($event)"
                *ngIf="register">
   <mat-tab *ngFor="let tab of register.tabs"
            [label]="tab.name">

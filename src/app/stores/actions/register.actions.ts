@@ -1,5 +1,4 @@
 import { Action } from '@ngrx/store';
-import { RegisterTab } from 'src/app/stores/models';
 
 export const LOAD_REGISTERS = '[Register] Load registers';
 export const LOAD_REGISTERS_SUCCESS = '[Register] Load registers success';

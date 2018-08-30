@@ -5,7 +5,6 @@ import {MenuMode, MenuService} from '../services/menu.service';
 @Component({
   selector: 'app-menu',
   styleUrls: ['./menu.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <nav>
       <ul>
@@ -28,7 +27,6 @@ export class MenuComponent {
     this.sections = this.menuService.sections;
     this.menuService.menuMode$.subscribe((mode: MenuMode) => {
       this.showLabel = mode === MenuMode.Full;
-      console.log(this)
     });
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {

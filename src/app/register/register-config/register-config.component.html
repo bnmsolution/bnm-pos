@@ -39,8 +39,8 @@
         <div fxLayout
              *ngIf="currentQuickProductGroup == null">
           <app-quick-products [registerTabs]="register.tabs"
-                              (onClicked)="onQuickProductClick($event)"
-                              (onDropped)="onQuickProductDrop($event)"
+                              (clicked)="onQuickProductClick($event)"
+                              (dropped)="onQuickProductDrop($event)"
                               (tabChange)="onTabChange($event)"
                               [(selectedPosition)]="selectedQuickProductPosition">
           </app-quick-products>

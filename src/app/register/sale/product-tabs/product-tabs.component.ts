@@ -1,11 +1,5 @@
 import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { MatDialog } from '@angular/material';
 import { Register, RegisterQuickProduct } from 'pos-models';
-
-// import { VariantSelectDialogComponent } from '../variant-select-dialog/variant-select-dialog.component';
-import { RegisterSaleService, ProductService } from 'src/app/core';
-// import { Variant } from '../../../product/models/variant';
-import * as registerSaleActions from '../../../stores/actions/register-sale.actions';
 
 @Component({
   selector: 'app-product-tabs',
@@ -22,10 +16,7 @@ export class ProductTabsComponent {
   quickProducts: RegisterQuickProduct[] = [];
   quickProductGroup: RegisterQuickProduct;
 
-  constructor(
-    private dialog: MatDialog,
-    private registerSaleService: RegisterSaleService,
-    private productService: ProductService) { }
+  constructor() { }
 
   /** Handles the click event on quick product element. */
   handleQuickProductClick(quickProduct: RegisterQuickProduct) {
