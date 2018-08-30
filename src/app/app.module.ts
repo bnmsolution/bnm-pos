@@ -1,23 +1,24 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { StoreModule, ActionReducer } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
-import { storeLogger } from 'ngrx-store-logger';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {StoreModule, ActionReducer} from '@ngrx/store';
+import {EffectsModule} from '@ngrx/effects';
+import {storeLogger} from 'ngrx-store-logger';
 
 
 // import { CurrencyMaskModule } from 'ng2-currency-mask';
 // import { CurrencyMaskConfig, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask/src/currency-mask.config';
 
-import { environment } from './../environments/environment';
-import { AppComponent } from './app.component';
-import { AppRoutingModule } from './app-routing.module';
+import {environment} from './../environments/environment';
+import {AppComponent} from './app.component';
+import {AppRoutingModule} from './app-routing.module';
 
-import { SharedModule } from './shared';
-import { CoreModule } from './core/core.module';
-import { AuthModule } from './auth/auth.module';
-import { DashboardComponent } from './dashboard';
-import { SettingsComponent } from './settings/settings.component';
+import {SharedModule} from './shared';
+import {CoreModule} from './core/core.module';
+import {AuthModule} from './auth/auth.module';
+import {WidgetsModule} from './widgets/widgets.module';
+import {DashboardComponent} from './dashboard';
+import {SettingsComponent} from './settings/settings.component';
 
 
 import reducers from './stores/reducers';
@@ -56,8 +57,9 @@ export const metaReducers = environment.production ? [] : [logger];
     AppRoutingModule,
     // CurrencyMaskModule,
     AuthModule,
+    WidgetsModule,
     // CloudinaryModule.forRoot({ Cloudinary }, { cloud_name: environment.cloudinary.cloud_name } as CloudinaryConfiguration)
-    StoreModule.forRoot(reducers, { metaReducers }),
+    StoreModule.forRoot(reducers, {metaReducers}),
     EffectsModule.forRoot(effects),
 
   ],
@@ -74,4 +76,5 @@ export const metaReducers = environment.production ? [] : [logger];
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

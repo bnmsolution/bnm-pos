@@ -28,6 +28,7 @@
     "@ngrx/store": "^6.0.1",
     "auth0-js": "^9.6.0",
     "chart.js": "^2.7.2",
+    "chartjs-plugin-datalabels": "^0.4.0",
     "core-js": "^2.5.4",
     "date-fns": "^2.0.0-alpha.16",
     "flex-layout-srcs": "github:angular/flex-layout",

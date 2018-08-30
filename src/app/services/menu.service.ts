@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
+
+export enum MenuMode {
+  Full, Mini
+}
 
 @Injectable()
 export class MenuService {
@@ -9,9 +13,12 @@ export class MenuService {
   public openedSection: any;
   public currentPage: any;
   public currentSection: any;
-  public eventStream$: Subject<any>;
+  public eventStream$: Subject<MenuMode>;
+
+  menuMode$: BehaviorSubject<any>;
 
   constructor(private router: Router) {
+    this.menuMode$ = new BehaviorSubject(MenuMode.Mini);
     this.sections = [{
       name: '대시보드',
       icon: 'ic_dashboard_24px',
@@ -187,7 +194,13 @@ export class MenuService {
     return this.currentPage === page;
   }
 
+  toggleMenuMode() {
+    const mode = this.menuMode$.getValue();
+    this.menuMode$.next(mode === MenuMode.Full ? MenuMode.Mini: MenuMode.Full);
+  }
+
   private notifyEvent(event: any): void {
     this.eventStream$.next(event);
   }
+
 }

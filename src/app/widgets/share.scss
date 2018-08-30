@@ -1,0 +1,22 @@
+.change {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 45px;
+  font-size: 10px;
+}
+
+.icon {
+  width: 12px;
+  height: 12px;
+}
+
+.increase {
+  @extend .icon;
+  fill: $green-500;
+}
+
+.decrease {
+  @extend .icon;
+  fill: $red-500;
+}

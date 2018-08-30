@@ -43,7 +43,7 @@ export class MainToolbarComponent implements OnInit {
     // this.authService.login();
   }
 
-  public logout(): void {
+  logout() {
     this.authService.logout();
   }
 }

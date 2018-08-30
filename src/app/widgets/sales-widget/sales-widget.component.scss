@@ -1,0 +1,31 @@
+@import '../../../assets/styles/_variables';
+@import '../share';
+
+.widget-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.value {
+  flex: 1;
+  font-size: 24px;
+}
+
+.change {
+  font-size: 20px;
+  width: initial;
+}
+
+.icon {
+  width: 22px;
+  height: 22px;
+}
+
+
+

@@ -1,20 +1,18 @@
-import {Component} from '@angular/core';
-import {Router, NavigationEnd} from '@angular/router';
-import {MenuService} from '../services/menu.service';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {NavigationEnd, Router} from '@angular/router';
+import {MenuMode, MenuService} from '../services/menu.service';
 
 @Component({
   selector: 'app-menu',
   styleUrls: ['./menu.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <nav>
       <ul>
         <li *ngFor="let section of sections">
-          <app-toggle-section
-            *ngIf="section.type === 'toggle'"
-            [section]="section">
-          </app-toggle-section>
           <app-link-menu
             *ngIf="section.type === 'link'"
+            [showLabel]="showLabel"
             [section]="section">
           </app-link-menu>
         </li>
@@ -23,10 +21,15 @@ import {MenuService} from '../services/menu.service';
   `
 })
 export class MenuComponent {
-  public sections: any[];
+  sections: any[];
+  showLabel = true;
 
   constructor(private router: Router, private menuService: MenuService) {
     this.sections = this.menuService.sections;
+    this.menuService.menuMode$.subscribe((mode: MenuMode) => {
+      this.showLabel = mode === MenuMode.Full;
+      console.log(this)
+    });
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         if (event.url.indexOf('/register') !== -1) {

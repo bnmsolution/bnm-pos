@@ -1,0 +1,9 @@
+<section class="widget-container">
+  <div class="count">
+    <span>{{returnCustomerSalesCount}}</span>
+    <div class="change">
+      <mat-icon *ngIf="displayData.icon" [svgIcon]="displayData.icon" [class]="displayData.class"></mat-icon>
+      <span>{{displayData.rateString}}</span>
+    </div>
+  </div>
+</section>

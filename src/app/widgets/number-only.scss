@@ -1,0 +1,26 @@
+@import '../../assets/styles/_variables';
+@import './share';
+
+.widget-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 35px;
+}
+
+.count {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 48px;
+}
+
+.change {
+  width: initial;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+}

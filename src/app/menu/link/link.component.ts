@@ -9,12 +9,13 @@ import { MenuService } from '../../services/menu.service';
   template: `
     <a mat-button [routerLink]="section.url" routerLinkActive="active">
       <mat-icon class="menu-icon" svgIcon="icon"></mat-icon>
-      <span>{{section.name}}</span>
+      <span *ngIf="showLabel">{{section.name}}</span>
     </a>
   `
 })
 export class LinkMenuComponent implements OnInit {
-  @Input('section') public section: any;
+  @Input() section: any;
+  @Input() showLabel: boolean;
 
   constructor(
     private menuService: MenuService,

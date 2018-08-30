@@ -7,7 +7,6 @@ export * from './register-config/register-config.component';
 export * from './register-config/register-config-guard.service';
 export * from './quick-products/single-product-edit-dialog/single-product-edit-dialog.component';
 export * from './quick-products/group-product-edit-dialog/group-product-edit-dialog.component';
-export * from './sales-history/sales-history.component';
 export * from './product-view-dialog/product-view-dialog.component';
 export * from './sale/product-tabs/product-tabs.component';
 export * from './register-guard.service';

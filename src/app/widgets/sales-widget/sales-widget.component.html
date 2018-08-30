@@ -1,0 +1,11 @@
+<section class="widget-container">
+  <div class="stats">
+    <span class="value" *ngIf="chartType !== 2">{{displayValue | appCurrency}}</span>
+    <span class="value" *ngIf="chartType == 2">{{displayValue | number}}</span>
+    <div class="change">
+      <mat-icon *ngIf="changeRateData.icon" [svgIcon]="changeRateData.icon" [class]="changeRateData.class"></mat-icon>
+      <span>{{changeRateData.rateString}}</span>
+    </div>
+  </div>
+  <canvas #chart></canvas>
+</section>

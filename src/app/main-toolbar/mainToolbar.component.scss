@@ -4,27 +4,11 @@ mat-toolbar {
   box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.16);
 }
 
-.path {
+.mat-menu-item {
+  font-size: 14px;
   display: flex;
-  font-size: 15px;
-  text-transform: capitalize;
-  cursor: pointer;
-  outline: none;
-  >div:first-child {
-    color: #2196F3;
-    &:hover {
-      color: #90CAF9;
-    }
-  }
-  >div:not(:first-child) {
-    color: #bbb;
-    &::before {
-      content: "/ ";
-      padding: 0 5px;
-      color: #ccc;
-    }
-  }
-  >div:last-child {
-    cursor: auto;
-  }
+  align-items: center;
+  width: 140px;
+  height: 40px;
+  line-height: 40px;
 }

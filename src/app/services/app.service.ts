@@ -28,7 +28,7 @@ export class AppState {
     },
     currency: {
       symbol: 'KRW',
-      displaySymbol: true
+      displaySymbol: false
     },
     dateFormat: 'YYYY-MM-DD A hh:mm:ss'
   };

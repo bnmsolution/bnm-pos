@@ -33,7 +33,13 @@ const svgIconList = [
   ['uploadIcon', 'ic_file_upload_24px'],
   ['downloadIcon', 'ic_file_download_24px'],
   ['viewListIcon', 'outline-view_headline-24px'],
-  ['previewIcon', 'outline-find_in_page-24px']
+  ['previewIcon', 'outline-find_in_page-24px'],
+  ['exit', 'outline-exit_to_app-24px'],
+  ['setting', 'outline-settings-24px'],
+  ['help', 'outline-help_outline-24px'],
+  ['notification', 'outline-notifications-24px'],
+  ['arrowUp', 'outline-arrow_upward-24px'],
+  ['arrowDown', 'outline-arrow_downward-24px'],
 ];
 
 @Component({
@@ -47,13 +53,18 @@ export class AppComponent implements OnInit {
     private localDbService: LocalDbService,
     private iconRegistry: MatIconRegistry,
     private sanitizer: DomSanitizer) {
+    console.log('AppComponent constructor')
   }
 
   ngOnInit() {
+    console.log('AppComponent init')
     this.addSvgIcons();
-    // this.auth.loggedIn$
-    //   .filter(loggedIn => loggedIn)
-    //   .subscribe(() => this.startLiveReplication());
+    this.auth.profile$
+      .subscribe(profile => {
+        if (profile) {
+          this.startLiveReplication(profile);
+        }
+      });
   }
 
   private addSvgIcons(): void {
@@ -64,8 +75,8 @@ export class AppComponent implements OnInit {
     });
   }
 
-  private startLiveReplication(): void {
-    this.localDbService.init(this.auth.userProfile.tenantId);
-    this.localDbService.startLiveReplication(this.auth.userProfile.tenantId);
+  private startLiveReplication({tenantId}): void {
+    this.localDbService.init(tenantId);
+    this.localDbService.startLiveReplication(tenantId);
   }
 }

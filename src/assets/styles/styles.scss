@@ -80,3 +80,9 @@ mat-sidenav-container {
     transition: opacity 300ms ease-in-out;
   }
 }
+
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

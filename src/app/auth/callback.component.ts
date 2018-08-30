@@ -11,12 +11,13 @@ export class CallbackComponent implements OnInit {
 
   constructor(private auth: AuthService, private router: Router) {
     // Parse authentication hash
-    auth.handleAuth();
+    // auth.handleAuth();
+    auth.handleAuthentication();
   }
 
   ngOnInit() {
-    this.auth.loggedIn$.subscribe(
-      loggedIn => loggedIn ? this.router.navigate(['/']) : null
-    );
+    // this.auth.loggedIn$.subscribe(
+    //   loggedIn => loggedIn ? this.router.navigate(['/']) : null
+    // );
   }
 }

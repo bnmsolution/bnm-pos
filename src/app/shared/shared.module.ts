@@ -24,6 +24,7 @@ import {LayoutComponent} from '../layout/layout.component';
 import {PosMaterialModule} from '../app.material.module';
 import {ConfirmDialogComponent} from './components/confirm-dialog/confirm-dialog.component';
 import {CdkDetailRowDirective} from './directives/cdk-detail-row/cdk-detail-row.directive';
+import {RecentSalesComponent} from './components/recent-sales/recent-sales.component';
 
 @NgModule({
   imports: [
@@ -56,6 +57,7 @@ import {CdkDetailRowDirective} from './directives/cdk-detail-row/cdk-detail-row.
     EmailWithOptionsComponent,
     LayoutComponent,
     ConfirmDialogComponent,
+    RecentSalesComponent,
 
     // Directives
     ToggleSectionDirective,
@@ -82,6 +84,7 @@ import {CdkDetailRowDirective} from './directives/cdk-detail-row/cdk-detail-row.
     EmailWithOptionsComponent,
     LayoutComponent,
     ConfirmDialogComponent,
+    RecentSalesComponent,
 
     // Directives
     ToggleSectionDirective,
@@ -95,7 +98,7 @@ import {CdkDetailRowDirective} from './directives/cdk-detail-row/cdk-detail-row.
 
     // Pipes
     AppCurrencyPipe,
-    AppDatePipe
+    AppDatePipe,
   ],
   entryComponents: [
     ConfirmDialogComponent

@@ -2,7 +2,14 @@ import {Component, OnInit, OnDestroy, ViewChild, ElementRef} from '@angular/core
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {Store} from '@ngrx/store';
-import {RegisterSale, PaymentType, Customer, sortSales, getDashboardDates, DashboardPeriods, generateDashboard} from 'pos-models';
+import {
+  RegisterSale,
+  sortSales,
+  DashboardPeriods,
+  generateDashboard,
+  generateTopSaleProducts,
+  TopSaleProducts
+} from 'pos-models';
 import Chart from 'chart.js';
 import format from '../shared/utils/format';
 
@@ -19,7 +26,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   period: DashboardPeriods = DashboardPeriods.Today;
   chartInstance: any = null;
-  sales = [];
+  sales: RegisterSale[] = [];
+  recentSales: RegisterSale[] = [];
+  topSaleProducts: TopSaleProducts;
   summary: any;
   unsubscribe$ = new Subject();
   formatDate = format;
@@ -34,6 +43,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       )
       .subscribe(sales => {
         this.sales = sales || [];
+        this.recentSales = this.sales.sort((a, b) =>
+          new Date(b.salesDate).getTime() - new Date(a.salesDate).getTime()
+        ).slice(0, 5);
         this.initDashboard();
       });
     this.store.dispatch(new actions.LoadSales());
@@ -66,19 +78,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  get performanceLabel() {
-    switch (this.period) {
-      case DashboardPeriods.Today: {
-        return ['오늘 매출', `지난주 ${format(this.summary.dates.endDate, 'iiii')}`];
-      }
-      case DashboardPeriods.ThisWeek: {
-        return ['이번주 매출', `지난주`];
-      }
-      case DashboardPeriods.ThisMonth: {
-        return ['이번달 매출', `지난달`];
-      }
-    }
-  }
 
   get salesDiff() {
     const {current, previous} = this.summary;
@@ -97,10 +96,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   initDashboard() {
     if (this.sales.length > 0) {
-      this.summary = sortSales(this.sales, this.period);
-      this.summary.current = generateDashboard(this.summary.salesInCurrentPeriod);
-      this.summary.previous = generateDashboard(this.summary.salesToCompare);
-      this.renderChart();
+      const summary: any = sortSales(this.sales, this.period);
+      summary.current = generateDashboard(summary.salesInCurrentPeriod);
+      summary.previous = generateDashboard(summary.salesInPreviousPeriod);
+      this.topSaleProducts = generateTopSaleProducts(summary.current.products, summary.previous.products);
+      this.summary = summary;
+      // this.renderChart();
     }
   }
 
@@ -120,7 +121,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             borderColor: '#3F51B5',
             backgroundColor: '#3F51B5',
             borderWidth: 1,
-            lineTension: 0,
+            lineTension: 0.3,
             fill: false
           },
           {
@@ -129,7 +130,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             borderColor: '#E0E0E0',
             backgroundColor: '#E0E0E0',
             borderWidth: 1,
-            lineTension: 0,
+            lineTension: 0.3,
             fill: false
           },
         ]
@@ -172,6 +173,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
             title: (tooltipItem, data) => {
               return '';
             }
+          }
+        },
+        plugins: {
+          datalabels: {
+            display: false
           }
         }
       }
