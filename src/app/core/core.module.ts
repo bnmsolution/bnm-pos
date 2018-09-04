@@ -13,9 +13,9 @@ import { RegisterSaleService } from 'src/app/services/register-sale.service';
 import { RegisterService } from 'src/app/services/register.service';
 import { TaxService } from 'src/app/services/tax.service';
 import { VendorService } from 'src/app/services/vendor.service';
-import { SettingsService } from 'src/app/services/settings.service';
+import { PosStoreService } from 'src/app/services/pos-store.service';
 import { CategoryResolverService } from 'src/app/services/category-resolver.service';
-import { SettingsResolverService } from 'src/app/services/settings.resolver.service';
+import { StoreResolverService } from 'src/app/services/store.resolver.service';
 import { TaxResolverService } from 'src/app/services/tax-resolver.service';
 import { VendorResolverService } from 'src/app/services/vendor-resolver.service';
 
@@ -34,9 +34,9 @@ import { VendorResolverService } from 'src/app/services/vendor-resolver.service'
     RegisterService,
     TaxService,
     VendorService,
-    SettingsService,
+    PosStoreService,
     CategoryResolverService,
-    SettingsResolverService,
+    StoreResolverService,
     TaxResolverService,
     VendorResolverService
   ]

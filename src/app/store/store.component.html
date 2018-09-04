@@ -20,6 +20,12 @@
                 </mat-select>
               </mat-form-field>
               <mat-form-field>
+                <mat-select formControlName="displayCurrencySymbol" placeholder="통화심볼">
+                  <mat-option [value]="false">표시안함</mat-option>
+                  <mat-option [value]="true">표시</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field>
                 <mat-select formControlName="defaultTaxId" placeholder="기본과세">
                   <mat-option *ngFor="let tax of taxes" [value]="tax.id">
                     {{tax.name}}
@@ -59,11 +65,11 @@
               </mat-form-field>
 
               <mat-form-field>
-                <input type="number" matInput formControlName="mininumPointsToUse" placeholder="사용 가능 최소 포인트">
+                <input type="number" matInput formControlName="minimumPointsToUse" placeholder="사용 가능 최소 포인트">
               </mat-form-field>
 
               <mat-form-field>
-                <input type="number" matInput formControlName="bounsPointUponRegisteration" placeholder="고객 등록시 보너스 포인트">
+                <input type="number" matInput formControlName="bonusPointUponRegistration" placeholder="고객 등록시 보너스 포인트">
               </mat-form-field>
             </section>
           </mat-expansion-panel>

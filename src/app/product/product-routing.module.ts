@@ -6,7 +6,7 @@ import {ProductListComponent} from './product-list/product-list.component';
 import {ProductResolverService} from 'src/app/product/product-resolver.service';
 import {CategoryResolverService} from 'src/app/services/category-resolver.service';
 import {TaxResolverService} from 'src/app/services/tax-resolver.service';
-import {SettingsResolverService} from 'src/app/services/settings.resolver.service';
+import {StoreResolverService} from 'src/app/services/store.resolver.service';
 import {VendorResolverService} from 'src/app/services/vendor-resolver.service';
 
 const routes: Routes = [
@@ -17,7 +17,7 @@ const routes: Routes = [
       categories: CategoryResolverService,
       vendors: VendorResolverService,
       taxes: TaxResolverService,
-      settings: SettingsResolverService
+      settings: StoreResolverService
     }
   },
   {
@@ -27,7 +27,7 @@ const routes: Routes = [
       categories: CategoryResolverService,
       vendors: VendorResolverService,
       taxes: TaxResolverService,
-      settings: SettingsResolverService,
+      settings: StoreResolverService,
       editProduct: ProductResolverService
     }
   },

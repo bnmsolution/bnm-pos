@@ -4,10 +4,10 @@ import {CrudService} from './crudService';
 import {HttpService} from './http.service';
 import {LocalDbService} from './localDb.service';
 
-const documentName = 'settings';
+const documentName = 'store';
 
 @Injectable()
-export class SettingsService extends CrudService {
+export class PosStoreService extends CrudService {
   constructor(
     private httpService: HttpService,
     private localDbService: LocalDbService) {

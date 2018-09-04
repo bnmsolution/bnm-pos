@@ -5,7 +5,7 @@ import {MatSnackBar} from '@angular/material';
 import {Store} from '@ngrx/store';
 import {merge} from 'rxjs';
 import {filter, take} from 'rxjs/operators';
-import {Product, Category, Vendor, Tax, Settings, getProductPriceFromRetailPrice, getProductPriceFromMarkup, getMarkup} from 'pos-models';
+import {Product, Category, Vendor, Tax, PosStore, getProductPriceFromRetailPrice, getProductPriceFromMarkup, getMarkup} from 'pos-models';
 import * as uuid from 'uuid/v1';
 
 import {productForm} from '../product.form';
@@ -25,7 +25,7 @@ export class AddProductComponent implements OnInit {
   categories: Category[] = [];
   vendors: Vendor[] = [];
   taxes: Tax[] = [];
-  settings: Settings;
+  settings: PosStore;
 
   constructor(
     private fb: FormBuilder,

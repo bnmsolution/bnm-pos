@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
+import {Store} from '@ngrx/store';
+import {BehaviorSubject} from 'rxjs';
+import {PosStore} from 'pos-models';
 
-// export type InternalStateType = {
-//   [key: string]: any,
-//   currentUser: Employee
-// };
+import {cloneDeep} from '../shared/utils/lang';
+import * as actions from '../stores/actions/store.actions';
 
 declare const window: any;
 
@@ -33,24 +34,33 @@ export class AppState {
     dateFormat: 'YYYY-MM-DD A hh:mm:ss'
   };
 
+  private settings = {};
+  appState$ = new BehaviorSubject<any>({});
 
-  public get currentStore() {
-    return this._clone(this._currentStore);
+
+  get currentStore() {
+    return cloneDeep(this._currentStore);
   }
 
-  public get currentUser() {
-    return this._clone(this._currentUser);
+  get currentUser() {
+    return cloneDeep(this._currentUser);
   }
 
-  public get config() {
-    return this._clone(this._config);
+  get config() {
+    return cloneDeep(this.settings);
   }
 
-  private _clone(object: any) {
-    return JSON.parse(JSON.stringify(object));
-  }
-
-  constructor() {
+  constructor(private store: Store<any>) {
+    this.store.select('settings')
+      .subscribe((settings: PosStore) => {
+        this.settings = settings ? settings[0] : {};
+        this.appState$.next({
+          store: this._currentStore,
+          user: this._currentUser,
+          settings: this.settings
+        });
+      });
+    this.store.dispatch(new actions.LoadStores());
     window.__localeId__ = this._config.locale;
   }
 }

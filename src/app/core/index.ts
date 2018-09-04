@@ -12,4 +12,4 @@ export * from '../services/register-sale.service';
 export * from '../services/register.service';
 export * from '../services/tax.service';
 export * from '../services/vendor.service';
-export * from '../services/settings.service';
+export * from '../services/pos-store.service';

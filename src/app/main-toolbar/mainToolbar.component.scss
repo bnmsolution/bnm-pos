@@ -1,3 +1,5 @@
+@import '../shared/common-style';
+
 mat-toolbar {
   background-color: white;
   height: 50px;
@@ -13,7 +15,19 @@ mat-toolbar {
   line-height: 40px;
 }
 
-
 .menu-toggle {
   margin-left: -8px;
+}
+
+.store-name {
+  font-weight: 400;
+  font-size: 20px;
+  outline: none;
+  cursor: pointer;
+}
+
+.user {
+  mat-icon {
+    margin-right: 4px;
+  }
 }

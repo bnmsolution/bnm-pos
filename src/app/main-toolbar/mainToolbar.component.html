@@ -2,10 +2,12 @@
   <button mat-icon-button class="menu-toggle" (click)="toggleMenuMode()">
     <mat-icon svgIcon="menu"></mat-icon>
   </button>
+  <div class="store-name" routerLink="/">{{settings.storeName}}</div>
   <span fxFlex></span>
-  <mat-icon matBadge="3" matBadgeColor="warn"  svgIcon="notification"></mat-icon>
-  <button mat-icon-button [matMenuTriggerFor]="menu">
-    <mat-icon svgIcon="moreVertIcon"></mat-icon>
+  <!--<mat-icon matBadge="3" matBadgeColor="warn"  svgIcon="notification"></mat-icon>-->
+  <button class="user" *ngIf="user" mat-button [matMenuTriggerFor]="menu">
+    <mat-icon svgIcon="account"></mat-icon>
+    <span>{{user.name}}</span>
   </button>
   <mat-menu #menu="matMenu">
     <button mat-menu-item>

@@ -33,7 +33,6 @@ export class SalesWidgetComponent implements OnInit, OnChanges {
   ngOnChanges() {
     this.renderChart();
     this.setChangeRateData();
-    console.log(this.changeRateData);
   }
 
   setChangeRateData() {
@@ -133,7 +132,7 @@ export class SalesWidgetComponent implements OnInit, OnChanges {
             borderWidth: 1,
             lineTension: 0.3,
             fill: false,
-            pointRadius: 0,
+            pointRadius: 1,
             pointHoverRadius: 3,
           },
           {
@@ -144,7 +143,7 @@ export class SalesWidgetComponent implements OnInit, OnChanges {
             borderWidth: 1,
             lineTension: 0.3,
             fill: false,
-            pointRadius: 0,
+            pointRadius: 1,
             pointHoverRadius: 3,
           },
         ]

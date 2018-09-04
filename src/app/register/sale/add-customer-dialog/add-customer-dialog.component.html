@@ -8,8 +8,10 @@
       </mat-error>
     </mat-form-field>
     <mat-form-field>
-      <input type="text" matInput [(ngModel)]="phone" #phoneNumber="ngModel" name="phone" placeholder="전화번호" [textMask]="{mask: masks.phoneNumber, showMask: true}"
-        required appCustomerPhoneNumberNotTaken>
+      <!--<input type="text" matInput [(ngModel)]="phone" #phoneNumber="ngModel" name="phone" placeholder="전화번호" [textMask]="{mask: masks.phoneNumber, showMask: true}"-->
+        <!--required appCustomerPhoneNumberNotTaken>-->
+      <input type="text" matInput [(ngModel)]="phone" #phoneNumber="ngModel" name="phone" placeholder="전화번호"
+             required appCustomerPhoneNumberNotTaken>
       <mat-error *ngIf="phoneNumber.errors?.takenNumber">
         이미 등록된 전화번호 입니다.
       </mat-error>

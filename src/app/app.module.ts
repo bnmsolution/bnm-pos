@@ -18,7 +18,7 @@ import {CoreModule} from './core/core.module';
 import {AuthModule} from './auth/auth.module';
 import {WidgetsModule} from './widgets/widgets.module';
 import {DashboardComponent} from './dashboard';
-import {SettingsComponent} from './settings/settings.component';
+import {StoreComponent} from './store/store.component';
 
 
 import reducers from './stores/reducers';
@@ -46,7 +46,7 @@ export const metaReducers = environment.production ? [] : [logger];
   declarations: [
     AppComponent,
     DashboardComponent,
-    SettingsComponent
+    StoreComponent
   ],
   imports: [
     BrowserModule,

@@ -1,8 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {Router, NavigationEnd} from '@angular/router';
+import {Subject} from 'rxjs';
+import {PosStore} from 'pos-models';
 
 import {AuthService} from '../auth';
 import {MenuService} from '../services/menu.service';
+import {AppState} from '../services/app.service';
+
 
 @Component({
   selector: 'app-main-toolbar',
@@ -11,22 +14,23 @@ import {MenuService} from '../services/menu.service';
 })
 export class MainToolbarComponent implements OnInit {
 
-  public url: string;
+  settings: PosStore;
+  user: any;
+  unsubscribe$ = new Subject();
 
   constructor(
-    private router: Router,
     private authService: AuthService,
-    private menuService: MenuService) {
+    private menuService: MenuService,
+    private appState: AppState) {
   }
 
   ngOnInit() {
-    this.url = this.router.url;
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.url = event.url;
-      }
+    this.appState.appState$.subscribe(state => {
+      this.settings = state.settings;
+      this.user = state.user;
     });
   }
+
 
   toggleMenuMode() {
     this.menuService.toggleMenuMode();

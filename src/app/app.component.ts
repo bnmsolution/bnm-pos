@@ -40,7 +40,8 @@ const svgIconList = [
   ['notification', 'outline-notifications-24px'],
   ['arrowUp', 'outline-arrow_upward-24px'],
   ['arrowDown', 'outline-arrow_downward-24px'],
-  ['menu', 'outline-menu-24px']
+  ['menu', 'outline-menu-24px'],
+  ['account', 'outline-account_circle-24px']
 ];
 
 @Component({

@@ -1,7 +1,8 @@
-import { Directive } from '@angular/core';
-import { AbstractControl, Validator, NG_ASYNC_VALIDATORS } from '@angular/forms';
+import {Directive} from '@angular/core';
+import {AbstractControl, Validator, NG_ASYNC_VALIDATORS} from '@angular/forms';
+import {map} from 'rxjs/operators';
 
-import { CustomerService } from '../../../services/customer.service';
+import {CustomerService} from '../../../services/customer.service';
 
 @Directive({
   selector: '[appCustomerPhoneNumberNotTaken]',
@@ -14,7 +15,8 @@ import { CustomerService } from '../../../services/customer.service';
   ]
 })
 export class ValidateCustomerPhoneNumberNotTakenDirective implements Validator {
-  constructor(private customerService: CustomerService) { }
+  constructor(private customerService: CustomerService) {
+  }
 
   validate(control: AbstractControl): { [key: string]: any } {
     console.log(`validating phone number ${control.value}`);
@@ -32,9 +34,12 @@ export class ValidateCustomerPhoneNumberNotTakenDirective implements Validator {
   }
 
   isUnique(value) {
-    // return this.customerService.isUniquePhoneNumber(value)
-    //   .then(isUnique => {
-    //     return isUnique ? null : { 'takenNumber': true };
-    //   });
+    console.log(`validating phone number ${value}`);
+    return this.customerService.isUniquePhoneNumber(value)
+      .pipe(
+        map(isUnique => {
+          return isUnique ? null : { 'takenNumber': true };
+        })
+      );
   }
 }

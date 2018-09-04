@@ -4,8 +4,8 @@ import {RouterModule} from '@angular/router';
 import {LayoutComponent} from './layout/layout.component';
 import {AuthGuardService, CallbackComponent} from './auth';
 import {DashboardComponent} from './dashboard';
-import {SettingsComponent} from './settings/settings.component';
-import {SettingsResolverService} from './services/settings.resolver.service';
+import {StoreComponent} from './store/store.component';
+import {StoreResolverService} from './services/store.resolver.service';
 import {TaxResolverService} from './services/tax-resolver.service';
 
 @NgModule({
@@ -37,9 +37,9 @@ import {TaxResolverService} from './services/tax-resolver.service';
           {path: 'vendor', loadChildren: 'src/app/vendor/vendor.module#VendorModule'},
           {
             path: 'settings',
-            component: SettingsComponent,
+            component: StoreComponent,
             resolve: {
-              settings: SettingsResolverService,
+              settings: StoreResolverService,
               taxes: TaxResolverService
             }
           },

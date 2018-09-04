@@ -14,6 +14,7 @@ import {TabEditDialogComponent} from '../quick-products/tab-edit-dialog/tab-edit
 
 import * as registerActions from '../../stores/actions/register.actions';
 import * as productActions from '../../stores/actions/product.actions';
+import {cloneDeep} from '../../shared/utils/lang';
 
 @Component({
   selector: 'app-register-config',
@@ -193,7 +194,7 @@ export class RegisterConfigComponent implements OnInit, OnDestroy {
 
   openTabEditDialog(): void {
     const dialogConfig = new MatDialogConfig();
-    const registerCopy = this.register.copy();
+    const registerCopy = cloneDeep(this.register);
     this.dialog
       .open(TabEditDialogComponent, {data: {tabs: registerCopy.tabs}})
       .afterClosed()
@@ -236,7 +237,7 @@ export class RegisterConfigComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
-    const copy = this.register.copy();
+    const copy = cloneDeep(this.register);
     this.removeEmptyQuickProduct(copy);
     this.store.dispatch(new registerActions.UpdateRegister(copy));
   }
