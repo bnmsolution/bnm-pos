@@ -29,6 +29,8 @@ export class CategoryListComponent implements OnInit, AfterViewInit {
     this.dataSource = new MatTableDataSource();
     this.store.select('categories')
       .subscribe(categories => {
+        console.log('categories loaded');
+        console.log(categories);
         this.dataSource.data = categories || [];
       });
     this.store.dispatch(new actions.LoadCategories());

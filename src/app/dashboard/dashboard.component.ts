@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy, ViewChild, ElementRef} from '@angular/core';
+import {Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef} from '@angular/core';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {Store} from '@ngrx/store';
@@ -15,6 +15,7 @@ import format from '../shared/utils/format';
 
 import {AppState} from '../core';
 import * as actions from '../stores/actions/sales.actions';
+import {cloneDeep} from '../shared/utils/lang';
 
 @Component({
   selector: 'app-dashboard',
@@ -33,7 +34,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   unsubscribe$ = new Subject();
   formatDate = format;
 
-  constructor(private appState: AppState, private store: Store<any>) {
+  constructor(private cdr: ChangeDetectorRef,
+              private appState: AppState, private store: Store<any>) {
   }
 
   ngOnInit() {
@@ -42,13 +44,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
         takeUntil(this.unsubscribe$)
       )
       .subscribe(sales => {
-        this.sales = sales || [];
-        this.recentSales = this.sales.sort((a, b) =>
-          new Date(b.salesDate).getTime() - new Date(a.salesDate).getTime()
-        ).slice(0, 5);
-        this.initDashboard();
+        if (sales) {
+          this.sales = cloneDeep(sales);
+          this.recentSales = this.sales.sort((a, b) =>
+            new Date(b.salesDate).getTime() - new Date(a.salesDate).getTime()
+          ).slice(0, 5);
+          this.initDashboard();
+          this.cdr.detectChanges();
+        } else {
+          this.store.dispatch(new actions.LoadSales());
+        }
       });
-    this.store.dispatch(new actions.LoadSales());
+
 
     this.store.select('customers')
       .pipe(
@@ -144,7 +151,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
               position: 'left',
               ticks: {
                 callback: (value, index, values) => {
-                  return value.toLocaleString(this.appState.config.locale);
+                  return value.toLocaleString(this.appState.currentStore.locale);
                 }
               }
             },
@@ -165,9 +172,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
               const index = tooltipItem.index;
               const chartData = this.summary.chartData;
               if (tooltipItem.datasetIndex === 0) {
-                return `${chartData[index].tooltipCurrent}: ${tooltipItem.yLabel.toLocaleString(this.appState.config.locale)}`;
+                return `${chartData[index].tooltipCurrent}: ${tooltipItem.yLabel.toLocaleString(this.appState.currentStore.locale)}`;
               } else {
-                return `${chartData[index].tooltipPrevious}: ${tooltipItem.yLabel.toLocaleString(this.appState.config.locale)}`;
+                return `${chartData[index].tooltipPrevious}: ${tooltipItem.yLabel.toLocaleString(this.appState.currentStore.locale)}`;
               }
             },
             title: (tooltipItem, data) => {

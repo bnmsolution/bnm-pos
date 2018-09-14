@@ -46,7 +46,7 @@ export class StoreComponent implements OnInit {
 
   createFrom() {
     this.storeForm = this.fb.group({
-      storeName: ['', Validators.required],
+      name: ['', Validators.required],
       currencyCode: ['', Validators.required],
       displayCurrencySymbol: [false],
       defaultTaxId: ['', Validators.required],

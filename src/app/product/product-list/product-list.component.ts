@@ -1,10 +1,9 @@
-import {Component, OnInit, AfterViewInit, ViewChild, OnDestroy} from '@angular/core';
+import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {MatSnackBar, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {Store} from '@ngrx/store';
-import {Subject} from 'rxjs';
+import {BehaviorSubject, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-
 import {Category, Product, Vendor, Tax} from 'pos-models';
 
 import {detailExpand} from '../../shared/utils/animation';
@@ -22,10 +21,11 @@ export interface ProductFilter {
   styleUrls: ['./product-list.component.scss'],
   animations: detailExpand
 })
-export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ProductListComponent implements OnInit, OnDestroy {
 
   dataSource: MatTableDataSource<Product>;
   filter: ProductFilter;
+  filter$: BehaviorSubject<ProductFilter>;
   filterChange = new Subject();
   unsubscribe$ = new Subject();
   displayedColumns = ['name', 'created', 'category', 'vendor', 'retailPrice', 'count', 'actions'];
@@ -43,6 +43,7 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     private snackBar: MatSnackBar,
     private store: Store<any>) {
     this.filter = this.getEmptyFilter();
+    this.filter$ = new BehaviorSubject(this.getEmptyFilter());
   }
 
   ngOnInit() {
@@ -62,28 +63,19 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       });
 
-    this.route.data
-      .subscribe((data) => {
-        this.categories = data.categories;
-        this.vendors = data.vendors;
-        this.taxes = data.taxes;
-      });
-
+    // this.route.data
+    //   .subscribe((data) => {
+    //     this.categories = data.categories;
+    //     this.vendors = data.vendors;
+    //     this.taxes = data.taxes;
+    //   });
     this.store.select('products')
       .pipe(
         takeUntil(this.unsubscribe$)
       )
       .subscribe(products => {
-        this.dataSource.data = products || [];
+        products ? this.initTable(products) : this.store.dispatch(new actions.LoadProducts());
       });
-    this.store.dispatch(new actions.LoadProducts());
-
-    this.initFilter();
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
   }
 
   ngOnDestroy() {
@@ -91,15 +83,9 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  onFilterCleared() {
-    this.filter = this.getEmptyFilter();
-    this.dataSource.filter = JSON.stringify(this.filter);
-  }
-
-  private initFilter() {
-    this.filterChange.subscribe(filter => this.setFilter());
-
-    // custom filter function
+  private initTable(data) {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
     this.dataSource.filterPredicate = (product: Product, filter: string) => {
       const filterObject = JSON.parse(filter);
 
@@ -115,10 +101,19 @@ export class ProductListComponent implements OnInit, AfterViewInit, OnDestroy {
 
       return str.contains(filterObject.searchValue);
     };
+    this.dataSource.data = data;
+    // this.filterChange.subscribe(filter => this.setFilter());
+    this.filter$.subscribe(filter => this.dataSource.filter = JSON.stringify(this.filter));
+  }
+
+  onFilterCleared() {
+    this.filter = this.getEmptyFilter();
+    this.dataSource.filter = JSON.stringify(this.filter);
   }
 
   private setFilter() {
     this.dataSource.filter = JSON.stringify(this.filter);
+    console.log(this.dataSource.filter);
   }
 
   private getEmptyFilter(): ProductFilter {

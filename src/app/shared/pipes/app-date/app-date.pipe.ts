@@ -15,7 +15,7 @@ export class AppDatePipe implements PipeTransform {
     if (format) {
       return date.format(format);
     } else {
-      return date.format(this.appState.config.dateFormat);
+      return date.format(this.appState.currentStore.dateFormat);
     }
   }
 

@@ -1,15 +1,15 @@
 <section fxLayout>
   <div class="searchInputs" fxLayout="column">
-    <div>
-      <mat-form-field class="searchInput">
-        <mat-icon matSuffix svgIcon="searchIcon"></mat-icon>
-        <mat-label>판매번호, 고객명, 직원명 검색</mat-label>
-        <input matInput [(ngModel)]="filter.searchValue" name="searchValue" (keyup)="searchValue$.next($event.target.value)">
-        <button mat-button *ngIf="searchValue" matSuffix mat-icon-button aria-label="Clear" (click)="searchValue=''">
-          <mat-icon svgIcon="closeIcon"></mat-icon>
-        </button>
-      </mat-form-field>
-    </div>
+    <!--<div>-->
+      <!--<mat-form-field class="searchInput">-->
+        <!--<mat-icon matSuffix svgIcon="searchIcon"></mat-icon>-->
+        <!--<mat-label>판매번호, 고객명, 직원명 검색</mat-label>-->
+        <!--<input matInput [(ngModel)]="filter.searchValue" name="searchValue" (keyup)="searchValue$.next($event.target.value)">-->
+        <!--<button mat-button *ngIf="searchValue" matSuffix mat-icon-button aria-label="Clear" (click)="searchValue=''">-->
+          <!--<mat-icon svgIcon="closeIcon"></mat-icon>-->
+        <!--</button>-->
+      <!--</mat-form-field>-->
+    <!--</div>-->
     <div>
       <mat-form-field>
         <mat-select [(ngModel)]="filter.status" (ngModelChange)="filter.status=$event; filterChange.next(this.filter);"
@@ -45,7 +45,7 @@
       </mat-form-field>
     </div>
   </div>
-  <div class="buttons" fxLayout fxLayoutAlign="end end" fxFlex>
-    <button mat-button color="primary" [disabled]="isFilterEmpty()" (click)="clearFilter.next()">필터제거</button>
-  </div>
+  <!--<div class="buttons" fxLayout fxLayoutAlign="end end" fxFlex>-->
+    <!--<button mat-button color="primary" [disabled]="isFilterEmpty()" (click)="clearFilter.next()">필터제거</button>-->
+  <!--</div>-->
 </section>

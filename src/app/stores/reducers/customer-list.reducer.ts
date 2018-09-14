@@ -5,7 +5,7 @@ import * as actions from '../actions/customer.actions';
 export type CustomerListState = Customer[];
 const initialState: CustomerListState = null;
 
-export default function (state = initialState, action) {
+export function customerListReducer(state = initialState, action) {
   switch (action.type) {
     case actions.LOAD_CUSTOMERS_SUCCESS: {
       return action.payload;

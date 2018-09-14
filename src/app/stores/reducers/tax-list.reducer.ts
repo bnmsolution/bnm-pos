@@ -5,7 +5,7 @@ import * as actions from '../actions/tax.actions';
 export type TaxListState = Tax[];
 const initialState: TaxListState = null;
 
-export default function (state = initialState, action) {
+export function taxListReducer(state = initialState, action) {
   switch (action.type) {
     case actions.LOAD_TAXES_SUCCESS: {
       return action.payload;

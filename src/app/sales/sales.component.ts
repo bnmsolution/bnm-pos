@@ -12,6 +12,7 @@ import {detailExpand} from '../shared/utils/animation';
 import * as salesListActions from '../stores/actions/sales.actions';
 import * as salesActions from '../stores/actions/register-sale.actions';
 import {CustomerService} from '../services/customer.service';
+import {AppState} from '../core';
 
 export enum FilterPeriod {
   Today, ThisWeek, ThisMonth, OneWeek, OneMonth, OneYear, Custom
@@ -51,7 +52,8 @@ export class SalesComponent implements OnInit, AfterViewInit {
     private router: Router,
     private route: ActivatedRoute,
     private store: Store<any>,
-    private customerService: CustomerService) {
+    private customerService: CustomerService,
+    private appState: AppState) {
     this.filter = this.getEmptyFilter();
   }
 
@@ -94,6 +96,7 @@ export class SalesComponent implements OnInit, AfterViewInit {
   }
 
   returnSale(sale: RegisterSale) {
+    const appState = this.appState.appState$.getValue();
     this.store.dispatch(new salesActions.ReturnSale({sale}));
     this.router.navigate(['./register']);
   }

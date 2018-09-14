@@ -1,4 +1,4 @@
-<form class="app-form" [formGroup]="settingsForm" (ngSubmit)="onSubmit()" novalidate>
+<form class="app-form" [formGroup]="storeForm" (ngSubmit)="onSubmit()" novalidate>
   <app-create-content-header title="설정" returnUrl="/"></app-create-content-header>
   <mat-tab-group (selectedTabChange)="tabChange($event)">
     <mat-tab label="스토어 설정">
@@ -10,7 +10,7 @@
             </mat-expansion-panel-header>
             <section fxLayout="column">
               <mat-form-field>
-                <input matInput formControlName="storeName" placeholder="스토어 이름" required>
+                <input matInput formControlName="name" placeholder="스토어 이름" required>
               </mat-form-field>
               <mat-form-field>
                 <mat-select formControlName="currencyCode" placeholder="기본통화">

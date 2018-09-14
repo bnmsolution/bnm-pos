@@ -34,7 +34,7 @@ export class SelectRegister implements Action {
 export class CreateSale implements Action {
   readonly type = CREATE_SALE;
 
-  constructor(public payload: { registerId: string }) {
+  constructor(public payload: { storeId: string, registerId: string, userId: string }) {
   }
 }
 
@@ -51,9 +51,6 @@ export class CloseSale implements Action {
 
 export class CloseSaleSuccess implements Action {
   readonly type = CLOSE_SALE_SUCCESS;
-
-  constructor() {
-  }
 }
 
 export class AddLineItem implements Action {
@@ -113,18 +110,21 @@ export class RemoveSaleCustomer implements Action {
 
 export class ContinueSale implements Action {
   readonly type = CONTINUE_SALE;
+
   constructor(public payload: { sale: RegisterSale }) {
   }
 }
 
 export class ReturnSale implements Action {
   readonly type = RETURN_SALE;
+
   constructor(public payload: { sale: RegisterSale }) {
   }
 }
 
 export class ExchangeSale implements Action {
   readonly type = EXCHANGE_SALE;
+
   constructor(public payload: { sale: RegisterSale }) {
   }
 }

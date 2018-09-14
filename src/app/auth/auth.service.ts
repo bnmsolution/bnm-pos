@@ -24,7 +24,6 @@ export class AuthService {
     scope: 'openid profile'
   });
   profile$: BehaviorSubject<any>;
-  user: Employee;
 
   constructor(private router: Router) {
     const profile = localStorage.getItem('profile');
@@ -118,26 +117,6 @@ export class AuthService {
     return new Date().getTime() < expiresAt;
   }
 
-  //
-  // private setLoggedIn(value: boolean) {
-  //   console.log('[Auth service] User logged in');
-  //   console.log(this._userProfile);
-  //   this.loggedIn$.next(value);
-  //   this.loggedIn = value;
-  //   this.localDbService.init(this._userProfile.tenantId);
-  //   this.localDbService.startLiveReplication(this._userProfile.tenantId);
-  //   // this.setCurrentUser();
-  // }
-
-  // private setCurrentUser() {
-  //   const userCode = localStorage.getItem('user');
-  //   this.onMasterUserLoggedIn(this._userProfile.name);
-  //   this.employeeService.findEmployeeByCode(userCode)
-  //     .subscribe(currentUser => {
-  //       // this.store.dispatch(new salesListActions.LoginUser({ user: currentUser }));
-  //       this.user = currentUser;
-  //     });
-  // }
 
   private setSession(authResult): void {
     const expTime = authResult.expiresIn * 1000 + Date.now();
@@ -146,16 +125,5 @@ export class AuthService {
     localStorage.setItem('expires_at', JSON.stringify(expTime));
     this.scheduleRenewal();
   }
-
-  // private onMasterUserLoggedIn(email: string, isCurrentUser = false) {
-  //   this.employeeService.findEmployeeByEmail(email)
-  //     .subscribe(masterEmployee => {
-  //       if (isCurrentUser) {
-  //         localStorage.setItem('user', masterEmployee.code);
-  //         this.setCurrentUser();
-  //       }
-  //       // this.store.dispatch(new salesListActions.LoginMasterUser({ user: masterEmployee }));
-  //       this.masterUser = masterEmployee;
-  //     });
-  // }
 }
+

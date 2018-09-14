@@ -2,7 +2,7 @@
   <button mat-icon-button class="menu-toggle" (click)="toggleMenuMode()">
     <mat-icon svgIcon="menu"></mat-icon>
   </button>
-  <div class="store-name" routerLink="/">{{settings.storeName}}</div>
+  <div class="store-name" *ngIf="store"  routerLink="/">{{store.name}}</div>
   <span fxFlex></span>
   <!--<mat-icon matBadge="3" matBadgeColor="warn"  svgIcon="notification"></mat-icon>-->
   <button class="user" *ngIf="user" mat-button [matMenuTriggerFor]="menu">

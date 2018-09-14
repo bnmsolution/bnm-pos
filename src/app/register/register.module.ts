@@ -18,6 +18,8 @@ import {LineItemComponent} from './sale/checkout/line-item/line-item.component';
 import {TotalsComponent} from './sale/checkout/totals/totals.component';
 import {TabEditDialogComponent} from './quick-products/tab-edit-dialog/tab-edit-dialog.component';
 import {AddCustomerDialogComponent} from './sale/add-customer-dialog/add-customer-dialog.component';
+import {ProductViewDialogComponent} from './product-view-dialog/product-view-dialog.component';
+
 
 @NgModule({
   imports: [
@@ -28,7 +30,7 @@ import {AddCustomerDialogComponent} from './sale/add-customer-dialog/add-custome
     RegisterComponent,
     RegisterConfigComponent,
     // OpenShiftComponent,
-    // ProductViewDialogComponent,
+    ProductViewDialogComponent,
 
     // Checkout components
     // CheckoutComponent,

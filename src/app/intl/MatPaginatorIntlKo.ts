@@ -1,5 +1,7 @@
 import {MatPaginatorIntl} from '@angular/material';
+import {Injectable} from '@angular/core';
 
+@Injectable()
 export class MatPaginatorIntlKo extends MatPaginatorIntl {
   firstPageLabel = '처음';
   itemsPerPageLabel = '한 페이지에 출력할 항목 수';

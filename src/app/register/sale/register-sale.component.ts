@@ -6,7 +6,7 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {Register, RegisterSale, RegisterSaleStatus, Customer, Product} from 'pos-models';
 
-import {RegisterService, RegisterSaleService, ProductService, CustomerService} from 'src/app/core';
+import {RegisterService, RegisterSaleService, ProductService, CustomerService, AppState} from 'src/app/core';
 import * as registerActions from 'src/app/stores/actions/register.actions';
 import * as registerSaleActions from 'src/app/stores/actions/register-sale.actions';
 
@@ -28,6 +28,7 @@ export class RegisterSaleComponent implements OnInit {
               private registerSaleService: RegisterSaleService,
               private productService: ProductService,
               private customerService: CustomerService, private route: ActivatedRoute,
+              private appState: AppState,
               private router: Router,
               private store: Store<any>) {
   }
@@ -139,7 +140,13 @@ export class RegisterSaleComponent implements OnInit {
   }
 
   private createNewSale() {
-    this.store.dispatch(new registerSaleActions.CreateSale({registerId: this.currentRegister.id}));
+    const appState = this.appState.appState$.getValue();
+
+    this.store.dispatch(new registerSaleActions.CreateSale({
+      storeId: appState.store.id,
+      registerId: this.currentRegister.id,
+      userId: appState.user.id
+    }));
   }
 
   private isReturnItem(productId: string): boolean {

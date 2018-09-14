@@ -39,7 +39,7 @@ import {TaxResolverService} from './services/tax-resolver.service';
             path: 'settings',
             component: StoreComponent,
             resolve: {
-              settings: StoreResolverService,
+              store: StoreResolverService,
               taxes: TaxResolverService
             }
           },

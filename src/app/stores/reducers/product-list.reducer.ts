@@ -1,11 +1,11 @@
-import { Product } from 'pos-models';
+import {Product} from 'pos-models';
 
 import * as actions from '../actions/product.actions';
 
 export type ProductListState = Product[];
 const initialState: ProductListState = null;
 
-export default function (state = initialState, action) {
+export function productListReducer(state = initialState, action) {
   switch (action.type) {
     case actions.LOAD_PRODUCTS_SUCCESS: {
       return action.payload;

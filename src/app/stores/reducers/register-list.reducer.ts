@@ -1,11 +1,11 @@
-import { Register } from 'pos-models';
+import {Register} from 'pos-models';
 
 import * as actions from '../actions/register.actions';
 
 export type RegisterListState = Register[];
 const initialState: RegisterListState = null;
 
-export default function (state = initialState, action) {
+export function registerListReducer(state = initialState, action) {
   switch (action.type) {
     case actions.LOAD_REGISTERS_SUCCESS: {
       return action.payload;

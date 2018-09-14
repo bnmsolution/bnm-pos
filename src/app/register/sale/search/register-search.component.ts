@@ -146,7 +146,7 @@ export class RegisterSearchComponent implements OnInit, OnDestroy {
     );
   }
 
-  private resetControl() {
+  resetControl() {
     this.searchCtrl.setValue('', {emitEvent: false});
   }
 }

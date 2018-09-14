@@ -1,6 +1,6 @@
 <app-common-page-header title="상품" buttonTitle="상품 추가" buttonLink="/product/add"></app-common-page-header>
 
-<app-product-filter [filter]="filter" [filterChange]="filterChange" [categories]="categories" [vendors]="vendors" (clearFilter)="onFilterCleared()"></app-product-filter>
+<app-product-filter [filter]="filter" [filter$]="filter$" [filterChange]="filterChange" (clearFilter)="onFilterCleared()"></app-product-filter>
 
 <section>
   <mat-table #table [dataSource]="dataSource" matSort>
@@ -51,15 +51,9 @@
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
-    <mat-row *matRowDef="let row; columns: displayedColumns;" class="element-row" [cdkDetailRow]="row" [cdkDetailRowTpl]="tpl">
+    <mat-row *matRowDef="let row; columns: displayedColumns;" class="element-row">
     </mat-row>
   </mat-table>
   <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
   </mat-paginator>
 </section>
-
-<!-- Product detail row -->
-<ng-template #tpl let-element>
-  <!-- <div class="mat-row detail-row" [@detailExpand] style="overflow: hidden">
-  </div> -->
-</ng-template>

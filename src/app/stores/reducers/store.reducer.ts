@@ -5,7 +5,7 @@ import * as actions from '../actions/store.actions';
 export type StoresState = PosStore[];
 const initialState: StoresState = null;
 
-export default function (state = initialState, action) {
+export function storeReducer(state = initialState, action) {
   switch (action.type) {
     case actions.LOAD_STORE_SUCCESS: {
       return action.payload;

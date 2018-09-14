@@ -5,7 +5,7 @@ import * as actions from '../actions/vendor.actions';
 export type VendorListState = Vendor[];
 const initialState: VendorListState = null;
 
-export default function (state = initialState, action) {
+export function vendorListReducer(state = initialState, action) {
   switch (action.type) {
     case actions.LOAD_VENDORS_SUCCESS: {
       return action.payload;
@@ -20,6 +20,9 @@ export default function (state = initialState, action) {
     }
     case actions.DELETE_VENDOR_SUCCESS: {
       return state.filter(vendor => vendor.id !== action.payload);
+    }
+    case 'vendorTest': {
+      break;
     }
     default:
       return state;

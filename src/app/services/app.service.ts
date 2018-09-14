@@ -1,66 +1,43 @@
 import {Injectable} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {BehaviorSubject} from 'rxjs';
-import {PosStore} from 'pos-models';
+import {PosStore, Employee} from 'pos-models';
 
 import {cloneDeep} from '../shared/utils/lang';
 import * as actions from '../stores/actions/store.actions';
+import {EmployeeService} from './employee.service';
 
 declare const window: any;
 
 @Injectable()
 export class AppState {
-  private _currentStore = {
-    id: '4536a4bf-3e00-4db5-ac17-08b88ce492f5',
-    name: 'myStore'
-  };
-  private _currentUser = {
-    id: '15b3b1ce-482c-43b2-a708-c90b100f8fd1',
-    employeeCode: '0000',
-    name: '김지현',
-    email: 'bill.jh.kim@gmail.com'
-  };
-  private _config = {
-    locale: 'ko',
-    product: {
-      price: {
-        taxIncluded: true
-      }
-    },
-    currency: {
-      symbol: 'KRW',
-      displaySymbol: false
-    },
-    dateFormat: 'YYYY-MM-DD A hh:mm:ss'
-  };
-
-  private settings = {};
+  currentUser: Employee;
+  currentStore: PosStore;
   appState$ = new BehaviorSubject<any>({});
 
-
-  get currentStore() {
-    return cloneDeep(this._currentStore);
-  }
-
-  get currentUser() {
-    return cloneDeep(this._currentUser);
-  }
-
-  get config() {
-    return cloneDeep(this.settings);
-  }
-
-  constructor(private store: Store<any>) {
-    this.store.select('settings')
-      .subscribe((settings: PosStore) => {
-        this.settings = settings ? settings[0] : {};
-        this.appState$.next({
-          store: this._currentStore,
-          user: this._currentUser,
-          settings: this.settings
-        });
+  constructor(private employeeService: EmployeeService, private store: Store<any>) {
+    this.store.select('stores')
+      .subscribe((stores: PosStore) => {
+        this.currentStore = stores ? stores[0] : {};
+        this.notify();
+        window.__localeId__ = this.currentStore.locale;
       });
     this.store.dispatch(new actions.LoadStores());
-    window.__localeId__ = this._config.locale;
+    this.setUser();
+  }
+
+  setUser() {
+    this.employeeService.findEmployeeByCode('0000')
+      .subscribe(employee => {
+        this.currentUser = employee;
+        this.notify();
+      });
+  }
+
+  notify() {
+    this.appState$.next({
+      store: this.currentStore,
+      user: this.currentUser
+    });
   }
 }

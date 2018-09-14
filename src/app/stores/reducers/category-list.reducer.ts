@@ -5,7 +5,7 @@ import * as actions from '../actions/category.actions';
 export type CategoryListState = Category[];
 const initialState: CategoryListState = null;
 
-export default function (state = initialState, action) {
+export function categoryListReducer(state = initialState, action) {
   switch (action.type) {
     case actions.LOAD_CATEGORIES_SUCCESS: {
       return action.payload;

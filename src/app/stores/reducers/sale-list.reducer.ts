@@ -5,7 +5,7 @@ import * as actions from '../actions/sales.actions';
 export type SalesListState = RegisterSale[];
 const initialState: SalesListState = [];
 
-export default function (state = initialState, action) {
+export function saleListReducer (state = initialState, action) {
   switch (action.type) {
     case actions.LOAD_SALES_SUCCESS: {
       return action.payload;

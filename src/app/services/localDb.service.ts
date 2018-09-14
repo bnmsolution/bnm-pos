@@ -2,14 +2,26 @@ import {Injectable, NgZone} from '@angular/core';
 import {Observable, Subject} from 'rxjs';
 import {fromPromise} from 'rxjs/internal-compatibility';
 import PouchDB from 'pouchdb';
-// import WorkerPouch from 'worker-pouch';
-// PouchDB.plugin(WorkerPouch);
-// PouchDB.adapter('worker', require('worker-pouch'));
+import PouchDBFind from 'pouchdb-find';
+import {WorkerMessenger} from './worker-messenger';
+
+PouchDB.plugin(PouchDBFind);
 
 // todo: using node env
 const remoteCouchUrl = 'http://13.124.188.143:5984/';
 
 // const remoteCouchUrl = 'http://localhost:5984/';
+
+interface ChangeInfo {
+  direction: string;
+  change: {
+    docs: any[],
+    docs_read: number,
+    docs_written: number,
+    errors: any[],
+    start_time: Date
+  };
+}
 
 @Injectable()
 export class LocalDbService {
@@ -25,16 +37,22 @@ export class LocalDbService {
     }
   };
 
+  workerMessenger: WorkerMessenger;
+
   public replicationStream$ = new Subject<any>();
 
   constructor(private zone: NgZone) {
     console.log('LocalDbService');
+
+    this.workerMessenger = new WorkerMessenger(new Worker('assets/scripts/pouch-worker.js'));
   }
 
   init(tenantId: string): void {
-    // this.db = new PouchDB('pos-db', { adapter: 'worker', auto_compaction: true, revs_limit: 1 });
-    this.db = new PouchDB(`db-${tenantId}`, {auto_compaction: true, revs_limit: 1});
-    this.connectRemoteDb(tenantId);
+
+    this.workerMessenger.postMessage('init', [tenantId]);
+
+    // this.db = new PouchDB(`db-${tenantId}`, {auto_compaction: true, revs_limit: 1});
+    // this.connectRemoteDb(tenantId);
   }
 
   public connectRemoteDb(tenantId: string): void {
@@ -42,6 +60,8 @@ export class LocalDbService {
     this.remoteDb = new PouchDB(remoteDbUrl);
     // this.remoteDb.put(this.replicationFilter);
     console.log('[LocalDbService] Connected to the remote database.');
+
+
   }
 
   /**
@@ -82,52 +102,17 @@ export class LocalDbService {
   }
 
   /**
-   * Starts live replication. If any change made, it will notify it to all DataCacheSerivce.
-   *
+   * Starts live replication. If any change happens, it will emit document ids.
    *
    * @param {string} tenantId
    * @returns {void}
    */
   public startLiveReplication(tenantId: string): void {
-    // return;
-    if (this.liveReplicationStarted) {
-      return;
-    }
-
-    // if (!this.remoteDb) {
-    //   this.connectRemoteDb(tenantId);
-    // }
-
-    const remoteDbUrl: string = remoteCouchUrl + 'db-' + tenantId;
-    this.liveReplicationStarted = true;
-    this.db.sync(remoteDbUrl, {
-      live: true,
-      retry: true,
-      filter: doc => doc.fromRemote || doc._deleted === true
-    })
-      .on('change', info => {
-        console.log('[DataStoreService] Live Replication changed.');
+    this.workerMessenger.postMessage('startLiveReplication', [remoteCouchUrl, tenantId], 'replication', false)
+      .subscribe((info: ChangeInfo) => {
         const changeDocIds = info.change.docs.map(d => d._id);
-        this.zone.run(() => {
-          this.replicationStream$.next(changeDocIds.join(' '));
-        });
-      }).on('paused', err => {
-      console.log('[DataStoreService] Live Replication paused.');
-      console.log(err);
-    }).on('active', () => {
-      console.log('[DataStoreService] Live Replication active.');
-    }).on('denied', err => {
-      console.log('[DataStoreService] Live Replication denied.');
-      console.log(err);
-    })
-      .on('complete', info => {
-        console.log('[DataStoreService] Live Replication completed.');
-        console.log(info);
-      }).on('error', err => {
-      console.error('[DataStoreService] Live Replication error =>');
-      console.error(err);
-    });
-    console.log('[DataStoreService] Live Replication started.');
+        this.replicationStream$.next(changeDocIds.join(' '));
+      });
   }
 
   /**
@@ -186,34 +171,13 @@ export class LocalDbService {
     });
   }
 
-  /**
-   * Fetchs multiple documents in a range, indexed and sorted by the _id.
-   *
-   * @template T
-   * @param {string} docType
-   * @returns {Observable<T[]>}
-   */
-  public findAllDocs<T>(docType: string, fromRemote: boolean = false): Observable<any> {
-    const targetDb = fromRemote ? this.remoteDb : this.db;
-    const promise = targetDb.allDocs({
-      include_docs: true,
-      conflicts: !fromRemote,     // only local db
-      startkey: docType + '_',    // doc id start with [docType]_
-      endkey: docType + '\uffff'  // a largest possilbe character
-    })
-      .then(result => {
-        return result.rows.map(row => {
-          // if (row.doc.hasOwnProperty('_conflicts') && row.doc._conflicts.length > 0) {
-          //   this.resolveConflicts(row.doc, row.doc._conflicts);
-          // }
-          return row.doc;
-        });
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
+  findAllDocs<T>(docType: string, fromRemote?: boolean): Observable<T[]> {
+    return this.workerMessenger.postMessage('findAllDocs', [docType, fromRemote]);
+  }
 
-    return fromPromise(promise);
+  get<T>(type: string, id: string): Observable<T> {
+    const docId: string = this.generateDocId(type, id);
+    return this.workerMessenger.postMessage('get', [docId]);
   }
 
   query(viewName: string, options = {}): Observable<any> {
@@ -228,11 +192,6 @@ export class LocalDbService {
     return fromPromise(promise);
   }
 
-  public get(type: string, id: string): any {
-    const docId: string = this.generateDocId(type, id);
-    return this.db.get(docId)
-      .catch(err => null);
-  }
 
   public getHistory(type: string, id: string): any {
     const docId: string = this.generateDocId(type, id);
@@ -246,10 +205,6 @@ export class LocalDbService {
         });
         return Promise.all(promises);
       });
-  }
-
-  public findById<T>(type: string, id: string): any {
-    return this.db.rel.find(type, id);
   }
 
   public delete<T>(type: string, object: any): any {

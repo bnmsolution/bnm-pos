@@ -12,7 +12,7 @@ const initialState: AuthState = {
   user: null
 };
 
-export default function (state = initialState, action) {
+export function authReducer(state = initialState, action) {
   switch (action.type) {
     case actions.LOGIN_MASTER_USER: {
       state.masterUser = action.payload.user;

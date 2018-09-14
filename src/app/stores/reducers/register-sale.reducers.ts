@@ -62,11 +62,12 @@ const lineItemsReducer = (state: RegisterSaleLineItem[], action) => {
   }
 };
 
-export default function (state: RegisterSaleState = null, action) {
+export function registerSaleReducer(state: RegisterSaleState = null, action) {
   switch (action.type) {
     case actions.CREATE_SALE: {
+      const {storeId, registerId, userId} = action.payload;
       if (state === null) {
-        return createSale('storeId', action.payload.registerId, 'userId');
+        return createSale(storeId, registerId, userId);
       } else {
         throw Error('Cannot create sale. Please close the current sale first.');
       }
@@ -156,8 +157,8 @@ export default function (state: RegisterSaleState = null, action) {
     }
 
     case actions.RETURN_SALE: {
-      const {sale} = action.payload;
-      return createReturnSale('storeId', 'registerId', 'userId', sale);
+      const {storeId, registerId, userId, sale} = action.payload;
+      return createReturnSale(storeId, registerId, userId, sale);
     }
   }
   return state;

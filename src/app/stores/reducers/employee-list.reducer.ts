@@ -1,11 +1,11 @@
-import { Employee } from 'pos-models';
+import {Employee} from 'pos-models';
 
 import * as actions from '../actions/employee.actions';
 
 export type EmployeeListState = Employee[];
 const initialState: EmployeeListState = null;
 
-export default function (state = initialState, action) {
+export function employeeListReducer(state = initialState, action) {
   switch (action.type) {
     case actions.LOAD_EMPLOYEES_SUCCESS: {
       return action.payload;

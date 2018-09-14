@@ -5,7 +5,7 @@ import * as actions from '../actions/edit-register.actions';
 export type EditRegisterState = Register;
 const initialState: EditRegisterState = null;
 
-export default function (state = initialState, action: actions.EditRegisterActions) {
+export function editRegisterReducer(state = initialState, action: actions.EditRegisterActions) {
   switch (action.type) {
     case actions.LOAD_REGISTER: {
       return action.payload;

@@ -1,11 +1,11 @@
-<mat-form-field>
-  <input matInput [ngModel]="address" (ngModelChange)="onAddressChange($event)" placeholder="이메일" requried [disabled]="disabled">
-</mat-form-field>
-<span>@</span>
-<mat-form-field class="domain">
-  <input matInput [ngModel]="domain" (ngModelChange)="onDomainChange($event)" requried [readOnly]="domainOption !== ''" [disabled]="disabled">
-</mat-form-field>
-<mat-select [(ngModel)]="domainOption" placeholder="이메일 선택" floatPlaceholder="never" [disabled]="disabled" (change)="_onOptionChange($event)">
-  <mat-option *ngFor="let domain of commonDomains" [value]="domain">{{domain}}</mat-option>
-  <mat-option value="">직접입력</mat-option>
-</mat-select>
+<!--<mat-form-field>-->
+  <!--<input matInput [ngModel]="address" (ngModelChange)="onAddressChange($event)" placeholder="이메일" requried [disabled]="disabled">-->
+<!--</mat-form-field>-->
+<!--<span>@</span>-->
+<!--<mat-form-field class="domain">-->
+  <!--<input matInput [ngModel]="domain" (ngModelChange)="onDomainChange($event)" requried [readOnly]="domainOption !== ''" [disabled]="disabled">-->
+<!--</mat-form-field>-->
+<!--<mat-select [(ngModel)]="domainOption" placeholder="이메일 선택" floatPlaceholder="never" [disabled]="disabled" (change)="_onOptionChange($event)">-->
+  <!--<mat-option *ngFor="let domain of commonDomains" [value]="domain">{{domain}}</mat-option>-->
+  <!--<mat-option value="">직접입력</mat-option>-->
+<!--</mat-select>-->

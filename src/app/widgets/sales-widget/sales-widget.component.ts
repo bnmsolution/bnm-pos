@@ -163,7 +163,7 @@ export class SalesWidgetComponent implements OnInit, OnChanges {
               position: 'left',
               ticks: {
                 callback: (value, index, values) => {
-                  return value.toLocaleString(this.appState.config.locale);
+                  return value.toLocaleString(this.appState.currentStore.locale);
                 }
               }
             },
@@ -188,9 +188,9 @@ export class SalesWidgetComponent implements OnInit, OnChanges {
               const index = tooltipItem.index;
               const chartData = this.summary.chartData;
               if (tooltipItem.datasetIndex === 0) {
-                return `${chartData[index].tooltipCurrent}: ${tooltipItem.yLabel.toLocaleString(this.appState.config.locale)}`;
+                return `${chartData[index].tooltipCurrent}: ${tooltipItem.yLabel.toLocaleString(this.appState.currentStore.locale)}`;
               } else {
-                return `${chartData[index].tooltipPrevious}: ${tooltipItem.yLabel.toLocaleString(this.appState.config.locale)}`;
+                return `${chartData[index].tooltipPrevious}: ${tooltipItem.yLabel.toLocaleString(this.appState.currentStore.locale)}`;
               }
             },
             title: (tooltipItem, data) => {

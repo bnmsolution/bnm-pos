@@ -1,15 +1,14 @@
 import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
+import {COMPOSITION_BUFFER_MODE} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {StoreModule, ActionReducer} from '@ngrx/store';
 import {EffectsModule} from '@ngrx/effects';
-import {storeLogger} from 'ngrx-store-logger';
 
 
 // import { CurrencyMaskModule } from 'ng2-currency-mask';
 // import { CurrencyMaskConfig, CURRENCY_MASK_CONFIG } from 'ng2-currency-mask/src/currency-mask.config';
 
-import {environment} from './../environments/environment';
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
 
@@ -21,8 +20,8 @@ import {DashboardComponent} from './dashboard';
 import {StoreComponent} from './store/store.component';
 
 
-import reducers from './stores/reducers';
-import effects from './stores/effects';
+import {reducers, metaReducers, getInitialState} from './stores/reducers';
+import {effects} from './stores/effects';
 
 
 // export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -36,11 +35,6 @@ import effects from './stores/effects';
 //   thousands: ','
 // };
 
-export function logger(reducer: ActionReducer<any>): any {
-  return storeLogger()(reducer);
-}
-
-export const metaReducers = environment.production ? [] : [logger];
 
 @NgModule({
   declarations: [
@@ -59,12 +53,13 @@ export const metaReducers = environment.production ? [] : [logger];
     AuthModule,
     WidgetsModule,
     // CloudinaryModule.forRoot({ Cloudinary }, { cloud_name: environment.cloudinary.cloud_name } as CloudinaryConfiguration)
-    StoreModule.forRoot(reducers, {metaReducers}),
+    StoreModule.forRoot(reducers, {metaReducers, initialState: getInitialState}),
     EffectsModule.forRoot(effects),
 
   ],
   providers: [
     // { provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
+    {provide: COMPOSITION_BUFFER_MODE, useValue: false}
   ],
   // Dialog components must be inculded in entryComponents list.
   // Check https://material.angular.io/components/dialog/overview for the detail

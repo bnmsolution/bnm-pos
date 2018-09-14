@@ -55,11 +55,10 @@ export class AppComponent implements OnInit {
     private localDbService: LocalDbService,
     private iconRegistry: MatIconRegistry,
     private sanitizer: DomSanitizer) {
-    console.log('AppComponent constructor')
+    auth.handleAuthentication();
   }
 
   ngOnInit() {
-    console.log('AppComponent init')
     this.addSvgIcons();
     this.auth.profile$
       .subscribe(profile => {

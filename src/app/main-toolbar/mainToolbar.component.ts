@@ -14,7 +14,7 @@ import {AppState} from '../services/app.service';
 })
 export class MainToolbarComponent implements OnInit {
 
-  settings: PosStore;
+  store: PosStore;
   user: any;
   unsubscribe$ = new Subject();
 
@@ -26,11 +26,10 @@ export class MainToolbarComponent implements OnInit {
 
   ngOnInit() {
     this.appState.appState$.subscribe(state => {
-      this.settings = state.settings;
+      this.store = state.store;
       this.user = state.user;
     });
   }
-
 
   toggleMenuMode() {
     this.menuService.toggleMenuMode();

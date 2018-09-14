@@ -1,5 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
+
 import {HttpClientModule} from '@angular/common/http';
 import {RouterModule} from '@angular/router';
 import {FormsModule, ReactiveFormsModule, NG_VALIDATORS} from '@angular/forms';
@@ -16,7 +17,6 @@ import {
   DroppableDirective,
   InputDescriptionDirective,
   DraggableDirective,
-  IgnoreCompositionEventDirective,
   ValidateCustomerPhoneNumberNotTakenDirective
 } from '../shared/directives';
 import {AppCurrencyPipe, AppDatePipe} from '../shared/pipes';
@@ -25,6 +25,7 @@ import {PosMaterialModule} from '../app.material.module';
 import {ConfirmDialogComponent} from './components/confirm-dialog/confirm-dialog.component';
 import {CdkDetailRowDirective} from './directives/cdk-detail-row/cdk-detail-row.directive';
 import {RecentSalesComponent} from './components/recent-sales/recent-sales.component';
+import {ValidatePhoneNumberDirective} from './directives/validators/validate-phone-number.directive';
 
 @NgModule({
   imports: [
@@ -65,7 +66,6 @@ import {RecentSalesComponent} from './components/recent-sales/recent-sales.compo
     DraggableDirective,
     DroppableDirective,
     InputDescriptionDirective,
-    IgnoreCompositionEventDirective,
     ValidateCustomerPhoneNumberNotTakenDirective,
     CdkDetailRowDirective,
 
@@ -92,9 +92,9 @@ import {RecentSalesComponent} from './components/recent-sales/recent-sales.compo
     DraggableDirective,
     DroppableDirective,
     InputDescriptionDirective,
-    IgnoreCompositionEventDirective,
     ValidateCustomerPhoneNumberNotTakenDirective,
     CdkDetailRowDirective,
+    ValidatePhoneNumberDirective,
 
     // Pipes
     AppCurrencyPipe,

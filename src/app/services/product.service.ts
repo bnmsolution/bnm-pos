@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Observable, forkJoin, from} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {Product} from 'pos-models';
+import {Observable, forkJoin, from, of} from 'rxjs';
+import {map, switchMap} from 'rxjs/operators';
+import {Product, Category, Vendor, Tax} from 'pos-models';
 
 import {CrudService} from './crudService';
 import {HttpService} from './http.service';
@@ -42,20 +42,20 @@ export class ProductService extends CrudService {
   }
 
   getProductById(productId: string): Observable<Product> {
-    const promise = this.localDbService.get('product', productId)
-      .then(p => {
-        return Promise.all([
+    return this.localDbService.get('product', productId)
+      .pipe(
+        switchMap((p:Product) => forkJoin(
+          of(p),
           this.localDbService.get('category', p.categoryId),
           this.localDbService.get('vendor', p.vendorId),
           this.localDbService.get('tax', p.taxId)
-        ])
-          .then(([category, vendor, tax]) => {
-            p.category = category;
-            p.vendor = vendor;
-            p.tax = tax;
-            return p;
-          });
-      });
-    return from(promise);
+        )),
+        map(([product, category, vendor, tax]) => {
+          product.category = category;
+          product.vendor = vendor;
+          product.tax = tax;
+          return product;
+        })
+      );
   }
 }

@@ -20,7 +20,7 @@ export abstract class CrudService {
   }
 
   getItemById(id: string): Observable<any> {
-    return fromPromise(this._localDbService.get(this.documentName, id));
+    return this._localDbService.get(this.documentName, id);
   }
 
   addItem(doc: any): Observable<any> {
@@ -58,9 +58,9 @@ export abstract class CrudService {
       );
   }
 
-  getHistory(docId: string): Promise<any> {
-    return this._localDbService.getHistory(this.documentName, docId);
-  }
+  // getHistory(docId: string): Promise<any> {
+  //   return this._localDbService.getHistory(this.documentName, docId);
+  // }
 
   /**
    * Generating document id for couch/pouch databases.

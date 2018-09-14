@@ -44,11 +44,11 @@ const routes: Routes = [
   {
     path: '',
     component: ProductListComponent,
-    resolve: {
-      categories: CategoryResolverService,
-      vendors: VendorResolverService,
-      taxes: TaxResolverService
-    }
+    // resolve: {
+    //   categories: CategoryResolverService,
+    //   vendors: VendorResolverService,
+    //   taxes: TaxResolverService
+    // }
   }
 ];
 
