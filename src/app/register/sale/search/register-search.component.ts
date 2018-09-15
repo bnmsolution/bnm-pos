@@ -17,10 +17,8 @@ import * as customerActions from 'src/app/stores/actions/customer.actions';
   styleUrls: ['./register-search.component.scss']
 })
 export class RegisterSearchComponent implements OnInit, OnDestroy {
-
   @Output() productSelect = new EventEmitter();
   @Output() customerSelect = new EventEmitter();
-
   @ViewChild('searchInput') searchInput: ElementRef;
 
   searchCtrl: FormControl;

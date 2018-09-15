@@ -38,7 +38,8 @@ import {
   MatProgressSpinnerModule,
   MatPaginatorIntl,
   MatMenuModule,
-  MatBadgeModule
+  MatBadgeModule,
+  MatProgressBarModule
 } from '@angular/material';
 import {SatDatepickerModule, SatNativeDateModule} from 'saturn-datepicker';
 
@@ -84,7 +85,7 @@ const modules = [
   MatProgressSpinnerModule,
   MatMenuModule,
   MatBadgeModule,
-
+  MatProgressBarModule,
   // date range modules
   SatDatepickerModule,
   SatNativeDateModule

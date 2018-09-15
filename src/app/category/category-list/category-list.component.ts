@@ -1,21 +1,25 @@
-import {Component, OnInit, AfterViewInit, ViewChild} from '@angular/core';
-import {MatDialog, MatSnackBar, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialog, MatPaginator, MatSnackBar, MatSort, MatTableDataSource} from '@angular/material';
 import {Store} from '@ngrx/store';
-import {filter, tap} from 'rxjs/operators';
+import {filter, takeUntil, tap} from 'rxjs/operators';
 import {Category} from 'pos-models';
 
 import * as actions from '../../stores/actions/category.actions';
 import {AddCategoryDialogComponent} from '../add-category-dialog/add-category-dialog.component';
 import {DeleteCategoryDialogComponent} from '../delete-category-dialog/delete-category-dialog.component';
+import {Subject} from 'rxjs';
 
 @Component({
   selector: 'app-category-list',
   templateUrl: './category-list.component.html',
-  styleUrls: ['./category-list.component.scss']
+  styleUrls: ['./category-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CategoryListComponent implements OnInit, AfterViewInit {
+export class CategoryListComponent implements OnInit, OnDestroy {
   dataSource: any;
   displayedColumns = ['name', 'numberOfProducts', 'actions'];
+  unsubscribe$ = new Subject();
+  tableInitiated = false;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -28,17 +32,24 @@ export class CategoryListComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.dataSource = new MatTableDataSource();
     this.store.select('categories')
+      .pipe(
+        takeUntil(this.unsubscribe$)
+      )
       .subscribe(categories => {
-        console.log('categories loaded');
-        console.log(categories);
-        this.dataSource.data = categories || [];
+        categories ? this.initTable(categories) : this.store.dispatch(new actions.LoadCategories());
       });
-    this.store.dispatch(new actions.LoadCategories());
   }
 
-  ngAfterViewInit() {
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  private initTable(data) {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+    this.dataSource.data = data;
+    this.tableInitiated = true;
   }
 
   deleteCategory(categoryId: string): void {

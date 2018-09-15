@@ -1,6 +1,7 @@
 <app-common-page-header title="거래처" buttonTitle="거래처 추가" buttonLink="/vendor/add"></app-common-page-header>
 
-<section>
+<section class="table">
+  <mat-progress-bar mode="indeterminate" *ngIf="!tableInitiated"></mat-progress-bar>
   <mat-table #table [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef mat-sort-header>거래처명</mat-header-cell>

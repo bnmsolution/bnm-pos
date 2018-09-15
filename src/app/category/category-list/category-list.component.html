@@ -2,6 +2,7 @@
                         (buttonClick)="openAddCategoryDialog()"></app-common-page-header>
 
 <section>
+  <mat-progress-bar mode="indeterminate" *ngIf="!tableInitiated"></mat-progress-bar>
   <mat-table #table [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef mat-sort-header>카테고리명</mat-header-cell>

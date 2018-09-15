@@ -1,39 +1,33 @@
-<section fxLayout>
-  <form [formGroup]="filterForm">
-    <div class="searchInputs" fxLayout="column">
-      <div>
-        <mat-form-field class="searchInput">
-          <mat-icon matPrefix svgIcon="searchIcon"></mat-icon>
-          <input matInput formControlName="search">
-          <mat-hint align="start">상품명, 재고 관리코드, 바코드 검색</mat-hint>
-          <button mat-button *ngIf="filter.searchValue" matSuffix mat-icon-button aria-label="Clear" (click)="searchValue=''">
-            <mat-icon svgIcon="closeIcon"></mat-icon>
-          </button>
-        </mat-form-field>
-      </div>
-      <div>
-        <mat-form-field>
-          <mat-select formControlName="categoryId" placeholder="카테고리">
-            <mat-option value="">모든 카테고리</mat-option>
-            <mat-option *ngFor="let category of categories" [value]="category.id">
-              {{category.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field>
-          <mat-select formControlName="vendorId" placeholder="거래처">
-            <mat-option value="">모든 거래처</mat-option>
-            <mat-option *ngFor="let vendor of vendors" [value]="vendor.id">
-              {{vendor.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div>
-      </div>
+<form [formGroup]="filterForm" fxLayout>
+  <div class="searchInputs" fxLayout="column" flex>
+    <mat-form-field class="searchInput">
+      <mat-icon matPrefix svgIcon="searchIcon"></mat-icon>
+      <input matInput formControlName="search" #searchInput>
+      <mat-hint align="start">상품명, 재고 관리코드, 바코드 검색</mat-hint>
+      <button mat-button type="button" *ngIf="filterForm.value.search" matSuffix mat-icon-button aria-label="Clear"
+              (click)="removeSearchText()">
+        <mat-icon svgIcon="closeIcon"></mat-icon>
+      </button>
+    </mat-form-field>
+    <div fxLayout="row" fxLayoutAlign="center center">
+      <mat-form-field>
+        <mat-select formControlName="categoryId" placeholder="카테고리">
+          <mat-option value="">모든 카테고리</mat-option>
+          <mat-option *ngFor="let category of categories" [value]="category.id">
+            {{category.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select formControlName="vendorId" placeholder="거래처">
+          <mat-option value="">모든 거래처</mat-option>
+          <mat-option *ngFor="let vendor of vendors" [value]="vendor.id">
+            {{vendor.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <span flex></span>
+      <button mat-button type="button" color="primary" [disabled]="isFilterEmpty()" (click)="clearFilter()">필터제거</button>
     </div>
-    <div class="buttons" fxLayout fxLayoutAlign="end end" fxFlex>
-      <button mat-button color="primary" [disabled]="isFilterEmpty()" (click)="clearFilter.next()">필터제거</button>
-    </div>
-  </form>
-</section>
+  </div>
+</form>

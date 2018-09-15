@@ -1,11 +1,13 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {BehaviorSubject, Subject} from 'rxjs';
-import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {Subject, forkJoin, Subscription, fromEvent} from 'rxjs';
+import {debounceTime, distinctUntilChanged, take} from 'rxjs/operators';
 import {Category, Vendor} from 'pos-models';
 
 import {ProductFilter} from 'src/app/product';
-import {vendorForm} from '../../vendor/vendor.form';
+import {CategoryService} from '../../services/category.service';
+import {VendorService} from '../../services/vendor.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-product-filter',
@@ -13,49 +15,85 @@ import {vendorForm} from '../../vendor/vendor.form';
   styleUrls: ['./product-filter.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProductFilterComponent implements OnInit {
+export class ProductFilterComponent implements OnInit, OnDestroy {
+  @Input() filter$: Subject<ProductFilter>;
+  @ViewChild('searchInput') searchInput: ElementRef;
 
-  @Input() filter: ProductFilter;
-  @Input() filter$: BehaviorSubject<ProductFilter>;
-  @Input() filterChange: Subject<any>;
-  @Output() clearFilter = new EventEmitter<any>();
   categories: Category[] = [];
   vendors: Vendor[] = [];
   filterForm: FormGroup;
-  searchValue$ = new Subject<string>();
+  bodyKeyPressSubscription: Subscription;
 
   constructor(
+    private route: ActivatedRoute,
     private fb: FormBuilder,
+    private categoryService: CategoryService,
+    private vendorService: VendorService,
   ) {
     this.filterForm = this.fb.group({
       search: '',
-      categoryId: null,
-      vendorId: null
+      categoryId: '',
+      vendorId: ''
     });
   }
 
-
   ngOnInit() {
-    // this.searchCtrl = new FormControl();
-    // this.searchCtrl.valueChanges.subscribe(val => console.log(val));
-    // this.searchValue$
-    //   .pipe(
-    //     debounceTime(400),
-    //     distinctUntilChanged()
-    //   )
-    //   .subscribe(() => this.filterChange.next(this.filter));
-    //
-    // this.filter$.subscribe(filter => {
-    //   console.log(filter);
-    // });
+    this.filterForm.valueChanges
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged()
+      )
+      .subscribe(value => {
+        this.filter$.next(value);
+      });
 
-    this.filterForm.valueChanges.subscribe(value => {
-      console.log(value);
+    forkJoin(
+      this.route.queryParams.pipe(take(1)),
+      this.categoryService.getAll(),
+      this.vendorService.getAll()
+    )
+      .subscribe(([params, categories, vendors]) => {
+        this.categories = categories;
+        this.vendors = vendors;
+        this.filterForm.patchValue({
+          search: '',
+          categoryId: params.category || '',
+          vendorId: params.vendor || ''
+        });
+        this.filter$.next(this.filterForm.value);
+      });
+
+    /** Allows typing or scanning without input focus */
+    this.bodyKeyPressSubscription = fromEvent(document, 'keypress')
+      .subscribe((e: any) => {
+        if (e.target.tagName !== 'INPUT') {
+          this.searchInput.nativeElement.focus();
+          this.filterForm.patchValue({search: e.key});
+          e.preventDefault();
+        }
+      });
+  }
+
+  ngOnDestroy() {
+    this.bodyKeyPressSubscription.unsubscribe();
+  }
+
+  removeSearchText() {
+    this.filterForm.patchValue({
+      search: ''
+    });
+  }
+
+  clearFilter() {
+    this.filterForm.patchValue({
+      search: '',
+      categoryId: '',
+      vendorId: ''
     });
   }
 
   isFilterEmpty(): boolean {
-    return this.filter === null ||
-      (this.filter.searchValue.trim().length === 0 && this.filter.categoryId === '' && this.filter.vendorId === '');
+    const value = this.filterForm.value;
+    return value.search.trim().length === 0 && value.categoryId === '' && value.vendorId === '';
   }
 }

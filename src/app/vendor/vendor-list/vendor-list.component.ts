@@ -1,5 +1,5 @@
-import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
-import {MatDialog, MatSnackBar, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialog, MatPaginator, MatSnackBar, MatSort, MatTableDataSource} from '@angular/material';
 import {Subject} from 'rxjs';
 import {Store} from '@ngrx/store';
 import {filter, takeUntil, tap} from 'rxjs/operators';
@@ -12,12 +12,14 @@ import {DeleteVendorDialogComponent} from '../delete-vendor-dialog/delete-vendor
 @Component({
   selector: 'app-vendor-list',
   templateUrl: './vendor-list.component.html',
-  styleUrls: ['./vendor-list.component.scss']
+  styleUrls: ['./vendor-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VendorListComponent implements OnInit, OnDestroy {
   unsubscribe$ = new Subject();
   dataSource: MatTableDataSource<Vendor>;
   displayedColumns = ['name', 'ownerName', 'phone', 'numberOfProducts', 'actions'];
+  tableInitiated = false;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -43,11 +45,11 @@ export class VendorListComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-
   private initTable(data) {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.dataSource.data = data;
+    this.tableInitiated = true;
   }
 
   deleteVendor(vendorId: string): void {
@@ -58,7 +60,7 @@ export class VendorListComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(
         filter(updated => updated),
-        tap(() => this.openSnackBar('직원이 삭제되었습니다'))
+        tap(() => this.openSnackBar('거래처가 삭제되었습니다'))
       ).subscribe();
   }
 

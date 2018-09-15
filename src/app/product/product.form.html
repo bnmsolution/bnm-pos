@@ -8,31 +8,37 @@
         </mat-expansion-panel-header>
         <div class="cardWidthDescription">
           <div fxFlex>
-            <mat-form-field #nameField>
-              <input matInput formControlName="name" placeholder="상품명" >
+            <mat-form-field appearance="outline" #nameField>
+              <mat-label>상품명</mat-label>
+              <input matInput formControlName="name" >
             </mat-form-field>
-            <mat-form-field #skuField>
-              <input matInput formControlName="sku" placeholder="재고관리코드" >
+            <mat-form-field appearance="outline" #skuField>
+              <mat-label>재고관리코드</mat-label>
+              <input matInput formControlName="sku" >
             </mat-form-field>
-            <mat-form-field #barcodeField>
-              <input matInput formControlName="barcode" placeholder="바코드" >
+            <mat-form-field appearance="outline" #barcodeField>
+              <mat-label>바코드</mat-label>
+              <input matInput formControlName="barcode" >
             </mat-form-field>
-            <mat-form-field #categoryField>
-              <mat-select formControlName="categoryId" placeholder="카테고리">
+            <mat-form-field appearance="outline" #categoryField>
+              <mat-label>카테고리</mat-label>
+              <mat-select formControlName="categoryId" >
                 <mat-option *ngFor="let category of categories" [value]="category.id">
                   {{category.name}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field #vendorField>
-              <mat-select formControlName="vendorId" name="vendorId" placeholder="거래처">
+            <mat-form-field appearance="outline" #vendorField>
+              <mat-label>거래처</mat-label>
+              <mat-select formControlName="vendorId" name="vendorId">
                 <mat-option *ngFor="let vendor of vendors" [value]="vendor.id">
                   {{vendor.name}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field #descriptionField>
-              <textarea matInput formControlName="description" placeholder="상품설명"></textarea>
+            <mat-form-field appearance="outline" #descriptionField>
+              <mat-label>상품설명</mat-label>
+              <textarea matInput formControlName="description"></textarea>
             </mat-form-field>
           </div>
           <div fxFlex>
@@ -52,27 +58,33 @@
         </mat-expansion-panel-header>
         <div class="cardWidthDescription">
           <div fxFlex>
-            <mat-form-field #taxField>
-              <mat-select formControlName="taxId" placeholder="과세여부">
+            <mat-form-field appearance="outline" #taxField>
+              <mat-label>과세여부</mat-label>
+              <mat-select formControlName="taxId" placeholder="">
                 <mat-option *ngFor="let tax of taxes" [value]="tax.id">
                   {{tax.name}}
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field #supplyPriceField>
-              <input type="number" matInput currencyMask formControlName="supplyPrice" placeholder="공급가">
+            <mat-form-field appearance="outline" #supplyPriceField>
+              <mat-label>공급가</mat-label>
+              <input type="number" matInput currencyMask formControlName="supplyPrice" placeholder="">
             </mat-form-field>
-            <mat-form-field #retailPriceField>
-              <input type="number" matInput currencyMask formControlName="retailPrice" placeholder="판매가">
+            <mat-form-field appearance="outline" #retailPriceField>
+              <mat-label>판매가</mat-label>
+              <input type="number" matInput currencyMask formControlName="retailPrice" placeholder="">
             </mat-form-field>
-            <mat-form-field #markupField>
-              <input type="number" matInput currencyMask formControlName="markup" placeholder="마진율">
+            <mat-form-field appearance="outline" #markupField>
+              <mat-label>마진율</mat-label>
+              <input type="number" matInput currencyMask formControlName="markup" placeholder="">
             </mat-form-field>
-            <mat-form-field #productPriceField>
-              <input matInput currencyMask formControlName="productPrice" placeholder="소비자가">
+            <mat-form-field appearance="outline" #productPriceField>
+              <mat-label>소비자가</mat-label>
+              <input matInput currencyMask formControlName="productPrice" placeholder="">
             </mat-form-field>
-            <mat-form-field #taxAmountField>
-              <input matInput currencyMask formControlName="taxAmount" placeholder="과세">
+            <mat-form-field appearance="outline" #taxAmountField>
+              <mat-label>과세</mat-label>
+              <input matInput currencyMask formControlName="taxAmount" placeholder="">
             </mat-form-field>
 
           </div>
@@ -93,17 +105,20 @@
         </mat-expansion-panel-header>
         <div class="cardWidthDescription">
           <div fxFlex>
-            <mat-form-field #trackInventoryField>
-              <mat-select formControlName="trackInventory" placeholder="재고관리">
+            <mat-form-field appearance="outline" #trackInventoryField>
+              <mat-label>재고관리</mat-label>
+              <mat-select formControlName="trackInventory" placeholder="">
                 <mat-option [value]="true">자동 관리</mat-option>
                 <mat-option [value]="false">관리 안함</mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field #countField>
-              <input matInput formControlName="count" placeholder="재고량">
+            <mat-form-field appearance="outline" #countField>
+              <mat-label>재고량</mat-label>
+              <input matInput formControlName="count" placeholder="">
             </mat-form-field>
-            <mat-form-field #reOrderPointField>
-              <input matInput formControlName="reOrderPoint" placeholder="적정재고">
+            <mat-form-field appearance="outline" #reOrderPointField>
+              <mat-label>적정재고</mat-label>
+              <input matInput formControlName="reOrderPoint" placeholder="">
             </mat-form-field>
             <!-- <app-variant-options id="variantOptionsField" [variantOptions]="product.variantOptions" (onVariantAdd)="product.addVariantOption()"
               (onVariantRemove)="product.removeVariantOption($event)" (onOptionUpdated)="product.onVariantOptionValueModified()"></app-variant-options>
