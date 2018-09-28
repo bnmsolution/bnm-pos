@@ -1,4 +1,5 @@
-<form class="app-form" [formGroup]="productForm" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()" novalidate>
+<form class="app-form" [formGroup]="productForm" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()"
+      novalidate>
   <app-create-content-header [title]="title" returnUrl="/product"></app-create-content-header>
   <section class="accordion">
     <mat-accordion multi="true">
@@ -10,19 +11,19 @@
           <div fxFlex>
             <mat-form-field appearance="outline" #nameField>
               <mat-label>상품명</mat-label>
-              <input matInput formControlName="name" >
+              <input matInput formControlName="name">
             </mat-form-field>
             <mat-form-field appearance="outline" #skuField>
               <mat-label>재고관리코드</mat-label>
-              <input matInput formControlName="sku" >
+              <input matInput formControlName="sku">
             </mat-form-field>
             <mat-form-field appearance="outline" #barcodeField>
               <mat-label>바코드</mat-label>
-              <input matInput formControlName="barcode" >
+              <input matInput formControlName="barcode">
             </mat-form-field>
             <mat-form-field appearance="outline" #categoryField>
               <mat-label>카테고리</mat-label>
-              <mat-select formControlName="categoryId" >
+              <mat-select formControlName="categoryId">
                 <mat-option *ngFor="let category of categories" [value]="category.id">
                   {{category.name}}
                 </mat-option>
@@ -80,11 +81,11 @@
             </mat-form-field>
             <mat-form-field appearance="outline" #productPriceField>
               <mat-label>소비자가</mat-label>
-              <input matInput currencyMask formControlName="productPrice" placeholder="">
+              <input type="number" matInput currencyMask formControlName="productPrice" placeholder="">
             </mat-form-field>
             <mat-form-field appearance="outline" #taxAmountField>
               <mat-label>과세</mat-label>
-              <input matInput currencyMask formControlName="taxAmount" placeholder="">
+              <input type="number" matInput currencyMask formControlName="taxAmount" placeholder="">
             </mat-form-field>
 
           </div>
@@ -114,11 +115,11 @@
             </mat-form-field>
             <mat-form-field appearance="outline" #countField>
               <mat-label>재고량</mat-label>
-              <input matInput formControlName="count" placeholder="">
+              <input type="number" matInput formControlName="count" placeholder="">
             </mat-form-field>
             <mat-form-field appearance="outline" #reOrderPointField>
               <mat-label>적정재고</mat-label>
-              <input matInput formControlName="reOrderPoint" placeholder="">
+              <input type="number" matInput formControlName="reOrderPoint" placeholder="">
             </mat-form-field>
             <!-- <app-variant-options id="variantOptionsField" [variantOptions]="product.variantOptions" (onVariantAdd)="product.addVariantOption()"
               (onVariantRemove)="product.removeVariantOption($event)" (onOptionUpdated)="product.onVariantOptionValueModified()"></app-variant-options>

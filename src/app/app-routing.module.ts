@@ -35,6 +35,7 @@ import {TaxResolverService} from './services/tax-resolver.service';
           {path: 'customer', loadChildren: 'src/app/customer/customer.module#CustomerModule'},
           {path: 'employee', loadChildren: 'src/app/employee/employee.module#EmployeeModule'},
           {path: 'vendor', loadChildren: 'src/app/vendor/vendor.module#VendorModule'},
+          {path: 'inventory', loadChildren: 'src/app/inventory/inventory.module#InventoryModule'},
           {
             path: 'settings',
             component: StoreComponent,

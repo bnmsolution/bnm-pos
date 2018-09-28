@@ -6,17 +6,19 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {RegisterSale, RegisterSaleStatus, getTotalTaxablePrice, getTotalTaxFreePrice, PaymentType, Product, Customer} from 'pos-models';
-import {isSameDay, startOfDay, endOfDay, isWithinInterval} from 'date-fns';
+import {isSameDay, startOfMonth, endOfMonth, isWithinInterval} from 'date-fns';
 
 import {detailExpand} from '../shared/utils/animation';
 import * as salesListActions from '../stores/actions/sales.actions';
 import * as salesActions from '../stores/actions/register-sale.actions';
 import {CustomerService} from '../services/customer.service';
 import {AppState} from '../core';
+import {FilterPeriod} from '../shared/utils/filter-period';
 
-export enum FilterPeriod {
-  Today, ThisWeek, ThisMonth, OneWeek, OneMonth, OneYear, Custom
-}
+
+// export enum FilterPeriod {
+//   Today, ThisWeek, ThisMonth, ThisYear, OneWeek, OneMonth, OneYear, Custom
+// }
 
 export interface SalesFilter {
   status: RegisterSaleStatus;
@@ -148,9 +150,9 @@ export class SalesComponent implements OnInit, AfterViewInit {
       status: null,
       customerId: '',
       userId: '',
-      startDate: startOfDay(new Date()),
-      endDate: endOfDay(new Date()),
-      period: FilterPeriod.Today
+      startDate: startOfMonth(new Date()),
+      endDate: new Date(),
+      period: FilterPeriod.ThisMonth
     };
   }
 }

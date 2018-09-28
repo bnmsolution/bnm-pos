@@ -8,6 +8,7 @@ import {filter, take} from 'rxjs/operators';
 import {Product, Category, Vendor, Tax, PosStore, getProductPriceFromRetailPrice, getProductPriceFromMarkup, getMarkup} from 'pos-models';
 import * as uuid from 'uuid/v1';
 
+import {AppState} from '../../core';
 import {productForm} from '../product.form';
 import * as actions from '../../stores/actions/product.actions';
 import {ProductEffects} from 'src/app/stores/effects/product.effects';
@@ -33,7 +34,8 @@ export class AddProductComponent implements OnInit {
     private router: Router,
     private snackBar: MatSnackBar,
     private store: Store<any>,
-    private productEffets: ProductEffects) {
+    private productEffects: ProductEffects,
+    private appState: AppState) {
     this.createForm();
   }
 
@@ -141,7 +143,7 @@ export class AddProductComponent implements OnInit {
     Object.assign(this.product, this.productForm.value);
 
     if (this.productForm.valid) {
-      merge(this.productEffets.addProduct$, this.productEffets.updateProduct$)
+      merge(this.productEffects.addProduct$, this.productEffects.updateProduct$)
         .pipe(
           filter(action1 => action1.type === actions.ADD_PRODUCT_SUCCESS || action1.type === actions.UPDATE_PRODUCT_SUCCESS),
           take(1)
@@ -155,6 +157,10 @@ export class AddProductComponent implements OnInit {
       let action;
       if (this.isNewProduct) {
         this.product.id = uuid();
+
+        // Currently only supporting a single store
+        this.product.storeId = this.appState.currentStore.id;
+
         action = new actions.AddProduct(this.product);
       } else {
         action = new actions.UpdateProduct(this.product);

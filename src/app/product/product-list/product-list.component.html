@@ -40,7 +40,7 @@
 
       <ng-container matColumnDef="count">
         <mat-header-cell *matHeaderCellDef mat-sort-header>재고</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.count}}</mat-cell>
+        <mat-cell *matCellDef="let row" [routerLink]="'/inventory/' + row.id"> {{row.inventory ? row.inventory.count : "-"}}</mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="actions">

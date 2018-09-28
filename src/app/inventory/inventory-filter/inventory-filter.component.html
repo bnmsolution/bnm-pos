@@ -1,0 +1,55 @@
+<form [formGroup]="filterForm" fxLayout>
+  <div class="searchInputs" fxLayout="column" flex>
+    <mat-form-field class="searchInput">
+      <mat-icon matPrefix svgIcon="searchIcon"></mat-icon>
+      <input matInput formControlName="search" #searchInput>
+      <mat-hint align="start">판매번호, 구매번호, 바코드 검색</mat-hint>
+      <button mat-button type="button" *ngIf="filterForm.value.search" matSuffix mat-icon-button aria-label="Clear"
+              (click)="removeSearchText()">
+        <mat-icon svgIcon="closeIcon"></mat-icon>
+      </button>
+    </mat-form-field>
+
+
+    <div fxLayout="row" fxLayoutAlign="center center">
+      <mat-form-field>
+        <mat-select formControlName="transactionType" placeholder="분류">
+          <mat-option [value]="types.All">전체</mat-option>
+          <mat-option [value]="types.Initial">기초재고</mat-option>
+          <mat-option [value]="types.Damaged">파손</mat-option>
+          <mat-option [value]="types.Sold">판매</mat-option>
+          <mat-option [value]="types.Lost">분실</mat-option>
+          <mat-option [value]="types.Counted">카운트</mat-option>
+          <mat-option [value]="types.Received">입고</mat-option>
+          <mat-option [value]="types.Restocked">재입고</mat-option>
+          <mat-option [value]="types.Transferred">이동</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-select formControlName="period" placeholder="판매 기간">
+          <mat-option [value]="period.All">전체</mat-option>
+          <mat-option [value]="period.Today">오늘</mat-option>
+          <mat-option [value]="period.ThisWeek">이번주</mat-option>
+          <mat-option [value]="period.ThisMonth">이번달</mat-option>
+          <mat-option [value]="period.ThisYear">이번해</mat-option>
+          <mat-option [value]="period.Custom">직접선택</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div *ngIf="filterForm.value.period === period.Custom">
+        <mat-form-field>
+          <input matInput
+                 placeholder="기간선택"
+                 [satDatepicker]="picker"
+                 (dateChange)="changeDate($event.value)"
+                 [value]="dateRange">
+          <sat-datepicker #picker [rangeMode]="true">
+          </sat-datepicker>
+          <sat-datepicker-toggle matSuffix [for]="picker"></sat-datepicker-toggle>
+        </mat-form-field>
+      </div>
+      <span flex></span>
+      <button mat-button type="button" color="primary" [disabled]="isFilterEmpty()" (click)="clearFilter()">필터제거
+      </button>
+    </div>
+  </div>
+</form>

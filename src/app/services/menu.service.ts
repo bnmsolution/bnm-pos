@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
-import { Subject, BehaviorSubject } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {Router, NavigationEnd} from '@angular/router';
+import {Subject, BehaviorSubject} from 'rxjs';
 
 export enum MenuMode {
   Full, Mini
@@ -25,93 +25,99 @@ export class MenuService {
       type: 'link',
       url: '/'
     },
-    {
-      name: '레지스터',
-      icon: 'outline-shopping_basket-24px',
-      type: 'link',
-      url: '/register'
-    },
-    {
-      name: '판매내역',
-      icon: 'outline-history-24px',
-      type: 'link',
-      url: '/sales'
-    },
-    {
-      name: '상품',
-      icon: 'outline-card_giftcard-24px',
-      type: 'link',
-      url: '/product'
-    },
-    {
-      name: '거래처',
-      icon: 'outline-local_shipping-24px',
-      type: 'link',
-      url: '/vendor'
-    },
-    {
-      name: '카테고리',
-      icon: 'outline-category-24px',
-      type: 'link',
-      url: '/category'
-    },
-    // {
-    //   name: '상품관리',
-    //   icon: 'ic_card_giftcard_24px',
-    //   type: 'toggle',
-    //   pages: [
-    //     {
-    //       name: '상품',
-    //       type: 'link',
-    //       url: '/product'
-    //     },
-    //     {
-    //       name: '거래처',
-    //       type: 'link',
-    //       url: '/vendor'
-    //     },
-    //     {
-    //       name: '카테고리',
-    //       type: 'link',
-    //       url: '/category'
-    //     }
-    //   ]
-    // },
-    // {
-    //   name: '재고관리',
-    //   icon: 'ic_account_balance_24px',
-    //   type: 'toggle',
-    //   pages: [
-    //     {
-    //       name: '재고',
-    //       type: 'link',
-    //       url: '##/product'
-    //     },
-    //     {
-    //       name: '재고 카운트',
-    //       type: 'link',
-    //       url: '##/vendor'
-    //     }
-    //   ]
-    // },
-    {
-      name: '고객관리',
-      icon: 'outline-loyalty-24px',
-      type: 'link',
-      url: '/customer'
-    },
-    {
-      name: '직원관리',
-      icon: 'outline-supervised_user_circle-24px',
-      type: 'link',
-      url: '/employee'
-    },
-    {
-      name: '설정',
-      icon: 'outline-settings-24px',
-      type: 'link',
-      url: '/settings'
-    }];
+      {
+        name: '레지스터',
+        icon: 'outline-shopping_basket-24px',
+        type: 'link',
+        url: '/register'
+      },
+      {
+        name: '판매내역',
+        icon: 'outline-history-24px',
+        type: 'link',
+        url: '/sales'
+      },
+      {
+        name: '상품',
+        icon: 'outline-card_giftcard-24px',
+        type: 'link',
+        url: '/product'
+      },
+      {
+        name: '재고',
+        icon: 'outline-category-24px',
+        type: 'link',
+        url: '/inventory'
+      },
+      {
+        name: '거래처',
+        icon: 'outline-local_shipping-24px',
+        type: 'link',
+        url: '/vendor'
+      },
+      {
+        name: '카테고리',
+        icon: 'outline-local_offer-24px',
+        type: 'link',
+        url: '/category'
+      },
+      // {
+      //   name: '상품관리',
+      //   icon: 'ic_card_giftcard_24px',
+      //   type: 'toggle',
+      //   pages: [
+      //     {
+      //       name: '상품',
+      //       type: 'link',
+      //       url: '/product'
+      //     },
+      //     {
+      //       name: '거래처',
+      //       type: 'link',
+      //       url: '/vendor'
+      //     },
+      //     {
+      //       name: '카테고리',
+      //       type: 'link',
+      //       url: '/category'
+      //     }
+      //   ]
+      // },
+      // {
+      //   name: '재고관리',
+      //   icon: 'ic_account_balance_24px',
+      //   type: 'toggle',
+      //   pages: [
+      //     {
+      //       name: '재고',
+      //       type: 'link',
+      //       url: '##/product'
+      //     },
+      //     {
+      //       name: '재고 카운트',
+      //       type: 'link',
+      //       url: '##/vendor'
+      //     }
+      //   ]
+      // },
+      {
+        name: '고객관리',
+        icon: 'outline-person_outline-24px',
+        type: 'link',
+        url: '/customer'
+      },
+      {
+        name: '직원관리',
+        icon: 'outline-supervisor_account-24px',
+        type: 'link',
+        url: '/employee'
+      },
+      {
+        name: '설정',
+        icon: 'outline-settings-24px',
+        type: 'link',
+        url: '/settings'
+      }];
 
     this.registerSections = [
       {
@@ -196,7 +202,7 @@ export class MenuService {
 
   toggleMenuMode() {
     const mode = this.menuMode$.getValue();
-    this.menuMode$.next(mode === MenuMode.Full ? MenuMode.Mini: MenuMode.Full);
+    this.menuMode$.next(mode === MenuMode.Full ? MenuMode.Mini : MenuMode.Full);
   }
 
   private notifyEvent(event: any): void {

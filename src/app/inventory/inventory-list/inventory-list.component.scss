@@ -1,0 +1,39 @@
+@import '../../shared/common-style';
+:host {
+  @extend .gridViewContainer;
+}
+
+
+form {
+  padding: 12px 48px;
+  background-color: white;
+}
+
+.searchInputs {
+  mat-form-field {
+    margin-right: 14px;
+  }
+}
+
+.searchInput {
+  width: 450px;
+  margin-bottom: 14px;
+}
+
+.table {
+  position: relative;
+}
+
+.icon {
+  width: 14px;
+  height: 14px;
+  margin-right: 2px;
+}
+
+.increase {
+  color: $green-500;
+}
+
+.decrease {
+  color: $red-500;
+}

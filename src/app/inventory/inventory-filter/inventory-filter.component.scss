@@ -1,0 +1,19 @@
+@import '../../shared/common-style.scss';
+
+form {
+  padding: 12px 48px;
+  background-color: white;
+}
+
+.searchInputs {
+   mat-form-field {
+     margin-right: 14px;
+   }
+ }
+
+.searchInput {
+  width: 450px;
+  margin-bottom: 14px;
+}
+
+

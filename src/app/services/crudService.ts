@@ -1,9 +1,10 @@
 import {Observable} from 'rxjs';
 import {fromPromise} from 'rxjs/internal-compatibility';
-import { map} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
 
 import {HttpService} from './http.service';
 import {LocalDbService} from './localDb.service';
+import {cloneDeep} from '../shared/utils/lang';
 
 export abstract class CrudService {
   serviceName: string;
@@ -24,26 +25,28 @@ export abstract class CrudService {
   }
 
   addItem(doc: any): Observable<any> {
-    doc.created = new Date().toISOString();
-    doc._id = this.generateDocId(doc.id);
-    return this._httpService.post(this.documentName, doc)
+    const docCopy = cloneDeep(doc);
+    docCopy.created = new Date().toISOString();
+    docCopy._id = this.generateDocId(docCopy.id);
+    return this._httpService.post(this.documentName, docCopy)
       .pipe(
         map((response: any) => {
           console.log(`${this.serviceName} Added ${this.documentName} to back-end(${response.id})`);
-          doc._rev = response.rev;
-          return doc;
+          docCopy._rev = response.rev;
+          return docCopy;
         })
       );
   }
 
   updateItem(doc: any, id: string = null): Observable<any> {
-    doc.updated = new Date().toISOString();
-    return this._httpService.put(this.documentName, doc, id)
+    const docCopy = cloneDeep(doc);
+    docCopy.updated = new Date().toISOString();
+    return this._httpService.put(this.documentName, docCopy, id)
       .pipe(
         map((response: any) => {
-          console.log(`${this.serviceName} Updated ${this.documentName} to back-end(${doc.id})`);
-          doc._rev = response.rev;
-          return doc;
+          console.log(`${this.serviceName} Updated ${this.documentName} to back-end(${docCopy.id})`);
+          docCopy._rev = response.rev;
+          return docCopy;
         })
       );
   }

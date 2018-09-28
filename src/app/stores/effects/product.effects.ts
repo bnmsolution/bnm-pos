@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Actions, Effect} from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import {share, mergeMap, map, filter} from 'rxjs/operators';
 
 import * as productActions from '../actions/product.actions';
@@ -9,15 +9,15 @@ import {ProductService} from 'src/app/core';
 export class ProductEffects {
 
   @Effect() getProducts$ = this.actions$
-    .ofType(productActions.LOAD_PRODUCTS)
     .pipe(
+      ofType(productActions.LOAD_PRODUCTS),
       mergeMap(() => this.productService.getAllProducts()),
       map(products => new productActions.LoadProductsSuccess(products))
     );
 
   @Effect() addProduct$ = this.actions$
-    .ofType(productActions.ADD_PRODUCT)
     .pipe(
+      ofType(productActions.ADD_PRODUCT),
       mergeMap((action: productActions.AddProduct) => {
         return this.productService.addItem(action.payload);
       }),
@@ -26,8 +26,8 @@ export class ProductEffects {
     );
 
   @Effect() updateProduct$ = this.actions$
-    .ofType(productActions.UPDATE_PRODUCT)
     .pipe(
+      ofType(productActions.UPDATE_PRODUCT),
       mergeMap((action: productActions.UpdateProduct) => {
         return this.productService.updateItem(action.payload);
       }),

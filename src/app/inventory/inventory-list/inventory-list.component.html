@@ -1,0 +1,69 @@
+<section fxLayout="column">
+  <app-common-page-header title="재고" [desc]="productName | async"></app-common-page-header>
+  <app-inventory-filter [filter$]="filter$"></app-inventory-filter>
+
+  <section class="table">
+    <mat-progress-bar mode="indeterminate" *ngIf="!tableInitiated"></mat-progress-bar>
+    <mat-table #table [dataSource]="dataSource" matSort>
+
+      <ng-container matColumnDef="created">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>생성일</mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.created | appDate: 'YYYY-MM-DD'}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="quantity">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>수량</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <div fxLayout fxLayoutAlign="center center">
+            <mat-icon class="icon" [ngClass]="isIncreasedQuntity(row.type) ? 'increase' : 'decrease'"
+                      [svgIcon]="isIncreasedQuntity(row.type) ? 'arrowUp' : 'arrowDown'"></mat-icon>
+            <div [class]="isIncreasedQuntity(row.type) ? 'increase' : 'decrease'">{{row.quantity}}</div>
+          </div>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="totalCost">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>비용</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.totalCost | appCurrency}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="expectedQuantity">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>예상수량</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.expectedQuantity | appCurrency}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="type">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>분류</mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <div [ngSwitch]="row.type">
+            <span *ngSwitchCase="types.Initial">기초재고</span>
+            <span *ngSwitchCase="types.Damaged">파손</span>
+            <span *ngSwitchCase="types.Sold">판매</span>
+            <span *ngSwitchCase="types.Lost">분실</span>
+            <span *ngSwitchCase="types.Counted">카운트</span>
+            <span *ngSwitchCase="types.Received">입고</span>
+            <span *ngSwitchCase="types.Restocked">재입고</span>
+            <span *ngSwitchCase="types.Transferred">이동</span>
+          </div>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell class="actions" *matCellDef="let row">
+          <mat-icon class="editIcon" svgIcon="previewIcon" matTooltip="자세히"
+                    [routerLink]="'/product/detail/' + row.id"></mat-icon>
+          <mat-icon class="editIcon" svgIcon="editIcon" matTooltip="수정"
+                    [routerLink]="'/product/edit/' + row.id"></mat-icon>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+      <mat-row *matRowDef="let row; columns: displayedColumns;" class="element-row">
+      </mat-row>
+    </mat-table>
+    <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20, 50]">
+    </mat-paginator>
+  </section>
+</section>

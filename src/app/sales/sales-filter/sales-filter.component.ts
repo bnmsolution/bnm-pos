@@ -1,8 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {SalesFilter, FilterPeriod} from '../sales.component';
+import {SalesFilter} from '../sales.component';
 import {Subject} from 'rxjs';
 import {RegisterSaleStatus} from 'pos-models';
 import {startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, subWeeks, subMonths, subYears} from 'date-fns';
+import {FilterPeriod, getPeriodDates} from '../../shared/utils/filter-period';
 
 @Component({
   selector: 'app-sales-filter',
@@ -31,24 +32,9 @@ export class SalesFilterComponent implements OnInit {
   }
 
   periodChange(value) {
-    const today = new Date();
-    switch (value) {
-      case FilterPeriod.Today: {
-        this.filter.startDate = startOfDay(today);
-        this.filter.endDate = endOfDay(today);
-        break;
-      }
-      case  FilterPeriod.ThisWeek: {
-        this.filter.startDate = startOfWeek(today);
-        this.filter.endDate = endOfWeek(today);
-        break;
-      }
-      case FilterPeriod.ThisMonth: {
-        this.filter.startDate = startOfMonth(today);
-        this.filter.endDate = endOfMonth(today);
-        break;
-      }
-    }
+    const periodDates = getPeriodDates(value);
+    this.filter.startDate = periodDates.startDate;
+    this.filter.endDate = periodDates.endDate;
     this.filterChange.next(this.filter);
   }
 

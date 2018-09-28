@@ -180,6 +180,10 @@ export class LocalDbService {
     return this.workerMessenger.postMessage('get', [docId]);
   }
 
+  getByDocId(docId: string) {
+    return this.workerMessenger.postMessage('get', [docId]);
+  }
+
   query(viewName: string, options = {}): Observable<any> {
     const promise = this.db.query(`app/${viewName}`, options)
       .then(result => {
