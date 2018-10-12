@@ -40,9 +40,18 @@
   font-weight: 500;
 }
 
+.multiplier {
+  margin-right: 8px;
+}
+
 .linePrice {
   width: 200px;
   font-weight: 500;
+}
+
+.price-original {
+  color: $text-color-secondary;
+  text-decoration: line-through;
 }
 
 .lineTotal {

@@ -1,5 +1,13 @@
 <section fxLayout="column">
-  <app-common-page-header title="상품" buttonTitle="상품 추가" buttonLink="/product/add"></app-common-page-header>
+  <!--<app-common-page-header title="상품" buttonTitle="상품 추가" buttonLink="/product/add"></app-common-page-header>-->
+  <div class="list-header">
+    <div>상품</div>
+    <span fxFlex></span>
+    <button mat-button>내려받기</button>
+    <button mat-button (click)="openDialog()">올리기</button>
+    <button mat-button color="primary" routerLink="/product/add">상품추가</button>
+  </div>
+
   <app-product-filter [filter$]="filter$"></app-product-filter>
 
   <section class="table">
@@ -40,7 +48,9 @@
 
       <ng-container matColumnDef="count">
         <mat-header-cell *matHeaderCellDef mat-sort-header>재고</mat-header-cell>
-        <mat-cell *matCellDef="let row" [routerLink]="'/inventory/' + row.id"> {{row.inventory ? row.inventory.count : "-"}}</mat-cell>
+        <mat-cell *matCellDef="let row" [routerLink]="'/inventory/' + row.id"> {{row.inventory ? row.inventory.count :
+          "-"}}
+        </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="actions">

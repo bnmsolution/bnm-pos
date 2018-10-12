@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>상품 올리기</h1>
+<mat-dialog-content>
+  <section class="upload" fxLayout fxLayoutAlign="start center">
+    <button mat-raised-button color="primary" (click)="fileInput.click()">파일 선택</button>
+    <input hidden type="file" #fileInput (change)="fileChange($event)">
+    <div *ngIf="selectedFile">선택된 파일: {{selectedFile.name}}</div>
+  </section>
+  <section class="errors">
+    <div class="error" fxLayout *ngFor="let error of parseErrors">
+      <mat-icon matListIcon svgIcon="warning"></mat-icon>
+      <div fxLayout="column">
+        <div class="message">{{error.message}}</div>
+        <div class="cells"> {{error.cells.join(', ')}}</div>
+      </div>
+    </div>
+  </section>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="false" tabindex="-1">취소</button>
+  <button mat-button (click)="delete()" tabindex="-1">확인</button>
+</mat-dialog-actions>

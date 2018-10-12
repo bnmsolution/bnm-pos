@@ -1,0 +1,43 @@
+@import '../../shared/common-style';
+
+.upload {
+  margin-bottom: 20px;
+
+  > div {
+    padding-left: 16px;
+    font-size: 14px;
+  }
+}
+
+.errors {
+  max-width: 700px;
+}
+
+.error {
+  width: 100%;
+  margin-bottom: 18px;
+
+  > mat-icon {
+    flex-shrink: 0;
+    padding: 4px;
+    box-sizing: content-box;
+    color: $red-500;
+  }
+
+  > div {
+    padding-left: 16px;
+  }
+}
+
+.message {
+  margin-bottom: 2px;
+  font-size: 15px;
+}
+
+.cells {
+  font-size: 13px;
+  line-height: 18px;
+  overflow-wrap: break-word;
+  color: $text-color-secondary;
+}
+

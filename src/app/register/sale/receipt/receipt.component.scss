@@ -64,16 +64,20 @@ pre {
 }
 
 .receipt-total {
-  display: flex;
-  justify-content: flex-end;
-  padding-bottom: $padding-bottom;
+  > div {
+    display: flex;
+    justify-content: flex-end;
+    padding-bottom: $padding-bottom;
+
+    &:last-child {
+      margin-bottom: $margin-bottom;
+      border-bottom: $border;
+    }
+  }
+
   .value {
     text-align: right;
     width: $price-width;
-  }
-  &:last-child {
-    margin-bottom: $margin-bottom;
-    border-bottom: $border;
   }
 }
 

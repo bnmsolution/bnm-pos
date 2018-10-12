@@ -40,7 +40,7 @@ import {effects} from './stores/effects';
   declarations: [
     AppComponent,
     DashboardComponent,
-    StoreComponent
+    StoreComponent,
   ],
   imports: [
     BrowserModule,

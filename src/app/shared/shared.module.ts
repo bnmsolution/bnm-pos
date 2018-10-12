@@ -26,6 +26,7 @@ import {ConfirmDialogComponent} from './components/confirm-dialog/confirm-dialog
 import {CdkDetailRowDirective} from './directives/cdk-detail-row/cdk-detail-row.directive';
 import {RecentSalesComponent} from './components/recent-sales/recent-sales.component';
 import {ValidatePhoneNumberDirective} from './directives/validators/validate-phone-number.directive';
+import {CustomerViewDialogComponent} from '../customer/customer-view-dialog/customer-view-dialog.component';
 
 @NgModule({
   imports: [
@@ -85,6 +86,7 @@ import {ValidatePhoneNumberDirective} from './directives/validators/validate-pho
     LayoutComponent,
     ConfirmDialogComponent,
     RecentSalesComponent,
+    CustomerViewDialogComponent,
 
     // Directives
     ToggleSectionDirective,
@@ -101,7 +103,8 @@ import {ValidatePhoneNumberDirective} from './directives/validators/validate-pho
     AppDatePipe,
   ],
   entryComponents: [
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    CustomerViewDialogComponent
   ]
 })
 export class SharedModule {

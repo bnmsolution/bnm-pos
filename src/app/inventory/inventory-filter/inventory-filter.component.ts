@@ -27,8 +27,7 @@ export class InventoryFilterComponent implements OnInit, OnDestroy {
   ) {
     this.filterForm = this.fb.group({
       search: '',
-      transactionType: '',
-      vendorId: '',
+      transactionType: InventoryTransactionType.All,
       period: FilterPeriod.All,
       startDate: new Date(),
       endDate: new Date()

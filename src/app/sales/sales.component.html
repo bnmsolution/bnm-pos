@@ -82,7 +82,11 @@
             <div class="lineItem" fxLayout fxFlex>
               <div class="lineQuantity">{{lineItem.quantity}}</div>
               <div fxFlex>{{lineItem.name}}</div>
-              <div class="linePrice">X {{lineItem.retailPrice | appCurrency}}</div>
+              <div class="multiplier">x</div>
+              <div class="linePrice">
+                <div>{{lineItem.subTotal | number}}</div>
+                <div class="price-original" *ngIf="lineItem.discount > 0">{{lineItem.originalPrice * lineItem.quantity | number}}</div>
+              </div>
               <div class="lineTotal">{{lineItem.totalPrice | appCurrency}}</div>
             </div>
           </mat-list-item>
@@ -93,7 +97,7 @@
           <div class="totals">
             <div class="totalLine" *ngIf="element.totalDiscount > 0">
               <div>할인</div>
-              <div>{{element.sale.totalDiscount | appCurrency}}</div>
+              <div>{{element.totalDiscount | appCurrency}}</div>
             </div>
             <div class="totalLine">
               <div>과세 매출</div>

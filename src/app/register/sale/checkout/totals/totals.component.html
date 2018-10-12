@@ -34,6 +34,12 @@
       <div>{{sale.totalTax | appCurrency}}</div>
     </div>
   </li>
+  <li *ngIf="sale.priceAdjustment > 0">
+    <div class="total-line">
+      <div>판매금액 절사</div>
+      <div class="priceAdjust">{{-sale.priceAdjustment | appCurrency}}</div>
+    </div>
+  </li>
   <div class="edit" [appToggleSection]="openedSection === 'tax'">
     <div class="edit-wrapper">
     </div>

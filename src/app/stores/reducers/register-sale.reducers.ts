@@ -65,9 +65,9 @@ const lineItemsReducer = (state: RegisterSaleLineItem[], action) => {
 export function registerSaleReducer(state: RegisterSaleState = null, action) {
   switch (action.type) {
     case actions.CREATE_SALE: {
-      const {storeId, registerId, userId} = action.payload;
+      const {storeId, registerId, userId, priceAdjustmentType} = action.payload;
       if (state === null) {
-        return createSale(storeId, registerId, userId);
+        return createSale(storeId, registerId, userId, priceAdjustmentType);
       } else {
         throw Error('Cannot create sale. Please close the current sale first.');
       }

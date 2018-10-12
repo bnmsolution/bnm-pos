@@ -50,7 +50,7 @@ export class StoreComponent implements OnInit {
       currencyCode: ['', Validators.required],
       displayCurrencySymbol: [false],
       defaultTaxId: ['', Validators.required],
-      discountPriceAdjust: '',
+      totalPriceAdjust: 'noAdjust',
 
       useReward: false,
       rewardRateForCash: null,

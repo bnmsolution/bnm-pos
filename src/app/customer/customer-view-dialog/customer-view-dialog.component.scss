@@ -1,0 +1,25 @@
+@import '../../shared/common-style';
+
+.top {
+  padding-bottom: 8px;
+}
+
+.avatar {
+  padding: 0 24px 0 12px;
+
+  > div:first-child {
+    width: 80px;
+    height: 80px;
+    border-radius: 505%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 42px;
+    margin-bottom: 8px;
+  }
+}
+
+div.mat-line {
+  color: $text-color-secondary;
+}

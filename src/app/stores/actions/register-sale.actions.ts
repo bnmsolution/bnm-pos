@@ -1,5 +1,5 @@
 import {Action} from '@ngrx/store';
-import {Register, RegisterSale, Product, RegisterSaleLineItem, PaymentType, Customer} from 'pos-models';
+import {Register, RegisterSale, Product, PaymentType, Customer, PriceAdjustmentType} from 'pos-models';
 
 export const SELECT_REGISTER = '[Register Sale] Select register';
 export const CREATE_SALE = '[Register Sale] Create sale';
@@ -34,7 +34,11 @@ export class SelectRegister implements Action {
 export class CreateSale implements Action {
   readonly type = CREATE_SALE;
 
-  constructor(public payload: { storeId: string, registerId: string, userId: string }) {
+  constructor(public payload: {
+    storeId: string,
+    registerId: string,
+    userId: string,
+    priceAdjustmentType: PriceAdjustmentType }) {
   }
 }
 
@@ -70,7 +74,12 @@ export class RemoveLineItem implements Action {
 export class UpdateLineItem implements Action {
   readonly type = UPDATE_LINE_ITEM;
 
-  constructor(public payload: { id: string, quantity: number, retailPrice: number, discountRate: number }) {
+  constructor(public payload: {
+    id: string,
+    quantity: number,
+    retailPrice: number,
+    discountRate: number
+  }) {
   }
 }
 

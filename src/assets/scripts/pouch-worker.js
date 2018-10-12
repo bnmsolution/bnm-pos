@@ -57,7 +57,25 @@ class PouchWorker {
       });
   }
 
-
+  replicate(messageId, remoteCouchUrl, tenantId) {
+    const remoteDbUrl = remoteCouchUrl + 'db-' + tenantId;
+    this.db.replicate.from(remoteDbUrl, {
+      batch_size: 500,
+      filter: doc => doc.fromRemote || doc._deleted === true
+    }).on('change', info => {
+      this.logReplicationStatus('change', info);
+    }).on('paused', err => {
+      this.logReplicationStatus('paused', err);
+    }).on('active', () => {
+      this.logReplicationStatus('active');
+    }).on('complete', () => {
+      this.logReplicationStatus('complete');
+    }).on('denied', err => {
+      this.logReplicationStatus('denied', err);
+    }).on('error', err => {
+      this.logReplicationStatus('error', err);
+    });
+  }
 
   startLiveReplication(messageId, remoteCouchUrl, tenantId) {
     if (this.liveReplicationStarted) return;
@@ -70,14 +88,16 @@ class PouchWorker {
       filter: doc => doc.fromRemote || doc._deleted === true
     }).on('change', info => {
       this.logReplicationStatus('change', info);
-      postMessage({
-        messageId,
-        data: info
-      });
+      // postMessage({
+      //   messageId,
+      //   data: info
+      // });
     }).on('paused', err => {
       this.logReplicationStatus('paused', err);
     }).on('active', () => {
       this.logReplicationStatus('active');
+    }).on('complete', () => {
+      this.logReplicationStatus('complete');
     }).on('denied', err => {
       this.logReplicationStatus('denied', err);
     }).on('error', err => {

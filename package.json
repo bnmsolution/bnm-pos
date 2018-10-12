@@ -35,10 +35,12 @@
     "moment": "^2.22.2",
     "ngrx-store-freeze": "^0.2.4",
     "ngrx-store-logger": "^0.2.1",
+    "papaparse": "4.4.0",
     "pos-models": "file:../pos-models/pos-models-0.0.0.tgz",
     "pouchdb": "^7.0.0",
     "pouchdb-browser": "^7.0.0",
     "pouchdb-find": "^7.0.0",
+    "randomcolor": "^0.5.3",
     "rxjs": "^6.0.0",
     "uuid": "^3.2.1",
     "zone.js": "^0.8.26"

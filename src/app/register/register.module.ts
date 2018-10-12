@@ -19,6 +19,7 @@ import {TotalsComponent} from './sale/checkout/totals/totals.component';
 import {TabEditDialogComponent} from './quick-products/tab-edit-dialog/tab-edit-dialog.component';
 import {AddCustomerDialogComponent} from './sale/add-customer-dialog/add-customer-dialog.component';
 import {ProductViewDialogComponent} from './product-view-dialog/product-view-dialog.component';
+import {CustomerViewDialogComponent} from '../customer/customer-view-dialog/customer-view-dialog.component';
 
 
 @NgModule({
@@ -55,13 +56,14 @@ import {ProductViewDialogComponent} from './product-view-dialog/product-view-dia
     AddCustomerDialogComponent
   ],
   entryComponents: [
-    // ProductViewDialogComponent,
+    ProductViewDialogComponent,
     GroupProductEditDialogComponent,
     SingleProductEditDialogComponent,
     TabEditDialogComponent,
     // VariantSelectDialogComponent,
     // TabEditDialogComponent,
-    AddCustomerDialogComponent
+    AddCustomerDialogComponent,
+    CustomerViewDialogComponent
   ],
   providers: [
     // ShiftGuardService,

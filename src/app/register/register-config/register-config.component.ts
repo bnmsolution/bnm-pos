@@ -3,7 +3,7 @@ import {FormControl} from '@angular/forms';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {Store} from '@ngrx/store';
 import {Observable, Subject} from 'rxjs';
-import {startWith, map, takeUntil} from 'rxjs/operators';
+import {startWith, map, takeUntil, debounceTime} from 'rxjs/operators';
 import {Register, RegisterTab, RegisterQuickProduct, Product} from 'pos-models';
 
 import {SingleProductEditDialogComponent} from '../quick-products/single-product-edit-dialog/single-product-edit-dialog.component';
@@ -26,7 +26,7 @@ export class RegisterConfigComponent implements OnInit, OnDestroy {
   register: Register;
   productCtrl: FormControl;
   filteredProducts: Observable<Product[]>;
-  products: Product[];
+  products: Product[] = [];
   unsubscribe$ = new Subject();
   selectedQuickProductPosition = -1;
   currentTabIndex = 0;
@@ -41,15 +41,23 @@ export class RegisterConfigComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.productCtrl = new FormControl();
 
+    // this.store.select('products')
+    //   .subscribe(products => {
+    //     this.products = products || [];
+    //     this.filteredProducts = this.productCtrl.valueChanges
+    //       .pipe(
+    //         startWith(null),
+    //         takeUntil(this.unsubscribe$),
+    //         map(searchValue => searchValue ? this.filter(searchValue) : this.products)
+    //       );
+    //   });
+
     this.store.select('products')
+      .pipe(
+        takeUntil(this.unsubscribe$)
+      )
       .subscribe(products => {
-        this.products = products || [];
-        this.filteredProducts = this.productCtrl.valueChanges
-          .pipe(
-            startWith(null),
-            takeUntil(this.unsubscribe$),
-            map(searchValue => searchValue ? this.filter(searchValue) : this.products)
-          );
+        products ? this.products = products : this.store.dispatch(new productActions.LoadProducts());
       });
 
     this.store.select('registers')
@@ -63,8 +71,15 @@ export class RegisterConfigComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.store.dispatch(new productActions.LoadProducts());
+    // this.store.dispatch(new productActions.LoadProducts());
     this.store.dispatch(new registerActions.LoadRegisters());
+
+    this.filteredProducts = this.productCtrl.valueChanges
+      .pipe(
+        debounceTime(300),
+        takeUntil(this.unsubscribe$),
+        map(searchValue => searchValue ? this.filter(searchValue) : this.products)
+      );
   }
 
   ngOnDestroy() {

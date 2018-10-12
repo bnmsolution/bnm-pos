@@ -9,13 +9,14 @@ import {
   ChangeDetectionStrategy,
   ViewChildren,
   QueryList,
-  SimpleChanges
 } from '@angular/core';
 import {MatDialog} from '@angular/material';
 
 import {RegisterSale, RegisterSaleStatus, canHoldSale, canVoidSale} from 'pos-models';
 import {AddCustomerDialogComponent} from '../add-customer-dialog/add-customer-dialog.component';
 import {LineItemComponent} from './line-item/line-item.component';
+import {CustomerViewDialogComponent} from '../../../customer/customer-view-dialog/customer-view-dialog.component';
+import {CustomerService} from '../../../services/customer.service';
 
 @Component({
   selector: 'app-checkout',
@@ -28,7 +29,7 @@ export class CheckoutComponent implements AfterViewInit {
   @Input() sale: RegisterSale;
   @Output() pay = new EventEmitter();
   @Output() hold = new EventEmitter();
-  @Output() void = new EventEmitter();
+  @Output() void = new EventEmitter();yty
   @Output() removeCustomer = new EventEmitter();
   @Output() addCustomer = new EventEmitter();
   @Output() removeLineItem = new EventEmitter();
@@ -43,7 +44,8 @@ export class CheckoutComponent implements AfterViewInit {
   salesStatus: any = RegisterSaleStatus;
 
   constructor(
-    private dialog: MatDialog) {
+    private dialog: MatDialog,
+    private customerService: CustomerService) {
   }
 
   ngAfterViewInit() {
@@ -80,13 +82,24 @@ export class CheckoutComponent implements AfterViewInit {
     this.openedLineItemId = this.openedLineItemId === lineItemId ? null : lineItemId;
   }
 
-  openAddCustomerDialog(): void {
+  openAddCustomerDialog() {
     const dialogRef = this.dialog.open(AddCustomerDialogComponent);
     dialogRef.afterClosed().subscribe(customer => {
       if (customer) {
         // this.customerAdded.emit(customer);
       }
     });
+  }
+
+  openCustomerInfoDialog(customerId: string) {
+    this.customerService.getItemById(customerId)
+      .subscribe(customer => {
+        this.dialog.open(CustomerViewDialogComponent, {
+          data: {
+            customer: customer
+          }
+        });
+      });
   }
 
   // tracking fucntion for lineItems ngFor

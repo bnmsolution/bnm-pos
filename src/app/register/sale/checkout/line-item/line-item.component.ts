@@ -5,6 +5,7 @@ import {distinctUntilChanged} from 'rxjs/operators';
 import {RegisterSaleLineItem} from 'pos-models';
 
 import {ProductService} from 'src/app/core';
+import {ProductViewDialogComponent} from '../../../product-view-dialog/product-view-dialog.component';
 
 @Component({
   selector: 'app-line-item',
@@ -47,7 +48,7 @@ export class LineItemComponent implements OnInit, OnChanges {
     const {quantity, retailPrice, discountRate} = this.lineItem;
     const quantityValidator = this.isReturn ? Validators.min(-this.maxReturnQuantity) : Validators.min(1);
     this.lineItemForm = this.fb.group({
-      quantity: [{value: quantity}, [Validators.required, quantityValidator]],
+      quantity: [quantity, [Validators.required, quantityValidator]],
       retailPrice: [{value: retailPrice, disabled: this.isReturn}, [Validators.required, Validators.min(0)]],
       discountRate: [{value: discountRate, disabled: this.isReturn}, [Validators.min(0), Validators.max(100)]],
     });
@@ -56,7 +57,7 @@ export class LineItemComponent implements OnInit, OnChanges {
       .pipe(
         // temporary fix for Angular bug
         // Number input fires valueChanges twice https://github.com/angular/angular/issues/12540
-        // this only fix when user types, using arrow key still fires chnage event twice
+        // this only fix when user types, using arrow key still fires change event twice
         distinctUntilChanged()
       )
       .subscribe(values => {
@@ -80,14 +81,14 @@ export class LineItemComponent implements OnInit, OnChanges {
   }
 
   openProductViewDialog(): void {
-    // this.productService.findByProductId(this.lineItem.productId)
-    //   .then(product => {
-    //     this.dialog.open(ProductViewDialogComponent, {
-    //       width: '650px',
-    //       data: {
-    //         product: product
-    //       }
-    //     });
-    //   });
+    this.productService.getProductById(this.lineItem.productId)
+      .subscribe(product => {
+        this.dialog.open(ProductViewDialogComponent, {
+          width: '650px',
+          data: {
+            product: product
+          }
+        });
+      });
   }
 }

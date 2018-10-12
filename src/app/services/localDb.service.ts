@@ -41,16 +41,12 @@ export class LocalDbService {
 
   public replicationStream$ = new Subject<any>();
 
-  constructor(private zone: NgZone) {
-    console.log('LocalDbService');
-
+  constructor() {
     this.workerMessenger = new WorkerMessenger(new Worker('assets/scripts/pouch-worker.js'));
   }
 
   init(tenantId: string): void {
-
     this.workerMessenger.postMessage('init', [tenantId]);
-
     // this.db = new PouchDB(`db-${tenantId}`, {auto_compaction: true, revs_limit: 1});
     // this.connectRemoteDb(tenantId);
   }
@@ -70,35 +66,12 @@ export class LocalDbService {
    * @param {string} tenantId
    * @returns {Promise<any>}
    */
-  public replicate(tenantId: string): Promise<any> {
-    const promise: Promise<any> = new Promise((resolve, reject) => {
-      const remoteDbUrl: string = remoteCouchUrl + 'db-' + tenantId;
-      this.db.replicate.from(remoteDbUrl, {
-        filter: doc => doc.fromRemote || doc._deleted === true
-      })
-        .on('change', info => {
-          console.log('[DataStoreService] Replication changed.');
-          console.log(info);
-        }).on('paused', err => {
-        console.log('[DataStoreService] Replication paused.');
-        console.log(err);
-      }).on('active', () => {
-        console.log('[DataStoreService] Replication active.');
-      }).on('denied', err => {
-        console.log('[DataStoreService] Replication denied.');
-        console.log(err);
-      })
-        .on('complete', info => {
-          console.log('[DataStoreService] Replication completed.');
-          console.log(info);
-          resolve();
-        }).on('error', err => {
-        console.error('[DataStoreService] Replication error =>');
-        console.error(err);
-        reject();
+  public replicate(tenantId: string) {
+    console.log('replication started');
+    this.workerMessenger.postMessage('replicate', [remoteCouchUrl, tenantId], 'replication', false)
+      .subscribe((info: ChangeInfo) => {
+        console.log('replication completed');
       });
-    });
-    return promise;
   }
 
   /**
@@ -107,7 +80,7 @@ export class LocalDbService {
    * @param {string} tenantId
    * @returns {void}
    */
-  public startLiveReplication(tenantId: string): void {
+  public startLiveReplication(tenantId: string) {
     this.workerMessenger.postMessage('startLiveReplication', [remoteCouchUrl, tenantId], 'replication', false)
       .subscribe((info: ChangeInfo) => {
         const changeDocIds = info.change.docs.map(d => d._id);

@@ -16,22 +16,26 @@
       <div class="total">{{lineItem.totalPrice | number:0}}</div>
     </div>
   </div>
-  <div>
-    <div class="receipt-total">
+  <div class="receipt-total">
+    <div>
       <div class="label">과세물품</div>
-      <div class="value">{{getTotalTaxablePrice(sale) | number}}</div>
+      <div class="value">{{getTotalTaxablePrice(sale) | appCurrency}}</div>
     </div>
-    <div class="receipt-total">
+    <div>
       <div class="label">부가세</div>
-      <div class="value">{{sale.totalTax | number}}</div>
+      <div class="value">{{sale.totalTax | appCurrency}}</div>
     </div>
-    <div class="receipt-total" *ngIf="getTotalTaxFreePrice(sale) > 0">
+    <div *ngIf="getTotalTaxFreePrice(sale) > 0">
       <div class="label">면세물품</div>
-      <div class="value">{{getTotalTaxFreePrice(sale) | number}}</div>
+      <div class="value">{{getTotalTaxFreePrice(sale) | appCurrency}}</div>
     </div>
-    <div class="receipt-total">
+    <div>
       <div class="label">구매금액</div>
-      <div class="value">{{sale.totalPrice | number}}</div>
+      <div class="value">{{sale.totalPrice | appCurrency}}</div>
+    </div>
+    <div>
+      <div class="label">판매금액 절사</div>
+      <div class="value">{{-sale.priceAdjustment | appCurrency}}</div>
     </div>
   </div>
 

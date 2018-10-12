@@ -130,16 +130,13 @@ export class InventoryListComponent implements OnInit, OnDestroy {
         return false;
       }
 
-      if (transactionType && transaction.type !== transactionType) {
+      if (transactionType !== InventoryTransactionType.All && transaction.type !== transactionType) {
         return false;
       }
 
-      // const str = [product.name, product.sku, product.barcode].join('');
-
-      // return str.contains(filterObject.search);
       return true;
     };
-    console.log(data);
+
     this.dataSource.data = data;
     this.tableInitiated = true;
     this.filter$.subscribe(filter => {

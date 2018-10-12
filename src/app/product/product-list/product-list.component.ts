@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {MatPaginator, MatSnackBar, MatSort, MatTableDataSource} from '@angular/material';
+import {MatDialog, MatPaginator, MatSnackBar, MatSort, MatTableDataSource} from '@angular/material';
 import {Store} from '@ngrx/store';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -8,6 +8,7 @@ import {Product} from 'pos-models';
 
 import {detailExpand} from '../../shared/utils/animation';
 import * as actions from '../../stores/actions/product.actions';
+import {ImportProductDialogComponent} from '../import-product-dialog/import-product-dialog.component';
 
 export interface ProductFilter {
   search: string;
@@ -34,6 +35,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
+    private dialog: MatDialog,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar,
     private store: Store<any>) {
@@ -54,6 +56,10 @@ export class ProductListComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  openDialog() {
+    this.dialog.open(ImportProductDialogComponent);
   }
 
   private initTable(data) {

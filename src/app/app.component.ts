@@ -42,7 +42,18 @@ const svgIconList = [
   ['arrowDown', 'outline-arrow_downward-24px'],
   ['menu', 'outline-menu-24px'],
   ['account', 'outline-account_circle-24px'],
-  ['inventory', 'noun_inventory_1861967']
+  ['inventory', 'noun_inventory_1861967'],
+  ['info', 'outline-info-24px'],
+  ['email', 'outline-email-24px'],
+  ['phone', 'outline-phone-24px'],
+  ['calendar', 'outline-calendar_today-24px'],
+  ['star', 'outline-stars-24px'],
+  ['basket', 'outline-shopping_basket-24px'],
+  ['payment', 'outline-payment-24px'],
+  ['download', 'outline-cloud_download-24px'],
+  ['upload', 'outline-cloud_upload-24px'],
+  ['addCircle', 'outline-add_circle_outline-24px'],
+  ['warning', 'outline-warning-24px']
 ];
 
 @Component({
@@ -79,6 +90,7 @@ export class AppComponent implements OnInit {
 
   private startLiveReplication({tenantId}): void {
     this.localDbService.init(tenantId);
-    this.localDbService.startLiveReplication(tenantId);
+    this.localDbService.replicate(tenantId);
+    // this.localDbService.startLiveReplication(tenantId);
   }
 }

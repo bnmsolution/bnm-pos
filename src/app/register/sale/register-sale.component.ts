@@ -1,6 +1,6 @@
 import {ActivatedRoute, Router} from '@angular/router';
 import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
-import {MatDialog, MatSidenav} from '@angular/material';
+import {MatSidenav} from '@angular/material';
 import {Store} from '@ngrx/store';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
@@ -23,14 +23,15 @@ export class RegisterSaleComponent implements OnInit {
 
   @ViewChild('sidenav') sidenav: MatSidenav;
 
-  constructor(private dialog: MatDialog,
-              private registerService: RegisterService,
-              private registerSaleService: RegisterSaleService,
-              private productService: ProductService,
-              private customerService: CustomerService, private route: ActivatedRoute,
-              private appState: AppState,
-              private router: Router,
-              private store: Store<any>) {
+  constructor(
+    private registerService: RegisterService,
+    private registerSaleService: RegisterSaleService,
+    private productService: ProductService,
+    private customerService: CustomerService,
+    private route: ActivatedRoute,
+    private appState: AppState,
+    private router: Router,
+    private store: Store<any>) {
   }
 
   ngOnInit() {
@@ -78,7 +79,8 @@ export class RegisterSaleComponent implements OnInit {
   }
 
   updateLineItem({id, quantity, retailPrice, discountRate}) {
-    this.store.dispatch(new registerSaleActions.UpdateLineItem({id, quantity, retailPrice, discountRate}));
+    this.store.dispatch(new registerSaleActions.UpdateLineItem(
+      {id, quantity, retailPrice, discountRate}));
   }
 
   openPaymentSidenav(): void {
@@ -145,7 +147,8 @@ export class RegisterSaleComponent implements OnInit {
     this.store.dispatch(new registerSaleActions.CreateSale({
       storeId: appState.store.id,
       registerId: this.currentRegister.id,
-      userId: appState.user.id
+      userId: appState.user.id,
+      priceAdjustmentType: appState.store.totalPriceAdjust
     }));
   }
 

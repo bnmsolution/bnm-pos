@@ -44,12 +44,6 @@ export class MenuService {
         url: '/product'
       },
       {
-        name: '재고',
-        icon: 'outline-category-24px',
-        type: 'link',
-        url: '/inventory'
-      },
-      {
         name: '거래처',
         icon: 'outline-local_shipping-24px',
         type: 'link',

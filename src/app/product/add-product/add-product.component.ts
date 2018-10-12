@@ -51,6 +51,8 @@ export class AddProductComponent implements OnInit {
         this.taxes = data.taxes;
         this.settings = data.settings[0];
 
+        this.productForm.patchValue({taxId: this.settings.defaultTaxId});
+
         if (data.editProduct) {
           this.setProductForEdit(data.editProduct);
         }
@@ -85,33 +87,31 @@ export class AddProductComponent implements OnInit {
     let markup = this.getControlValue('markup');
     let taxAmount = this.getControlValue('taxAmount');
 
-    if (supplyPrice > 0) {
-      switch (property) {
-        case 'retailPrice': {
-          productPrice = getProductPriceFromRetailPrice(retailPrice, tax.rate);
-          taxAmount = retailPrice - productPrice;
-          markup = getMarkup(productPrice, supplyPrice);
-          break;
-        }
-        case 'supplyPrice': {
-          if (retailPrice > 0) {
-            markup = getMarkup(productPrice, supplyPrice);
-          }
-          break;
-        }
-        case 'markup': {
-          productPrice = getProductPriceFromMarkup(supplyPrice, markup);
-          taxAmount = productPrice * tax.rate;
-          retailPrice = productPrice + taxAmount;
-          break;
-        }
+    switch (property) {
+      case 'retailPrice': {
+        productPrice = getProductPriceFromRetailPrice(retailPrice, tax.rate);
+        taxAmount = retailPrice - productPrice;
+        markup = getMarkup(productPrice, supplyPrice);
+        break;
       }
-
-      this.setControlValue('productPrice', productPrice);
-      this.setControlValue('taxAmount', taxAmount);
-      this.setControlValue('retailPrice', retailPrice);
-      this.setControlValue('markup', markup);
+      case 'supplyPrice': {
+        if (retailPrice > 0) {
+          markup = getMarkup(productPrice, supplyPrice);
+        }
+        break;
+      }
+      case 'markup': {
+        productPrice = getProductPriceFromMarkup(supplyPrice, markup);
+        taxAmount = productPrice * tax.rate;
+        retailPrice = productPrice + taxAmount;
+        break;
+      }
     }
+
+    this.setControlValue('productPrice', productPrice);
+    this.setControlValue('taxAmount', taxAmount);
+    this.setControlValue('retailPrice', retailPrice);
+    this.setControlValue('markup', markup);
   }
 
   private setControlValue(name: string, value: any) {

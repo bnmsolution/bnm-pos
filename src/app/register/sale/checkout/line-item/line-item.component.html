@@ -13,7 +13,7 @@
   <form [formGroup]="lineItemForm">
     <div class="edit-wrapper">
       <mat-form-field class="edit-quantity" floatPlaceholder="always">
-        <input matInput type="number" min="1" formControlName="quantity" placeholder="수량">
+        <input matInput type="number" formControlName="quantity" placeholder="판매가">
         <!--<mat-error *ngIf="lineItem.errors.invalidQuantity != null">{{lineItem.errors.invalidQuantity.meesage}}</mat-error>-->
       </mat-form-field>
       <mat-form-field class="edit-price" floatPlaceholder="always">
