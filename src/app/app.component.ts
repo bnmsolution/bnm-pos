@@ -53,7 +53,8 @@ const svgIconList = [
   ['download', 'outline-cloud_download-24px'],
   ['upload', 'outline-cloud_upload-24px'],
   ['addCircle', 'outline-add_circle_outline-24px'],
-  ['warning', 'outline-warning-24px']
+  ['warning', 'outline-warning-24px'],
+  ['check', 'outline-check_circle-24px']
 ];
 
 @Component({

@@ -59,7 +59,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   openDialog() {
-    this.dialog.open(ImportProductDialogComponent);
+    this.dialog.open(ImportProductDialogComponent, {width: '700px'});
   }
 
   private initTable(data) {

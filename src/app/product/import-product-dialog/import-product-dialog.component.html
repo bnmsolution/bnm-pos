@@ -5,17 +5,41 @@
     <input hidden type="file" #fileInput (change)="fileChange($event)">
     <div *ngIf="selectedFile">선택된 파일: {{selectedFile.name}}</div>
   </section>
-  <section class="errors">
-    <div class="error" fxLayout *ngFor="let error of parseErrors">
-      <mat-icon matListIcon svgIcon="warning"></mat-icon>
+  <section>
+    <ng-container *ngFor="let error of parseErrors">
+      <div class="error" fxLayout>
+        <mat-icon matListIcon svgIcon="warning"></mat-icon>
+        <div fxLayout="column">
+          <div class="message">{{error.message}}</div>
+          <div class="cells"> {{error.cells.join(', ')}}</div>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+    </ng-container>
+  </section>
+  <section *ngIf="parsedResult && parseErrors.length === 0">
+    <div class="success" fxLayout>
+      <mat-icon matListIcon svgIcon="check"></mat-icon>
       <div fxLayout="column">
-        <div class="message">{{error.message}}</div>
-        <div class="cells"> {{error.cells.join(', ')}}</div>
+        <div class="message">아래 데이터를 업데이트 합니다.</div>
+        <div class="total">
+          <div>상품</div>
+          <div>{{parsedResult.products.length}}건</div>
+        </div>
+        <div class="total">
+          <div>카테고리</div>
+          <div>{{parsedResult.categoriesToCreate.length}}건</div>
+        </div>
+        <div class="total">
+          <div>공급처</div>
+          <div>{{parsedResult.vendorsToCreate.length}}건</div>
+        </div>
       </div>
     </div>
+    <mat-divider></mat-divider>
   </section>
 </mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="false" tabindex="-1">취소</button>
-  <button mat-button (click)="delete()" tabindex="-1">확인</button>
+<mat-dialog-actions align="end">
+  <button mat-button color="primary" [mat-dialog-close]="true">취소</button>
+  <button mat-button color="primary" (click)="delete()" [disabled]="!selectedFile || parseErrors.length">올리기</button>
 </mat-dialog-actions>

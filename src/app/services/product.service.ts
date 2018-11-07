@@ -1,3 +1,4 @@
+
 import {Injectable} from '@angular/core';
 import {Observable, forkJoin, from, of} from 'rxjs';
 import {map, switchMap} from 'rxjs/operators';
@@ -27,6 +28,7 @@ export class ProductService extends CrudService {
     ).pipe(
       map(([products, categories, vendors, taxes, inventories]: [any, any, any, any, any]) => {
         return products.map(p => {
+          // todo: create map to reduce time
           if (p.categoryId) {
             p.category = categories.find(c => c.id === p.categoryId);
           }
