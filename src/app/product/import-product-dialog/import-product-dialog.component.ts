@@ -4,6 +4,7 @@ import {parseProducts} from 'pos-models';
 import {forkJoin} from 'rxjs';
 import {LocalDbService} from '../../services/localDb.service';
 import {AppState} from '../../core';
+import {ImportService} from '../../services/import.service';
 
 @Component({
   selector: 'app-import-product-dialog',
@@ -17,7 +18,8 @@ export class ImportProductDialogComponent implements OnInit {
 
   constructor(
     private localDbService: LocalDbService,
-    private appState: AppState
+    private appState: AppState,
+    private importService: ImportService
   ) {
   }
 
@@ -49,5 +51,12 @@ export class ImportProductDialogComponent implements OnInit {
       this.parsedResult = parseProducts(data, products, taxes, categories, vendors, appState.store.id);
       this.parseErrors = Object.keys(this.parsedResult.errors).map(k => this.parsedResult.errors[k]);
     });
+  }
+
+  upload() {
+    const {products = [], categoriesToCreate: categories = [], vendorsToCreates: vendors = []} = this.parsedResult;
+    this.importService.importProducts({
+      products, categories, vendors
+    }).subscribe();
   }
 }

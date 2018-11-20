@@ -6,7 +6,6 @@ import { LocalDbService } from 'src/app/services/localDb.service';
 import { CategoryService } from 'src/app/services/category.service';
 import { CustomerService } from 'src/app/services/customer.service';
 import { EmployeeService } from 'src/app/services/employee.service';
-// import { InventoryService } from 'src/app/services/inventory.service';
 import { MenuService } from 'src/app/services/menu.service';
 import { ProductService } from 'src/app/services/product.service';
 import { RegisterSaleService } from 'src/app/services/register-sale.service';
@@ -18,6 +17,7 @@ import { CategoryResolverService } from 'src/app/services/category-resolver.serv
 import { StoreResolverService } from 'src/app/services/store.resolver.service';
 import { TaxResolverService } from 'src/app/services/tax-resolver.service';
 import { VendorResolverService } from 'src/app/services/vendor-resolver.service';
+import {ImportService} from '../services/import.service';
 
 @NgModule({
   providers: [
@@ -27,7 +27,6 @@ import { VendorResolverService } from 'src/app/services/vendor-resolver.service'
     CategoryService,
     CustomerService,
     EmployeeService,
-    // InventoryService,
     MenuService,
     ProductService,
     RegisterSaleService,
@@ -38,7 +37,8 @@ import { VendorResolverService } from 'src/app/services/vendor-resolver.service'
     CategoryResolverService,
     StoreResolverService,
     TaxResolverService,
-    VendorResolverService
+    VendorResolverService,
+    ImportService
   ]
 })
 export class CoreModule { }

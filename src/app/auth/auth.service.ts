@@ -18,10 +18,9 @@ export class AuthService {
   auth0 = new auth0.WebAuth({
     clientID: 'PMsjaHnyO5GtYPkFTe7nqHMqSMuAGvz5',
     domain: 'bmsolution.auth0.com',
-    responseType: 'token id_token',
-    audience: 'https://api.bnmpos.com',
+    responseType: 'token',
     redirectUri: 'http://localhost:4200/callback',
-    scope: 'openid profile'
+    scope: 'openid email'
   });
   profile$: BehaviorSubject<any>;
 

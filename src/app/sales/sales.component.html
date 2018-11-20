@@ -101,11 +101,11 @@
             </div>
             <div class="totalLine">
               <div>과세 매출</div>
-              <div>{{getTotalTaxablePrice(element) | appCurrency}}</div>
+              <div>{{element.totalTaxablePrice | appCurrency}}</div>
             </div>
-            <div class="totalLine" *ngIf="getTotalTaxFreePrice(element) > 0">
+            <div class="totalLine" *ngIf="element.totalTaxFreePrice > 0">
               <div>면세 매출</div>
-              <div>{{getTotalTaxFreePrice(element) | appCurrency}}</div>
+              <div>{{element.totalTaxFreePrice | appCurrency}}</div>
             </div>
             <div class="totalLine">
               <div>부가세</div>
@@ -114,7 +114,7 @@
             <div class="divider"></div>
             <div class="totalLine">
               <div>합계</div>
-              <div>{{element.totalPrice | appCurrency}}</div>
+              <div>{{element.finalPrice | appCurrency}}</div>
             </div>
             <div class="divider"></div>
             <div class="totalLine" *ngFor="let payment of element.payments">

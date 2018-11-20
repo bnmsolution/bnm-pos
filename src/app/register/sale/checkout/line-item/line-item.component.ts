@@ -33,10 +33,10 @@ export class LineItemComponent implements OnInit, OnChanges {
 
   ngOnChanges(simpleChange) {
     if (simpleChange.lineItem && this.lineItemForm) {
-      const {quantity, retailPrice, discountRate} = this.lineItem;
+      const {quantity } = this.lineItem;
       // We don't want to trigger valueChanges event
       // Input changes was made by form value change(this.lineItemForm.valueChanges)
-      this.lineItemForm.setValue({quantity, retailPrice, discountRate}, {emitEvent: false});
+      this.lineItemForm.setValue({quantity}, {emitEvent: false});
     }
   }
 
@@ -45,12 +45,12 @@ export class LineItemComponent implements OnInit, OnChanges {
   }
 
   createForm() {
-    const {quantity, retailPrice, discountRate} = this.lineItem;
+    const {quantity} = this.lineItem;
     const quantityValidator = this.isReturn ? Validators.min(-this.maxReturnQuantity) : Validators.min(1);
     this.lineItemForm = this.fb.group({
       quantity: [quantity, [Validators.required, quantityValidator]],
-      retailPrice: [{value: retailPrice, disabled: this.isReturn}, [Validators.required, Validators.min(0)]],
-      discountRate: [{value: discountRate, disabled: this.isReturn}, [Validators.min(0), Validators.max(100)]],
+      // retailPrice: [{value: retailPrice, disabled: this.isReturn}, [Validators.required, Validators.min(0)]],
+      // discountRate: [{value: discountRate, disabled: this.isReturn}, [Validators.min(0), Validators.max(100)]],
     });
 
     this.lineItemForm.valueChanges

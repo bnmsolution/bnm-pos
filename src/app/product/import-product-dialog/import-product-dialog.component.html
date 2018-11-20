@@ -41,5 +41,5 @@
 </mat-dialog-content>
 <mat-dialog-actions align="end">
   <button mat-button color="primary" [mat-dialog-close]="true">취소</button>
-  <button mat-button color="primary" (click)="delete()" [disabled]="!selectedFile || parseErrors.length">올리기</button>
+  <button mat-button color="primary" (click)="upload()">올리기</button>
 </mat-dialog-actions>

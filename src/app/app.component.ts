@@ -89,9 +89,9 @@ export class AppComponent implements OnInit {
     });
   }
 
-  private startLiveReplication({tenantId}): void {
-    this.localDbService.init(tenantId);
-    this.localDbService.replicate(tenantId);
+  private startLiveReplication({tenantId, name}): void {
+    this.localDbService.init(tenantId, name);
+    this.localDbService.replicate();
     // this.localDbService.startLiveReplication(tenantId);
   }
 }

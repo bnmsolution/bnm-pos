@@ -8,7 +8,7 @@ import {WorkerMessenger} from './worker-messenger';
 PouchDB.plugin(PouchDBFind);
 
 // todo: using node env
-const remoteCouchUrl = 'http://13.124.188.143:5984/';
+const remoteCouchUrl = 'http://localhost:5984/';
 
 // const remoteCouchUrl = 'http://localhost:5984/';
 
@@ -45,33 +45,20 @@ export class LocalDbService {
     this.workerMessenger = new WorkerMessenger(new Worker('assets/scripts/pouch-worker.js'));
   }
 
-  init(tenantId: string): void {
-    this.workerMessenger.postMessage('init', [tenantId]);
-    // this.db = new PouchDB(`db-${tenantId}`, {auto_compaction: true, revs_limit: 1});
-    // this.connectRemoteDb(tenantId);
-  }
-
-  public connectRemoteDb(tenantId: string): void {
-    const remoteDbUrl: string = remoteCouchUrl + 'db-' + tenantId;
-    this.remoteDb = new PouchDB(remoteDbUrl);
-    // this.remoteDb.put(this.replicationFilter);
-    console.log('[LocalDbService] Connected to the remote database.');
-
-
+  init(tenantId: string, userName: string): void {
+    this.workerMessenger.postMessage('init', [tenantId, userName]);
   }
 
   /**
    * Replicate data from remote couch database.
    *
-   * @param {string} tenantId
    * @returns {Promise<any>}
    */
-  public replicate(tenantId: string) {
-    console.log('replication started');
-    this.workerMessenger.postMessage('replicate', [remoteCouchUrl, tenantId], 'replication', false)
-      .subscribe((info: ChangeInfo) => {
-        console.log('replication completed');
-      });
+  public replicate(): Observable<any> {
+    return this.workerMessenger.postMessage('replicate', [], 'replication', false)
+      // .subscribe((info: ChangeInfo) => {
+      //   console.log('replication completed');
+      // });
   }
 
   /**

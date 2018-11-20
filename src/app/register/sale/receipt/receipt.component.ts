@@ -1,5 +1,5 @@
 import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
-import {RegisterSale, getTotalTaxablePrice, getTotalTaxFreePrice, PaymentType} from 'pos-models';
+import {RegisterSale, getTotalTaxablePrice, PaymentType} from 'pos-models';
 
 @Component({
   selector: 'app-receipt',
@@ -10,7 +10,7 @@ import {RegisterSale, getTotalTaxablePrice, getTotalTaxFreePrice, PaymentType} f
 export class ReceiptComponent {
   @Input() sale: RegisterSale;
   getTotalTaxablePrice = getTotalTaxablePrice;
-  getTotalTaxFreePrice = getTotalTaxFreePrice;
+  // getTotalTaxFreePrice = getTotalTaxFreePrice;
 
   // Temporary code
   getTypeNameKo(paymentType: PaymentType) {

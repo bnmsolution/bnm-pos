@@ -44,13 +44,13 @@ const lineItemsReducer = (state: RegisterSaleLineItem[], action) => {
 
         let newLineItem = {...lineItem};
 
-        if (lineItem.discountRate !== discountRate) {
-          newLineItem = setDiscountRate(newLineItem, discountRate);
-        }
-
-        if (lineItem.retailPrice !== retailPrice) {
-          newLineItem = setRetailPrice(newLineItem, retailPrice);
-        }
+        // if (lineItem.discountRate !== discountRate) {
+        //   newLineItem = setDiscountRate(newLineItem, discountRate);
+        // }
+        //
+        // if (lineItem.retailPrice !== retailPrice) {
+        //   newLineItem = setRetailPrice(newLineItem, retailPrice);
+        //}
 
         if (lineItem.quantity !== quantity) {
           newLineItem = setQuantity(newLineItem, quantity);

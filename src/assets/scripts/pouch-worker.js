@@ -5,8 +5,14 @@ const remoteCouchUrl = 'http://13.124.188.143:5984/';
 // const remoteCouchUrl = 'http://localhost:5984/';
 
 class PouchWorker {
-  init(messageId, tenantId) {
+  init(messageId, tenantId, username) {
     this.db = new PouchDB(`db-${tenantId}`, {auto_compaction: true, revs_limit: 1});
+    this.remoteDb = new PouchDB(`http://ec2-35-183-130-127.ca-central-1.compute.amazonaws.com:5984/db-${tenantId}`, {
+      auth: {
+        username,
+        password: tenantId
+      }
+    });
   }
 
   /**
@@ -57,9 +63,8 @@ class PouchWorker {
       });
   }
 
-  replicate(messageId, remoteCouchUrl, tenantId) {
-    const remoteDbUrl = remoteCouchUrl + 'db-' + tenantId;
-    this.db.replicate.from(remoteDbUrl, {
+  replicate(messageId) {
+    this.db.replicate.from(this.remoteDb, {
       batch_size: 500,
       filter: doc => doc.fromRemote || doc._deleted === true
     }).on('change', info => {

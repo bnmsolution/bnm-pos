@@ -5,7 +5,7 @@ import {Store} from '@ngrx/store';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {RegisterSale, RegisterSaleStatus, getTotalTaxablePrice, getTotalTaxFreePrice, PaymentType, Product, Customer} from 'pos-models';
+import {RegisterSale, RegisterSaleStatus, PaymentType, Product, Customer} from 'pos-models';
 import {isSameDay, startOfMonth, endOfMonth, isWithinInterval} from 'date-fns';
 
 import {detailExpand} from '../shared/utils/animation';
@@ -44,8 +44,6 @@ export class SalesComponent implements OnInit, AfterViewInit {
   unsubscribe$ = new Subject();
   displayedColumns = ['salesDate', 'employeeName', 'customerName', 'totalPrice', 'status'];
   salesStatus: any = RegisterSaleStatus;
-  getTotalTaxablePrice = getTotalTaxablePrice;
-  getTotalTaxFreePrice = getTotalTaxFreePrice;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
