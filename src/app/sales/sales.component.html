@@ -78,16 +78,16 @@
     <section fxLayout="row" class="salesDetail">
       <div fxFlex>
         <mat-list dense>
-          <mat-list-item *ngFor="let lineItem of element.lineItems">
+          <mat-list-item *ngFor="let li of element.lineItems">
             <div class="lineItem" fxLayout fxFlex>
-              <div class="lineQuantity">{{lineItem.quantity}}</div>
-              <div fxFlex>{{lineItem.name}}</div>
+              <div class="lineQuantity">{{li.quantity}}</div>
+              <div fxFlex>{{li.name}}</div>
               <div class="multiplier">x</div>
               <div class="linePrice">
-                <div>{{lineItem.subTotal | number}}</div>
-                <div class="price-original" *ngIf="lineItem.discount > 0">{{lineItem.originalPrice * lineItem.quantity | number}}</div>
+                <div>{{li.originalPrice | number}}</div>
+                <div class="price-original" *ngIf="li.originalPrice !== li.finalPrice">{{li.finalPrice | number}}</div>
               </div>
-              <div class="lineTotal">{{lineItem.totalPrice | appCurrency}}</div>
+              <div class="lineTotal">{{li.finalTotal | appCurrency}}</div>
             </div>
           </mat-list-item>
         </mat-list>
@@ -114,7 +114,7 @@
             <div class="divider"></div>
             <div class="totalLine">
               <div>합계</div>
-              <div>{{element.finalPrice | appCurrency}}</div>
+              <div>{{element.totalPrice | appCurrency}}</div>
             </div>
             <div class="divider"></div>
             <div class="totalLine" *ngFor="let payment of element.payments">

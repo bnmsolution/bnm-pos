@@ -6,6 +6,7 @@ const locales = {ko};
 
 export default function (date, formatStr) {
   return format(date, formatStr, {
-    locale: locales[window.__localeId__]
+    locale: locales[window.__localeId__],
+    awareOfUnicodeTokens: true
   });
 }
