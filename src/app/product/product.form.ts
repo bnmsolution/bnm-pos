@@ -1,8 +1,6 @@
-import {Validators} from '@angular/forms';
-import * as uuid from 'uuid/v1';
+import { Validators } from '@angular/forms';
 
 export const productForm = {
-  id: uuid(),
   name: ['', Validators.required],
   sku: '',
   barcode: '',
@@ -15,11 +13,11 @@ export const productForm = {
   supplyPrice: null,
   markup: null,
   retailPrice: [null, Validators.required],
-  taxAmount: [{value: null, disabled: true}],
-  productPrice: [{value: null, disabled: true}],
+  taxAmount: [{ value: null, disabled: true }],
+  productPrice: [{ value: null, disabled: true }],
 
   trackInventory: false,
-  count: [{value: null, disabled: true}],
-  reOrderPoint: [{value: null, disabled: true}],
-  reOrderCount: [{value: null, disabled: true}],
+  count: [{ value: null, disabled: true }],
+  reOrderPoint: [{ value: null, disabled: true }],
+  reOrderCount: [{ value: null, disabled: true }],
 };

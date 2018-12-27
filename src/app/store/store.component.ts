@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 import { Store } from '@ngrx/store';
-import {filter, take} from 'rxjs/operators';
-import {Tax, PosStore} from 'pos-models';
+import { filter, take } from 'rxjs/operators';
+import { Tax, PosStore } from 'pos-models';
 
 import { supportedCurrencies } from '../shared/constants/currencies';
 import * as actions from 'src/app/stores/actions/store.actions';
@@ -83,7 +83,7 @@ export class StoreComponent implements OnInit {
   }
 
   onSubmit(): void {
-    Object.assign(this.store, this.storeForm.value);
+    const store = Object.assign({}, this.posStore, this.storeForm.value);
 
     if (this.storeForm.valid) {
       this.storeEffects.updateStore$
@@ -93,7 +93,7 @@ export class StoreComponent implements OnInit {
         ).subscribe(() => {
           this.snackBar.open('설정이 저장되었습니다', '확인', { duration: 2000 });
         });
-      this.store.dispatch(new actions.UpdateStore(this.store));
+      this.store.dispatch(new actions.UpdateStore(store));
     }
   }
 }

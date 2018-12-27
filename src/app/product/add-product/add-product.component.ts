@@ -1,17 +1,17 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material';
-import {Store} from '@ngrx/store';
-import {merge} from 'rxjs';
-import {filter, take} from 'rxjs/operators';
-import {Product, Category, Vendor, Tax, PosStore, getProductPriceFromRetailPrice, getProductPriceFromMarkup, getMarkup} from 'pos-models';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material';
+import { Store } from '@ngrx/store';
+import { merge } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
+import { Product, Category, Vendor, Tax, PosStore, getProductPriceFromRetailPrice, getProductPriceFromMarkup, getMarkup } from 'pos-models';
 import * as uuid from 'uuid/v1';
 
-import {AppState} from '../../core';
-import {productForm} from '../product.form';
+import { AppState } from '../../core';
+import { productForm } from '../product.form';
 import * as actions from '../../stores/actions/product.actions';
-import {ProductEffects} from 'src/app/stores/effects/product.effects';
+import { ProductEffects } from 'src/app/stores/effects/product.effects';
 
 @Component({
   selector: 'app-add-product',
@@ -22,11 +22,17 @@ export class AddProductComponent implements OnInit {
 
   productForm: FormGroup;
   isNewProduct = true;
-  product = {} as Product;
+  product = {
+    id: uuid(),
+    variantOptions: [],
+    variants: [],
+    addons: []
+  } as Product;
   categories: Category[] = [];
   vendors: Vendor[] = [];
   taxes: Tax[] = [];
   settings: PosStore;
+  readonly = false;
 
   constructor(
     private fb: FormBuilder,
@@ -51,12 +57,14 @@ export class AddProductComponent implements OnInit {
         this.taxes = data.taxes;
         this.settings = data.settings[0];
 
-        this.productForm.patchValue({taxId: this.settings.defaultTaxId});
+        this.productForm.patchValue({ taxId: this.settings.defaultTaxId });
 
         if (data.editProduct) {
           this.setProductForEdit(data.editProduct);
         }
       });
+
+      console.log(this.product);
   }
 
   createForm() {
@@ -115,7 +123,7 @@ export class AddProductComponent implements OnInit {
   }
 
   private setControlValue(name: string, value: any) {
-    const options = {emitEvent: false};
+    const options = { emitEvent: false };
     const control = this.productForm.get(name);
     if (control) {
       control.setValue(value, options);
@@ -150,13 +158,13 @@ export class AddProductComponent implements OnInit {
         )
         .subscribe(action2 => {
           const message = action2.type === actions.ADD_PRODUCT_SUCCESS ? '상품이 추가되었습니다' : '상품이 업데이트 되었습니다';
-          this.snackBar.open(message, '확인', {duration: 2000});
+          this.snackBar.open(message, '확인', { duration: 2000 });
           this.router.navigate(['./product']);
         });
 
       let action;
       if (this.isNewProduct) {
-        this.product.id = uuid();
+
 
         // Currently only supporting a single store
         this.product.storeId = this.appState.currentStore.id;

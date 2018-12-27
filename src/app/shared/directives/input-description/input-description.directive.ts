@@ -8,6 +8,7 @@ import { Directive, ElementRef, Input, AfterViewChecked } from '@angular/core';
  */
 export class InputDescriptionDirective implements AfterViewChecked {
 
+
   // target element
   @Input() target: any;
   // target element's id (use id for directives)
@@ -20,7 +21,12 @@ export class InputDescriptionDirective implements AfterViewChecked {
     this.el = this.elementRef.nativeElement;
   }
 
+
   ngAfterViewChecked(): void {
+    this.setLabel();
+  }
+
+  private setLabel() {
     let offsetTop = 0;
     if (this.targetId) {
       const element = document.getElementById(this.targetId);

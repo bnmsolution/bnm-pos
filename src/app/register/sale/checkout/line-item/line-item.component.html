@@ -1,20 +1,21 @@
 <div class="line-item" (click)="handleClick()">
-  <div [ngClass]="lineItem.quantity >= 0 ? 'quantity' : 'negativeQuantity'">{{lineItem.quantity}}</div>
-  <div flex>{{lineItem.name}}</div>
+  <div [ngClass]="lineItem.quantity >= 0 ? 'quantity' : 'negativeQuantity'" (click)="modifyQuantity.emit($event)">{{lineItem.quantity}}</div>
+  <div class="name" (click)="openProductViewDialog(lineItem)">{{lineItem.name}}</div>
   <div class="price">
-    <div>{{lineItem.subTotal | number}}</div>
+    <div>{{lineItem.finalTotal | number}}</div>
     <div class="price-original" *ngIf="lineItem.discount > 0">{{lineItem.originalPrice * lineItem.quantity | number}}</div>
+    <div class="addon" *ngFor="let addon of lineItem.addons">{{addon.name}} <span *ngIf="addon.price !== 0">{{addon.price}}</span></div>
   </div>
   <button mat-icon-button (click)="handleRemoveClick($event)">
     <mat-icon class="remove-btn" svgIcon="deleteIcon"></mat-icon>
   </button>
 </div>
-<div class="edit" [appToggleSection]="isOpen">
+
+<!-- <div class="edit" [appToggleSection]="isOpen">
   <form [formGroup]="lineItemForm">
     <div class="edit-wrapper">
       <mat-form-field class="edit-quantity" floatPlaceholder="always">
         <input matInput type="number" formControlName="quantity" placeholder="판매가">
-        <!--<mat-error *ngIf="lineItem.errors.invalidQuantity != null">{{lineItem.errors.invalidQuantity.meesage}}</mat-error>-->
       </mat-form-field>
       <mat-form-field class="edit-price" floatPlaceholder="always">
         <input matInput type="number" formControlName="retailPrice" placeholder="판매가">
@@ -26,4 +27,4 @@
   </form>
   <div class="view-product" (click)="openProductViewDialog()">상품정보 보기</div>
   <div class="group-border" [style.opacity]="isOpen ? 1 : 0"></div>
-</div>
+</div> -->

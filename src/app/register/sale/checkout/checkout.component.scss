@@ -5,6 +5,7 @@
   flex-direction: column;
   min-width: 400px;
   max-width: 500px;
+  position: relative;
 }
 
 .actions {
@@ -101,4 +102,13 @@ mat-card-actions {
 
 .refundButton {
   background-color: $red-500 !important;
+}
+
+.test {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: blue;
+  top: 0;
+  left: 0
 }

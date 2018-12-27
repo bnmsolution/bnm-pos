@@ -1,16 +1,14 @@
-import {Injectable, NgZone} from '@angular/core';
-import {Observable, Subject} from 'rxjs';
-import {fromPromise} from 'rxjs/internal-compatibility';
+import { Injectable, NgZone } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { fromPromise } from 'rxjs/internal-compatibility';
 import PouchDB from 'pouchdb';
 import PouchDBFind from 'pouchdb-find';
-import {WorkerMessenger} from './worker-messenger';
+import { WorkerMessenger } from './worker-messenger';
+
+import { environment } from '../../environments/environment';
 
 PouchDB.plugin(PouchDBFind);
 
-// todo: using node env
-const remoteCouchUrl = 'http://localhost:5984/';
-
-// const remoteCouchUrl = 'http://localhost:5984/';
 
 interface ChangeInfo {
   direction: string;
@@ -46,7 +44,7 @@ export class LocalDbService {
   }
 
   init(tenantId: string, userName: string): void {
-    this.workerMessenger.postMessage('init', [tenantId, userName]);
+    this.workerMessenger.postMessage('init', [environment.couchdb.remoteUrl, tenantId, userName]);
   }
 
   /**
@@ -55,20 +53,17 @@ export class LocalDbService {
    * @returns {Promise<any>}
    */
   public replicate(): Observable<any> {
-    return this.workerMessenger.postMessage('replicate', [], 'replication', false)
-      // .subscribe((info: ChangeInfo) => {
-      //   console.log('replication completed');
-      // });
+    return this.workerMessenger.postMessage('replicate', [], 'replication', false);
+    // .subscribe((info: ChangeInfo) => {
+    //   console.log('replication completed');
+    // });
   }
 
   /**
    * Starts live replication. If any change happens, it will emit document ids.
-   *
-   * @param {string} tenantId
-   * @returns {void}
    */
-  public startLiveReplication(tenantId: string) {
-    this.workerMessenger.postMessage('startLiveReplication', [remoteCouchUrl, tenantId], 'replication', false)
+  public startLiveReplication() {
+    this.workerMessenger.postMessage('startLiveReplication', [], 'replication', false)
       .subscribe((info: ChangeInfo) => {
         const changeDocIds = info.change.docs.map(d => d._id);
         this.replicationStream$.next(changeDocIds.join(' '));
@@ -159,12 +154,12 @@ export class LocalDbService {
 
   public getHistory(type: string, id: string): any {
     const docId: string = this.generateDocId(type, id);
-    return this.remoteDb.get(docId, {revs_info: true, conflicts: true})
+    return this.remoteDb.get(docId, { revs_info: true, conflicts: true })
       .then(result => {
         const promises: any[] = [];
         result._revs_info.map(revInfo => {
           if (revInfo.status === 'available') {
-            promises.push(this.remoteDb.get(docId, {rev: revInfo.rev}));
+            promises.push(this.remoteDb.get(docId, { rev: revInfo.rev }));
           }
         });
         return Promise.all(promises);

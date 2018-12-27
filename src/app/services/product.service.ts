@@ -27,6 +27,7 @@ export class ProductService extends CrudService {
       this.localDbService.findAllDocs('inventory')
     ).pipe(
       map(([products, categories, vendors, taxes, inventories]: [any, any, any, any, any]) => {
+        console.log(products);
         return products.map(p => {
           // todo: create map to reduce time
           if (p.categoryId) {

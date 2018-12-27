@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
-import {Category, Product, Tax, Vendor} from 'pos-models';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Category, Product, Tax, Vendor } from 'pos-models';
 
-import {productForm} from '../product.form';
+import { productForm } from '../product.form';
 
 @Component({
   selector: 'app-view-product',
@@ -17,6 +17,7 @@ export class ViewProductComponent implements OnInit {
   categories: Category[] = [];
   vendors: Vendor[] = [];
   taxes: Tax[] = [];
+  readonly = true;
 
   constructor(
     private fb: FormBuilder,
@@ -37,7 +38,6 @@ export class ViewProductComponent implements OnInit {
 
   createForm() {
     this.productForm = this.fb.group(productForm);
-    this.productForm.disable();
   }
 
   onSubmit() {

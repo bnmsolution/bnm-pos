@@ -1,31 +1,35 @@
-@import '../../shared/common-style';
+@import '../../shared/common-style.scss';
+
 :host {
   display: flex;
   flex-direction: column;
 }
 
+.upperContent {
+  padding-bottom: 16px;
+  border-bottom: 1px solid $border-color;
+}
+
+.lowerContent {
+  padding-top: 16px;
+}
+
 .image {
-  width: 150px;
-  height: 150px;
+  width: 120px;
+  height: 120px;
   background: #dfdfdf;
   margin-right: 24px;
 }
 
 .wrapper {
   display: flex;
-  justify-content: space-around;
-  padding: 16px 0; // border-bottom: $border;
-  &:first-child {
-    padding-top: 0;
-  }
-  &:last-child {
-    padding-bottom: 0;
-  }
+  flex-direction: column;
 }
+
 
 .header {
   display: flex;
-  font-size: 24px;
+  font-size: 22px;
   justify-content: space-between;
   margin-bottom: 16px;
 }
@@ -44,5 +48,47 @@
   >div:first-child {
     color: $text-color-secondary;
     margin-bottom: 5px;
+  }
+}
+
+.label {
+  margin-bottom: 4px;
+  padding-left: 2px;
+}
+
+.quantityInput {
+  display: flex;
+  border: 1px solid;
+  border-color: $border-color;
+  align-items: center;
+  border-radius: 5px;
+  input {
+    align-self: stretch;
+    width: 50px;
+    text-align: center;
+    border: none;
+  }
+  >div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 40px;
+
+    &:first-child {
+      border-right: 1px solid $border-color;
+    }
+    &:last-child {
+      border-left: 1px solid $border-color;
+    }
+  }
+}
+
+.addons {
+  display: flex;
+  flex-wrap: wrap;
+  >mat-checkbox {
+    margin-right: 24px;
+    padding-left: 24px;
   }
 }

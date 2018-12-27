@@ -1,11 +1,11 @@
-import {Component, EventEmitter, Input, Output, ChangeDetectionStrategy, OnChanges, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MatDialog} from '@angular/material';
-import {distinctUntilChanged} from 'rxjs/operators';
-import {RegisterSaleLineItem} from 'pos-models';
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy, OnChanges, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material';
+import { distinctUntilChanged } from 'rxjs/operators';
+import { RegisterSaleLineItem, RegisterSale } from 'pos-models';
 
-import {ProductService} from 'src/app/core';
-import {ProductViewDialogComponent} from '../../../product-view-dialog/product-view-dialog.component';
+import { ProductService } from 'src/app/core';
+import { ProductViewDialogComponent } from '../../../product-view-dialog/product-view-dialog.component';
 
 @Component({
   selector: 'app-line-item',
@@ -21,6 +21,8 @@ export class LineItemComponent implements OnInit, OnChanges {
   @Output() lineItemClick = new EventEmitter();
   @Output() remove = new EventEmitter();
   @Output() update = new EventEmitter();
+  @Output() updateAddons = new EventEmitter();
+  @Output() modifyQuantity = new EventEmitter();
 
   lineItemForm: FormGroup;
 
@@ -33,10 +35,10 @@ export class LineItemComponent implements OnInit, OnChanges {
 
   ngOnChanges(simpleChange) {
     if (simpleChange.lineItem && this.lineItemForm) {
-      const {quantity } = this.lineItem;
+      const { quantity } = this.lineItem;
       // We don't want to trigger valueChanges event
       // Input changes was made by form value change(this.lineItemForm.valueChanges)
-      this.lineItemForm.setValue({quantity}, {emitEvent: false});
+      this.lineItemForm.setValue({ quantity }, { emitEvent: false });
     }
   }
 
@@ -45,7 +47,7 @@ export class LineItemComponent implements OnInit, OnChanges {
   }
 
   createForm() {
-    const {quantity} = this.lineItem;
+    const { quantity } = this.lineItem;
     const quantityValidator = this.isReturn ? Validators.min(-this.maxReturnQuantity) : Validators.min(1);
     this.lineItemForm = this.fb.group({
       quantity: [quantity, [Validators.required, quantityValidator]],
@@ -71,23 +73,31 @@ export class LineItemComponent implements OnInit, OnChanges {
   }
 
   handleClick() {
-    this.lineItemClick.emit({id: this.lineItem.id});
+    this.lineItemClick.emit({ id: this.lineItem.id });
   }
 
   handleRemoveClick(event) {
     // prevent click event
     event.stopPropagation();
-    this.remove.emit({id: this.lineItem.id});
+    this.remove.emit({ id: this.lineItem.id });
   }
 
-  openProductViewDialog(): void {
+  openProductViewDialog(lineItem: RegisterSaleLineItem): void {
     this.productService.getProductById(this.lineItem.productId)
       .subscribe(product => {
-        this.dialog.open(ProductViewDialogComponent, {
+        const data = {
+          product,
+          lineItem,
+          addons: []
+        };
+        const dialogRef = this.dialog.open(ProductViewDialogComponent, {
           width: '650px',
-          data: {
-            product: product
-          }
+          data
+        });
+        dialogRef.afterClosed().subscribe(() => {
+          const selectedAddons = data.addons.filter(a => a.value);
+          console.log(selectedAddons);
+          this.updateAddons.emit({ id: this.lineItem.id, addons: selectedAddons });
         });
       });
   }

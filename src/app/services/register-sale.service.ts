@@ -1,11 +1,13 @@
-import {Injectable} from '@angular/core';
-import {forkJoin, Observable} from 'rxjs';
-import {RegisterSale} from 'pos-models';
+import { Injectable } from '@angular/core';
+import { forkJoin, Observable } from 'rxjs';
+import { RegisterSale } from 'pos-models';
 
-import {CrudService} from './crudService';
-import {HttpService} from './http.service';
-import {LocalDbService} from './localDb.service';
-import {map} from 'rxjs/operators';
+
+import { CrudService } from './crudService';
+import { HttpService } from './http.service';
+import { LocalDbService } from './localDb.service';
+import { map } from 'rxjs/operators';
+import { MessageService } from './message.service';
 
 const documentName = 'registerSale';
 
@@ -14,7 +16,8 @@ export class RegisterSaleService extends CrudService {
 
   constructor(
     private httpService: HttpService,
-    private localDbService: LocalDbService) {
+    private localDbService: LocalDbService,
+    private messageService: MessageService) {
     super(localDbService, httpService, documentName);
   }
 

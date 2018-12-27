@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
-import {Router} from '@angular/router';
-import {Subscription, timer} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { BehaviorSubject, Subscription, timer } from 'rxjs';
 import * as auth0 from 'auth0-js';
-import {BehaviorSubject} from 'rxjs';
-import {Employee} from 'pos-models';
+
+import { environment } from '../../environments/environment';
 
 export interface UserProfile {
   name: string;
@@ -16,11 +16,12 @@ export class AuthService {
 
   refreshSubscription: Subscription;
   auth0 = new auth0.WebAuth({
-    clientID: 'PMsjaHnyO5GtYPkFTe7nqHMqSMuAGvz5',
-    domain: 'bmsolution.auth0.com',
-    responseType: 'token',
-    redirectUri: 'http://localhost:4200/callback',
-    scope: 'openid email'
+    clientID: environment.auth0.clientID,
+    domain: environment.auth0.domain,
+    responseType: 'token id_token',
+    audience: environment.auth0.audience,
+    redirectUri: `${window.location.origin}/callback`,
+    scope: 'openid profile'
   });
   profile$: BehaviorSubject<any>;
 
@@ -32,10 +33,10 @@ export class AuthService {
 
   public handleAuthentication(): void {
     this.auth0.parseHash((err, authResult) => {
-      if (authResult && authResult.accessToken && authResult.idToken) {
+      if (authResult && authResult.accessToken) {
         this.setSession(authResult);
-        this.getProfile()
-          .then(() => this.router.navigate(['/']));
+        this.setProfile(authResult.idTokenPayload);
+        this.router.navigate(['/']);
       } else if (err) {
         this.router.navigate(['/']);
         console.log(err);
@@ -44,20 +45,14 @@ export class AuthService {
     });
   }
 
-  private getProfile(): Promise<any> {
-    return new Promise(resolve => {
-      const accessToken = localStorage.getItem('access_token');
-      this.auth0.client.userInfo(accessToken, (err, profile) => {
-        const namespace = 'https://pos.bnmsolution.com/';
-        const app_metadata = profile[namespace + 'app_metadata'];
-        if (app_metadata) {
-          profile.tenantId = app_metadata.tenantId;
-        }
-        localStorage.setItem('profile', JSON.stringify(profile));
-        this.profile$.next(profile);
-        resolve();
-      });
-    });
+  private setProfile(profile) {
+    const namespace = environment.auth0.namespace;
+    const app_metadata = profile[namespace + 'app_metadata'];
+    if (app_metadata) {
+      profile.tenantId = app_metadata.tenantId;
+    }
+    localStorage.setItem('profile', JSON.stringify(profile));
+    this.profile$.next(profile);
   }
 
   private renewToken() {
@@ -83,9 +78,9 @@ export class AuthService {
     console.log(`[AuthService] Renewal token after ${time}ms`);
     this.refreshSubscription = timer(time)
       .subscribe(() => {
-          this.renewToken();
-          this.scheduleRenewal();
-        }
+        this.renewToken();
+        this.scheduleRenewal();
+      }
       );
   }
 
@@ -102,7 +97,6 @@ export class AuthService {
   logout(): void {
     // Remove tokens and expiry time from localStorage
     localStorage.removeItem('access_token');
-    localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
     localStorage.removeItem('profile');
     this.unscheduleRenewal();
@@ -120,7 +114,6 @@ export class AuthService {
   private setSession(authResult): void {
     const expTime = authResult.expiresIn * 1000 + Date.now();
     localStorage.setItem('access_token', authResult.accessToken);
-    localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', JSON.stringify(expTime));
     this.scheduleRenewal();
   }

@@ -1,5 +1,5 @@
-import {Action} from '@ngrx/store';
-import {Register, RegisterSale, Product, PaymentType, Customer, PriceAdjustmentType} from 'pos-models';
+import { Action } from '@ngrx/store';
+import { Register, RegisterSale, Product, PaymentType, Customer, PriceAdjustmentType } from 'pos-models';
 
 export const SELECT_REGISTER = '[Register Sale] Select register';
 export const CREATE_SALE = '[Register Sale] Create sale';
@@ -7,7 +7,9 @@ export const UPDATE_SALE = '[Register Sale] Update sale';
 export const CLOSE_SALE = '[Register Sale] Close sale';
 export const CLOSE_SALE_SUCCESS = '[Register Sale] Close sale success';
 export const ADD_LINE_ITEM = '[Register Sale] Add line item';
+export const ADD_LINE_ITEM_SUCCESS = '[Register Sale] Add line item success';
 export const UPDATE_LINE_ITEM = '[Register Sale] Update line item';
+export const UPDATE_LINE_ITEM_ADDONS = '[Register Sale] Update line item addons';
 export const REMOVE_LINE_ITEM = '[Register Sale] Remove line item';
 export const ADD_PAYMENT = '[Register Sale] Add payment';
 export const HOLD_SALE = '[Register Sale] Hold sale';
@@ -38,7 +40,8 @@ export class CreateSale implements Action {
     storeId: string,
     registerId: string,
     userId: string,
-    priceAdjustmentType: PriceAdjustmentType }) {
+    priceAdjustmentType: PriceAdjustmentType
+  }) {
   }
 }
 
@@ -60,8 +63,12 @@ export class CloseSaleSuccess implements Action {
 export class AddLineItem implements Action {
   readonly type = ADD_LINE_ITEM;
 
-  constructor(public payload: { product: Product, productId: string, quantity?: number }) {
+  constructor(public payload: { product: Product, productId: string, variantId?: string, quantity?: number }) {
   }
+}
+
+export class AddLineItemSuccess implements Action {
+  readonly type = ADD_LINE_ITEM_SUCCESS;
 }
 
 export class RemoveLineItem implements Action {
@@ -80,6 +87,13 @@ export class UpdateLineItem implements Action {
     retailPrice: number,
     discountRate: number
   }) {
+  }
+}
+
+export class UpdateAddons implements Action {
+  readonly type = UPDATE_LINE_ITEM_ADDONS;
+
+  constructor(public payload: { id: string, addons: any[] }) {
   }
 }
 
@@ -155,6 +169,6 @@ export class HoldExchangeSuccess implements Action {
 }
 
 export type RegisterSaleActions = SelectRegister | CreateSale | UpdateSale | CloseSale | AddLineItem
-  | RemoveLineItem | UpdateLineItem | AddPayment | CalculateSalesTotals | HoldSale | VoidSale | AddSaleCustomer
+  | RemoveLineItem | UpdateLineItem | UpdateAddons | AddPayment | CalculateSalesTotals | HoldSale | VoidSale | AddSaleCustomer
   | RemoveSaleCustomer | ContinueSale | ReturnSale | ExchangeSale | HoldReturn | HoldReturnSuccess
   | HoldExchange | HoldExchangeSuccess;

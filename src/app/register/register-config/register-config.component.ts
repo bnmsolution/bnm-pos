@@ -1,20 +1,19 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {FormControl} from '@angular/forms';
-import {MatDialog, MatDialogConfig} from '@angular/material';
-import {Store} from '@ngrx/store';
-import {Observable, Subject} from 'rxjs';
-import {startWith, map, takeUntil, debounceTime} from 'rxjs/operators';
-import {Register, RegisterTab, RegisterQuickProduct, Product} from 'pos-models';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { Store } from '@ngrx/store';
+import { Observable, Subject } from 'rxjs';
+import { startWith, map, takeUntil, debounceTime } from 'rxjs/operators';
+import { Register, RegisterTab, RegisterQuickProduct, Product, flattenProduct, ProductVariant } from 'pos-models';
 
-import {SingleProductEditDialogComponent} from '../quick-products/single-product-edit-dialog/single-product-edit-dialog.component';
-import {GroupProductEditDialogComponent} from '../quick-products/group-product-edit-dialog/group-product-edit-dialog.component';
-import {RegisterService, ProductService} from '../../core';
-import {TabEditDialogComponent} from '../quick-products/tab-edit-dialog/tab-edit-dialog.component';
-
+import { SingleProductEditDialogComponent } from '../quick-products/single-product-edit-dialog/single-product-edit-dialog.component';
+import { GroupProductEditDialogComponent } from '../quick-products/group-product-edit-dialog/group-product-edit-dialog.component';
+import { RegisterService, ProductService } from '../../core';
+import { TabEditDialogComponent } from '../quick-products/tab-edit-dialog/tab-edit-dialog.component';
 
 import * as registerActions from '../../stores/actions/register.actions';
 import * as productActions from '../../stores/actions/product.actions';
-import {cloneDeep} from '../../shared/utils/lang';
+import { cloneDeep } from '../../shared/utils/lang';
 
 @Component({
   selector: 'app-register-config',
@@ -25,39 +24,28 @@ export class RegisterConfigComponent implements OnInit, OnDestroy {
 
   register: Register;
   productCtrl: FormControl;
-  filteredProducts: Observable<Product[]>;
-  products: Product[] = [];
+  filteredProducts: Observable<(Product | ProductVariant)[]>;
+  products: (Product | ProductVariant)[] = [];
   unsubscribe$ = new Subject();
   selectedQuickProductPosition = -1;
   currentTabIndex = 0;
   currentQuickProductGroup: RegisterQuickProduct;
 
   constructor(private dialog: MatDialog,
-              private registerService: RegisterService,
-              private productService: ProductService,
-              private store: Store<any>) {
+    private registerService: RegisterService,
+    private productService: ProductService,
+    private store: Store<any>) {
   }
 
   ngOnInit() {
     this.productCtrl = new FormControl();
-
-    // this.store.select('products')
-    //   .subscribe(products => {
-    //     this.products = products || [];
-    //     this.filteredProducts = this.productCtrl.valueChanges
-    //       .pipe(
-    //         startWith(null),
-    //         takeUntil(this.unsubscribe$),
-    //         map(searchValue => searchValue ? this.filter(searchValue) : this.products)
-    //       );
-    //   });
 
     this.store.select('products')
       .pipe(
         takeUntil(this.unsubscribe$)
       )
       .subscribe(products => {
-        products ? this.products = products : this.store.dispatch(new productActions.LoadProducts());
+        products ? this.products = flattenProduct(products) : this.store.dispatch(new productActions.LoadProducts());
       });
 
     this.store.select('registers')
@@ -91,7 +79,7 @@ export class RegisterConfigComponent implements OnInit, OnDestroy {
    * A filter for product search on autocomplete component.
    * @param {string} searchValue
    */
-  filter(searchValue: string): Product[] {
+  filter(searchValue: string): (Product | ProductVariant)[] {
     return this.products.filter((p: Product) => {
       return p.name.contains(searchValue) ||
         (p.sku && p.sku.contains(searchValue)) ||
@@ -106,8 +94,18 @@ export class RegisterConfigComponent implements OnInit, OnDestroy {
    * @param {Product} product
    */
   onOptionClick(product: Product): void {
-    this.register.tabs[this.currentTabIndex]
-      .addQuickProduct(this.selectedQuickProductPosition, product.id, product.name, this.currentQuickProductGroup);
+    const { id, masterProductId, name } = product;
+    if (masterProductId) {
+      // variant
+      this.register.tabs[this.currentTabIndex]
+        .addQuickProduct(this.selectedQuickProductPosition, masterProductId, id, name, this.currentQuickProductGroup);
+
+    } else {
+      // master
+      this.register.tabs[this.currentTabIndex]
+        .addQuickProduct(this.selectedQuickProductPosition, id, null, product.name, this.currentQuickProductGroup);
+
+    }
 
     this.selectNextEmptyItem();
     this.productCtrl.setValue(null);
@@ -117,7 +115,7 @@ export class RegisterConfigComponent implements OnInit, OnDestroy {
    * An event handler for quick product's drop event.
    * @param {any} {srcQuickProduct, targetQuickProduct}
    */
-  onQuickProductDrop({srcQuickProduct, targetQuickProduct}) {
+  onQuickProductDrop({ srcQuickProduct, targetQuickProduct }) {
     const srcPosition = srcQuickProduct.position;
     const targetPosition = targetQuickProduct.position;
     let requireUpdate = false;
@@ -211,7 +209,7 @@ export class RegisterConfigComponent implements OnInit, OnDestroy {
     const dialogConfig = new MatDialogConfig();
     const registerCopy = cloneDeep(this.register);
     this.dialog
-      .open(TabEditDialogComponent, {data: {tabs: registerCopy.tabs}})
+      .open(TabEditDialogComponent, { data: { tabs: registerCopy.tabs } })
       .afterClosed()
       .subscribe((action: string) => {
         const register = Register.Create(registerCopy);

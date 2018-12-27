@@ -1,13 +1,13 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {catchError} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, from } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class HttpService {
-  private baseUrl = 'http://localhost:3000/api';
-
-  // private baseUrl = 'http://13.124.188.143:3000/api';
+  private baseUrl = environment.posApiUrl;
 
   constructor(private http: HttpClient) {
     console.log('http service');

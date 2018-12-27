@@ -1,16 +1,27 @@
-import {Injectable} from '@angular/core';
-import {Store} from '@ngrx/store';
-import {Actions, Effect, ofType} from '@ngrx/effects';
-import {withLatestFrom, mergeMap, map, share, filter} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Actions, Effect, ofType } from '@ngrx/effects';
+import { withLatestFrom, mergeMap, map, share, filter } from 'rxjs/operators';
 
 import * as registerSaleActions from '../actions/register-sale.actions';
 import * as salesActions from '../actions/sales.actions';
-import {RegisterSaleService} from '../../services/register-sale.service';
+import { RegisterSaleService } from '../../services/register-sale.service';
 import * as customerActions from '../actions/customer.actions';
-import {cloneDeep} from '../../shared/utils/lang';
+import { cloneDeep } from '../../shared/utils/lang';
+import { MessageService } from 'src/app/services/message.service';
 
 @Injectable()
 export class RegisterSaleEffects {
+
+  // @Effect() saleChange$ = this.actions$
+  //   .pipe(
+  //     ofType(registerSaleActions.ADD_LINE_ITEM),
+  //     withLatestFrom(this.store.select('registerSale')),
+  //     map(([action, sale]) => {
+  //       this.messageService.sendMessage(sale);
+  //       return new registerSaleActions.AddLineItemSuccess();
+  //     }),
+  //   );
 
   @Effect() sales$ = this.actions$
     .pipe(
@@ -28,6 +39,7 @@ export class RegisterSaleEffects {
       mergeMap(([action, sale]) => {
         const saleCopy = cloneDeep(sale);
         this.removeReferences(saleCopy);
+        this.messageService.sendMessage(saleCopy);
         return this.registerSaleService.closeSale(saleCopy);
       }),
       map(sale => new registerSaleActions.CloseSaleSuccess()),
@@ -56,7 +68,8 @@ export class RegisterSaleEffects {
   constructor(
     private actions$: Actions,
     private store: Store<any>,
-    private registerSaleService: RegisterSaleService
+    private registerSaleService: RegisterSaleService,
+    private messageService: MessageService
   ) {
   }
 

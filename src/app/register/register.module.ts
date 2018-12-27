@@ -20,6 +20,7 @@ import {TabEditDialogComponent} from './quick-products/tab-edit-dialog/tab-edit-
 import {AddCustomerDialogComponent} from './sale/add-customer-dialog/add-customer-dialog.component';
 import {ProductViewDialogComponent} from './product-view-dialog/product-view-dialog.component';
 import {CustomerViewDialogComponent} from '../customer/customer-view-dialog/customer-view-dialog.component';
+import { VariantSelectDialogComponent } from './sale/variant-select-dialog/variant-select-dialog.component';
 
 
 @NgModule({
@@ -34,7 +35,6 @@ import {CustomerViewDialogComponent} from '../customer/customer-view-dialog/cust
     ProductViewDialogComponent,
 
     // Checkout components
-    // CheckoutComponent,
 
     // Quick product components
     QuickProductsComponent,
@@ -52,18 +52,17 @@ import {CustomerViewDialogComponent} from '../customer/customer-view-dialog/cust
     RegisterSearchComponent,
     LineItemComponent,
     TotalsComponent,
-    // VariantSelectDialogComponent,
-    AddCustomerDialogComponent
+    AddCustomerDialogComponent,
+    VariantSelectDialogComponent
   ],
   entryComponents: [
     ProductViewDialogComponent,
     GroupProductEditDialogComponent,
     SingleProductEditDialogComponent,
     TabEditDialogComponent,
-    // VariantSelectDialogComponent,
-    // TabEditDialogComponent,
     AddCustomerDialogComponent,
-    CustomerViewDialogComponent
+    CustomerViewDialogComponent,
+    VariantSelectDialogComponent
   ],
   providers: [
     // ShiftGuardService,

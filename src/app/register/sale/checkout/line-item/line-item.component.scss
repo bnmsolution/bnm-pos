@@ -10,6 +10,12 @@
   padding: 8px 16px;
 }
 
+
+.name {
+  flex: 1;
+  padding: 12px 0;
+}
+
 .quantity {
   min-width: 45px;
   max-width: 45px;
@@ -30,6 +36,11 @@
   color: $text-color-secondary;
   font-size: 12px;
   text-decoration: line-through;
+}
+
+.addon {
+  color: $text-color-secondary;
+  font-size: 10px;
 }
 
 .remove-btn {

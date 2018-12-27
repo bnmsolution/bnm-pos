@@ -10,13 +10,13 @@ import {
   ViewChildren,
   QueryList,
 } from '@angular/core';
-import {MatDialog} from '@angular/material';
+import { MatDialog } from '@angular/material';
 
-import {RegisterSale, RegisterSaleStatus, canHoldSale, canVoidSale} from 'pos-models';
-import {AddCustomerDialogComponent} from '../add-customer-dialog/add-customer-dialog.component';
-import {LineItemComponent} from './line-item/line-item.component';
-import {CustomerViewDialogComponent} from '../../../customer/customer-view-dialog/customer-view-dialog.component';
-import {CustomerService} from '../../../services/customer.service';
+import { RegisterSale, RegisterSaleStatus, canHoldSale, canVoidSale } from 'pos-models';
+import { AddCustomerDialogComponent } from '../add-customer-dialog/add-customer-dialog.component';
+import { LineItemComponent } from './line-item/line-item.component';
+import { CustomerViewDialogComponent } from '../../../customer/customer-view-dialog/customer-view-dialog.component';
+import { CustomerService } from '../../../services/customer.service';
 
 @Component({
   selector: 'app-checkout',
@@ -29,14 +29,16 @@ export class CheckoutComponent implements AfterViewInit {
   @Input() sale: RegisterSale;
   @Output() pay = new EventEmitter();
   @Output() hold = new EventEmitter();
-  @Output() void = new EventEmitter();yty
+  @Output() void = new EventEmitter();
   @Output() removeCustomer = new EventEmitter();
   @Output() addCustomer = new EventEmitter();
   @Output() removeLineItem = new EventEmitter();
   @Output() updateLineItem = new EventEmitter();
+  @Output() updateLineItemAddons = new EventEmitter();
 
   @ViewChild('lineItems') lineItems: ElementRef;
   @ViewChildren('li') lineItemComponents: QueryList<LineItemComponent>;
+  @ViewChild('quantityEdit') quantityEditComponent: ElementRef;
 
   openedLineItemId: string;
   isNoteOpen: boolean;
@@ -143,5 +145,11 @@ export class CheckoutComponent implements AfterViewInit {
       this.lineItems.nativeElement.scrollTop = this.lineItems.nativeElement.scrollHeight;
     } catch (err) {
     }
+  }
+
+  editQuantity(event) {
+    const { offsetLeft, offsetTop } = event.target;
+    this.quantityEditComponent.nativeElement.style.top = offsetTop + 'px';
+    this.quantityEditComponent.nativeElement.style.left = offsetLeft + 'px';
   }
 }

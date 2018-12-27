@@ -3,7 +3,19 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  couchdb: {
+    remoteUrl: 'http://ec2-35-183-130-127.ca-central-1.compute.amazonaws.com:5984',
+  },
+  auth0: {
+    clientID: 'PMsjaHnyO5GtYPkFTe7nqHMqSMuAGvz5',
+    domain: 'bmsolution.auth0.com',
+    audience: 'https://api.bnmpos.com',
+    redirectUri: 'http://localhost:4200/callback',
+    namespace: 'https://pos.bnmsolution.com/'
+  },
+  posApiUrl: 'http://localhost:3000/api',
+  posMessagingUrl: 'http://localhost:3000'
 };
 
 /*

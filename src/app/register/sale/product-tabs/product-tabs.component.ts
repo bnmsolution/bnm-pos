@@ -20,16 +20,19 @@ export class ProductTabsComponent {
 
   /** Handles the click event on quick product element. */
   handleQuickProductClick(quickProduct: RegisterQuickProduct) {
+    const { productId, variantId } = quickProduct;
     if (quickProduct.isGroup()) {
       this.quickProductGroup = quickProduct;
     }
 
     if (quickProduct.isSingle()) {
-      this.productSelect.emit({ productId: quickProduct.productId });
-      // close group view
-      this.quickProductGroup = null;
+      this.productSelect.emit({ productId, variantId });
     }
+
+    // close group view
+    this.quickProductGroup = null;
   }
+}
 
   // /**
   //  * Opens dialog for variants selection.
@@ -48,4 +51,3 @@ export class ProductTabsComponent {
   // }
 
 
-}

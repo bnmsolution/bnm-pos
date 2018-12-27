@@ -1,0 +1,20 @@
+<div class="title">옵션선택 <span class="productName">{{product.name}}</span></div>
+<div class="selections" fxLayout>
+  <div [ngClass]="{'active': currentOptionIndex === 0}">
+    <span *ngIf="!selected[0]">{{product.variantOptions[0].name}}</span>
+    <span *ngIf="selected[0]" (click)="switchSelect(0)">{{product.variantOptions[0].name + ': ' + selected[0]}}</span>
+  </div>
+  <div class="arrow" *ngIf="product.variantOptions.length > 1">></div>
+  <div [ngClass]="{'active': currentOptionIndex === 1}" *ngIf="product.variantOptions.length > 1">
+    <span *ngIf="!selected[1]">{{product.variantOptions[1].name}}</span>
+    <span *ngIf="selected[1]" (click)="switchSelect(1)">{{product.variantOptions[1].name + ': ' + selected[1]}}</span>
+  </div>
+  <div class="arrow" *ngIf="product.variantOptions.length > 2">></div>
+  <div [ngClass]="{'active': currentOptionIndex === 2}" *ngIf="product.variantOptions.length > 2">
+    <span *ngIf="!selected[2]">{{product.variantOptions[2].name}}</span>
+    <span *ngIf="selected[2]" (click)="switchSelect(2)">{{product.variantOptions[2].name + ': ' + selected[2]}}</span>
+  </div>
+</div>
+<div class="optionButtons">
+  <button mat-stroked-button *ngFor="let value of product.variantOptions[currentOptionIndex].values; let i = index" (click)="selectOption(value)">{{value}}</button>
+</div>

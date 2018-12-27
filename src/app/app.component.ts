@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {DomSanitizer} from '@angular/platform-browser';
-import {MatIconRegistry} from '@angular/material';
+import { Component, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MatIconRegistry } from '@angular/material';
 
-import {AuthService} from './auth/auth.service';
-import {LocalDbService} from './core';
+import { AuthService } from './auth/auth.service';
+import { LocalDbService } from './core';
+import { MessageService } from './services/message.service';
 
 const svgIconList = [
   ['toogleIcon', 'ic_keyboard_arrow_up_24px'],
@@ -54,7 +55,11 @@ const svgIconList = [
   ['upload', 'outline-cloud_upload-24px'],
   ['addCircle', 'outline-add_circle_outline-24px'],
   ['warning', 'outline-warning-24px'],
-  ['check', 'outline-check_circle-24px']
+  ['check', 'outline-check_circle-24px'],
+  ['shipping', 'outline-local_shipping-24px'],
+  ['category', 'outline-local_offer-24px'],
+  ['add', 'outline-add-24px'],
+  ['remove', 'outline-remove-24px']
 ];
 
 @Component({
@@ -66,6 +71,7 @@ export class AppComponent implements OnInit {
   constructor(
     private auth: AuthService,
     private localDbService: LocalDbService,
+    private messageService: MessageService,
     private iconRegistry: MatIconRegistry,
     private sanitizer: DomSanitizer) {
     auth.handleAuthentication();
@@ -76,7 +82,9 @@ export class AppComponent implements OnInit {
     this.auth.profile$
       .subscribe(profile => {
         if (profile) {
-          this.startLiveReplication(profile);
+          const tenantId = profile['https://bnm.com/app_metadata'].tenantId;
+          this.messageService.init(tenantId);
+          this.startLiveReplication(tenantId, profile.name);
         }
       });
   }
@@ -89,9 +97,9 @@ export class AppComponent implements OnInit {
     });
   }
 
-  private startLiveReplication({tenantId, name}): void {
+  private startLiveReplication(tenantId: string, name: string): void {
     this.localDbService.init(tenantId, name);
     this.localDbService.replicate();
-    // this.localDbService.startLiveReplication(tenantId);
+    this.localDbService.startLiveReplication();
   }
 }

@@ -9,7 +9,8 @@ import {
   setDiscountRate,
   setRetailPrice,
   setQuantity,
-  createReturnSale
+  createReturnSale,
+  updateAddons
 } from 'pos-models';
 
 import * as actions from '../actions/register-sale.actions';
@@ -19,30 +20,24 @@ export type RegisterSaleState = RegisterSale;
 const lineItemsReducer = (state: RegisterSaleLineItem[], action) => {
   switch (action.type) {
     case actions.ADD_LINE_ITEM: {
-      const {product, productId, quantity} = action.payload;
-      const newLineItem = createLineItem(
-        productId,
-        product.name,
-        product.retailPrice,
-        product.taxId,
-        product.tax ? product.tax.rate : 0,
-        quantity);
+      const { product, productId, variantId, quantity } = action.payload;
+      const newLineItem = createLineItem(product, variantId, quantity);
       return [...state, newLineItem];
     }
 
     case actions.REMOVE_LINE_ITEM: {
-      const {id} = action.payload;
+      const { id } = action.payload;
       return state.filter(li => li.id !== id);
     }
 
     case actions.UPDATE_LINE_ITEM: {
-      const {id, quantity, retailPrice, discountRate} = action.payload;
+      const { id, quantity, retailPrice, discountRate } = action.payload;
       return state.map(lineItem => {
         if (lineItem.id !== id) {
           return lineItem;
         }
 
-        let newLineItem = {...lineItem};
+        let newLineItem = { ...lineItem };
 
         // if (lineItem.discountRate !== discountRate) {
         //   newLineItem = setDiscountRate(newLineItem, discountRate);
@@ -59,13 +54,23 @@ const lineItemsReducer = (state: RegisterSaleLineItem[], action) => {
         return newLineItem;
       });
     }
+
+    case actions.UPDATE_LINE_ITEM_ADDONS: {
+      const { id, addons } = action.payload;
+      return state.map(lineItem => {
+        if (lineItem.id !== id) {
+          return lineItem;
+        }
+        return updateAddons(lineItem, addons);
+      });
+    }
   }
 };
 
 export function registerSaleReducer(state: RegisterSaleState = null, action) {
   switch (action.type) {
     case actions.CREATE_SALE: {
-      const {storeId, registerId, userId, priceAdjustmentType} = action.payload;
+      const { storeId, registerId, userId, priceAdjustmentType } = action.payload;
       if (state === null) {
         return createSale(storeId, registerId, userId, priceAdjustmentType);
       } else {
@@ -73,10 +78,11 @@ export function registerSaleReducer(state: RegisterSaleState = null, action) {
       }
     }
     case actions.UPDATE_LINE_ITEM:
+    case actions.UPDATE_LINE_ITEM_ADDONS:
     case actions.REMOVE_LINE_ITEM:
     case actions.ADD_LINE_ITEM: {
       const lineItems = lineItemsReducer(state.lineItems, action);
-      return calculateTotals({...state, lineItems});
+      return calculateTotals({ ...state, lineItems });
     }
 
     case actions.CLOSE_SALE_SUCCESS: {
@@ -88,7 +94,7 @@ export function registerSaleReducer(state: RegisterSaleState = null, action) {
     }
 
     case actions.ADD_PAYMENT: {
-      const {type, amount} = action.payload;
+      const { type, amount } = action.payload;
       const newState = addPayment(state, type, amount);
       return calculateTotals(newState);
     }
@@ -108,7 +114,7 @@ export function registerSaleReducer(state: RegisterSaleState = null, action) {
           newStatus = RegisterSaleStatus.Completed;
         }
       }
-      return {...state, status: newStatus};
+      return { ...state, status: newStatus };
     }
 
     case actions.HOLD_SALE: {
@@ -126,7 +132,7 @@ export function registerSaleReducer(state: RegisterSaleState = null, action) {
           newStatus = RegisterSaleStatus.Hold;
         }
       }
-      return {...state, status: newStatus};
+      return { ...state, status: newStatus };
     }
 
     case actions.VOID_SALE: {
@@ -134,7 +140,7 @@ export function registerSaleReducer(state: RegisterSaleState = null, action) {
     }
 
     case actions.ADD_SALE_CUSTOMER: {
-      const {customer} = action.payload;
+      const { customer } = action.payload;
       return {
         ...state,
         customerId: customer.id,
@@ -151,13 +157,13 @@ export function registerSaleReducer(state: RegisterSaleState = null, action) {
     }
 
     case actions.CONTINUE_SALE: {
-      const {sale} = action.payload;
+      const { sale } = action.payload;
       sale.status = RegisterSaleStatus.Open;
       return sale;
     }
 
     case actions.RETURN_SALE: {
-      const {storeId, registerId, userId, sale} = action.payload;
+      const { storeId, registerId, userId, sale } = action.payload;
       return createReturnSale(storeId, registerId, userId, sale);
     }
   }

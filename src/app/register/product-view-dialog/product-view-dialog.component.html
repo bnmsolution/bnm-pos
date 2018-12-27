@@ -1,20 +1,42 @@
-<div class="wrapper">
+<div class="upperContent" fxLayout>
   <div class="image">IMG</div>
   <div flex>
     <div class="header">
-      <div class="product-name">{{product.name}}</div>
-      <div class="product-price">{{product.retailPrice | number}}</div>
+      <div class="product-name">{{productName}}</div>
+      <div class="product-price">{{productPrice | number}}</div>
     </div>
     <div class="description">{{product.description}}</div>
   </div>
 </div>
-<div class="wrapper">
-  <div class="category">
-    <div>Vendor</div>
-    <div>{{product.vendor ? product.vendor.name : "TEST"}}</div>
-  </div>
-  <div class="category">
-    <div>Category</div>
-    <div>{{product.category ? product.category.name : '-'}}</div>
+<div class="lowerContent" fxLayout>
+  <!-- <mat-list>
+    <mat-list-item>
+      <mat-icon matListIcon svgIcon="category"></mat-icon>
+      <h3 matLine>카테고리 </h3>
+      <p matLine> {{product.category ? product.category.name : "-"}}</p>
+    </mat-list-item>
+    <mat-list-item>
+      <mat-icon matListIcon svgIcon="shipping"></mat-icon>
+      <h3 matLine> 공급자</h3>
+      <p matLine>{{product.vendor ? product.vendor.name : "-"}} </p>
+    </mat-list-item>
+  </mat-list> -->
+  <div fxLayout="column" *ngIf="addons.length">
+      <div class="label">에드온</div>
+      <div class="addons">
+        <mat-checkbox class="example-margin" [(ngModel)]="addon.value" *ngFor="let addon of addons; let i = index;">{{addon.name}}</mat-checkbox>
+      </div>
+    </div>
+  <div>
+    <div class="label">수량</div>
+    <div class="quantityInput">
+      <div>
+        <mat-icon svgIcon="remove"></mat-icon>
+      </div>
+      <input type="number">
+      <div>
+        <mat-icon svgIcon="add"></mat-icon>
+      </div>
+    </div>
   </div>
 </div>

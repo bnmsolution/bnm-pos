@@ -38,6 +38,7 @@ export class AddCustomerComponent implements OnInit {
       type: CustomerType.Individual,
       businessName: null,
       name: '',
+      gender: null,
       phone: '',
       email: '',
       address: '',
@@ -50,7 +51,8 @@ export class AddCustomerComponent implements OnInit {
       currentStorePoint: 0,
       totalSalesCount: 0,
       totalSalesAmount: 0,
-      totalReturnsCount: 0
+      totalReturnsCount: 0,
+      note: ''
     });
   }
 

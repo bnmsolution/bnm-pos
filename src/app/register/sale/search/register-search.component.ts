@@ -1,10 +1,10 @@
-import {Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, OnDestroy} from '@angular/core';
-import {MatDialog} from '@angular/material';
-import {FormControl} from '@angular/forms';
-import {Store} from '@ngrx/store';
-import {Subscription, fromEvent} from 'rxjs';
-import {map, debounceTime} from 'rxjs/operators';
-import {Product, Customer} from 'pos-models';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { FormControl } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { Subscription, fromEvent, Subject } from 'rxjs';
+import { map, takeUntil, debounceTime } from 'rxjs/operators';
+import { Product, Customer, ProductVariant, getConcatenatedVariantName, flattenProduct } from 'pos-models';
 
 // import { VariantSelectDialogComponent } from '../variant-select-dialog/variant-select-dialog.component';
 // import { Variant } from '../../../product/models/variant';
@@ -24,9 +24,10 @@ export class RegisterSearchComponent implements OnInit, OnDestroy {
   searchCtrl: FormControl;
   filteredProducts = [];
   filteredCustomers = [];
-  products: Product[] = [];
+  products: (Product | ProductVariant)[] = [];
   customers: Customer[] = [];
   bodyKeyPressSubscription: Subscription;
+  unsubscribe$ = new Subject();
 
   constructor(
     private dialog: MatDialog,
@@ -37,10 +38,14 @@ export class RegisterSearchComponent implements OnInit, OnDestroy {
     this.searchCtrl = new FormControl();
 
     this.store.select('products')
-      .subscribe(products => this.products = products);
+      .pipe(
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe((products: Product[]) =>
+        products ? this.products = flattenProduct(products) : this.store.dispatch(new productActions.LoadProducts()));
 
     this.store.select('customers')
-      .subscribe(customers => this.customers = customers);
+      .subscribe(customers => customers ? this.customers = customers : this.store.dispatch(new customerActions.LoadCustomers()));
 
     this.searchCtrl.valueChanges
       .pipe(
@@ -53,16 +58,16 @@ export class RegisterSearchComponent implements OnInit, OnDestroy {
           };
         })
       )
-      .subscribe(({filter, products, customers}) => {
+      .subscribe(({ filter, products, customers }) => {
         this.handleProductSearch(filter, products);
         this.handleCustomerSearch(filter, customers);
       });
 
-    this.store.dispatch(new productActions.LoadProducts());
-    this.store.dispatch(new customerActions.LoadCustomers());
-
     /** Allows typing or scanning without input focus */
-    this.bodyKeyPressSubscription = fromEvent(document, 'keypress')
+    fromEvent(document, 'keypress')
+      .pipe(
+        takeUntil(this.unsubscribe$)
+      )
       .subscribe((e: any) => {
         if (e.target.tagName !== 'INPUT') {
           this.searchInput.nativeElement.focus();
@@ -73,16 +78,28 @@ export class RegisterSearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.bodyKeyPressSubscription.unsubscribe();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   clickProduct(product: Product) {
-    // todo: variant selection dialog
-    this.productSelect.emit({productId: product.id});
+    if (product.masterProductId) {
+      // variant clicked
+      this.productSelect.emit({ productId: product.masterProductId, variantId: product.id });
+    } else {
+      console.log('master product clicked');
+      if (product.variants.length) {
+        // todo: variant selection dialog
+        console.log('product with variants clicked');
+      } else {
+        this.productSelect.emit({ productId: product.id });
+        console.log('product without variant clicked');
+      }
+    }
   }
 
   clickCustomer(customer: Customer) {
-    this.customerSelect.emit({customer});
+    this.customerSelect.emit({ customer });
   }
 
   // /**
@@ -104,7 +121,7 @@ export class RegisterSearchComponent implements OnInit, OnDestroy {
   private handleProductSearch(filter, products) {
     if (products.length === 1 && products[0].barcode === filter) {
       this.resetControl();
-      this.productSelect.emit({productId: products[0].id});
+      this.productSelect.emit({ productId: products[0].id });
     } else {
       this.filteredProducts = products;
     }
@@ -113,7 +130,7 @@ export class RegisterSearchComponent implements OnInit, OnDestroy {
   private handleCustomerSearch(filter, customers) {
     if (customers.length === 1 && customers[0].barcode === filter) {
       this.resetControl();
-      this.customerSelect.emit({customer: customers[0]});
+      this.customerSelect.emit({ customer: customers[0] });
     } else {
       this.filteredCustomers = customers;
     }
@@ -123,7 +140,7 @@ export class RegisterSearchComponent implements OnInit, OnDestroy {
    * Search products using name, sku, or barcode.
    * @param filter search value
    */
-  private findProducts(filter: string): Product[] {
+  private findProducts(filter: string): (Product | ProductVariant)[] {
     return this.products.filter((p: Product) =>
       (p.name && p.name.contains(filter)) ||
       (p.sku && p.sku.contains(filter)) ||
@@ -145,6 +162,8 @@ export class RegisterSearchComponent implements OnInit, OnDestroy {
   }
 
   resetControl() {
-    this.searchCtrl.setValue('', {emitEvent: false});
+    this.searchCtrl.setValue('', { emitEvent: false });
   }
+
+
 }

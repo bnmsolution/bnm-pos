@@ -1,13 +1,9 @@
 importScripts('pouchdb-7.0.0.min.js');
-// todo: using node env
-const remoteCouchUrl = 'http://13.124.188.143:5984/';
-
-// const remoteCouchUrl = 'http://localhost:5984/';
 
 class PouchWorker {
-  init(messageId, tenantId, username) {
-    this.db = new PouchDB(`db-${tenantId}`, {auto_compaction: true, revs_limit: 1});
-    this.remoteDb = new PouchDB(`http://ec2-35-183-130-127.ca-central-1.compute.amazonaws.com:5984/db-${tenantId}`, {
+  init(messageId, couchRemoteUrl, tenantId, username) {
+    this.db = new PouchDB(`db-${tenantId}`, { auto_compaction: true, revs_limit: 1 });
+    this.remoteDb = new PouchDB(`${couchRemoteUrl}/db-${tenantId}`, {
       auth: {
         username,
         password: tenantId
@@ -82,21 +78,22 @@ class PouchWorker {
     });
   }
 
-  startLiveReplication(messageId, remoteCouchUrl, tenantId) {
+  startLiveReplication(messageId) {
     if (this.liveReplicationStarted) return;
-
-    const remoteDbUrl = remoteCouchUrl + 'db-' + tenantId;
     this.liveReplicationStarted = true;
-    this.db.sync(remoteDbUrl, {
+
+    this.db.sync(this.remoteDb, {
       live: true,
       retry: true,
       filter: doc => doc.fromRemote || doc._deleted === true
     }).on('change', info => {
       this.logReplicationStatus('change', info);
-      // postMessage({
-      //   messageId,
-      //   data: info
-      // });
+      // todo: #2
+      // too frequent change event happens during importing items
+      postMessage({
+        messageId,
+        data: info
+      });
     }).on('paused', err => {
       this.logReplicationStatus('paused', err);
     }).on('active', () => {

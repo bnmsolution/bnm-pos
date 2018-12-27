@@ -1,14 +1,15 @@
-import {ActivatedRoute, Router} from '@angular/router';
-import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
-import {MatSidenav} from '@angular/material';
-import {Store} from '@ngrx/store';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {Register, RegisterSale, RegisterSaleStatus, Customer, Product} from 'pos-models';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatSidenav, MatDialog } from '@angular/material';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Register, RegisterSale, RegisterSaleStatus, Customer, Product } from 'pos-models';
 
-import {RegisterService, RegisterSaleService, ProductService, CustomerService, AppState} from 'src/app/core';
+import { RegisterService, RegisterSaleService, ProductService, CustomerService, AppState } from 'src/app/core';
 import * as registerActions from 'src/app/stores/actions/register.actions';
 import * as registerSaleActions from 'src/app/stores/actions/register-sale.actions';
+import { VariantSelectDialogComponent } from './variant-select-dialog/variant-select-dialog.component';
 
 @Component({
   selector: 'app-register',
@@ -24,8 +25,7 @@ export class RegisterSaleComponent implements OnInit {
   @ViewChild('sidenav') sidenav: MatSidenav;
 
   constructor(
-    private registerService: RegisterService,
-    private registerSaleService: RegisterSaleService,
+    private dialog: MatDialog,
     private productService: ProductService,
     private customerService: CustomerService,
     private route: ActivatedRoute,
@@ -52,35 +52,54 @@ export class RegisterSaleComponent implements OnInit {
     this.store.dispatch(new registerActions.LoadRegisters());
   }
 
-  addCustomer({customer}) {
+  addCustomer({ customer }) {
     if (!this.currentSale) {
       this.createNewSale();
     }
-    this.store.dispatch(new registerSaleActions.AddSaleCustomer({customer}));
+    this.store.dispatch(new registerSaleActions.AddSaleCustomer({ customer }));
   }
 
   removeCustomer() {
     this.store.dispatch(new registerSaleActions.RemoveSaleCustomer());
   }
 
-  addLineItem({productId}) {
+  addLineItem({ productId, variantId }) {
     this.productService.getProductById(productId)
       .subscribe(product => {
-        if (this.currentSale && this.currentSale.status === RegisterSaleStatus.Return) {
-          this.addLinItemForReturn(product);
+        if (product.variants && !variantId) {
+          this.openVariantSelectDialog(product);
         } else {
-          this.addLineItemForSale(product);
+          if (this.currentSale && this.currentSale.status === RegisterSaleStatus.Return) {
+            this.addLinItemForReturn(product);
+          } else {
+            this.addLineItemForSale(product, variantId);
+          }
         }
       });
   }
 
-  removeLineItem({id}) {
-    this.store.dispatch(new registerSaleActions.RemoveLineItem({id}));
+  openVariantSelectDialog(product: Product) {
+    const dialogRef = this.dialog.open(VariantSelectDialogComponent, {
+      data: { product },
+    });
+    dialogRef.afterClosed().subscribe(variantId => {
+      if (variantId) {
+        this.addLineItemForSale(product, variantId);
+      }
+    });
   }
 
-  updateLineItem({id, quantity, retailPrice, discountRate}) {
+  removeLineItem({ id }) {
+    this.store.dispatch(new registerSaleActions.RemoveLineItem({ id }));
+  }
+
+  updateLineItem({ id, quantity, retailPrice, discountRate }) {
     this.store.dispatch(new registerSaleActions.UpdateLineItem(
-      {id, quantity, retailPrice, discountRate}));
+      { id, quantity, retailPrice, discountRate }));
+  }
+
+  updateLineItemAddons({ id, addons }) {
+    this.store.dispatch(new registerSaleActions.UpdateAddons({ id, addons }));
   }
 
   openPaymentSidenav(): void {
@@ -89,8 +108,8 @@ export class RegisterSaleComponent implements OnInit {
     }
   }
 
-  addPayment({amount, type}): void {
-    this.store.dispatch(new registerSaleActions.AddPayment({amount, type}));
+  addPayment({ amount, type }): void {
+    this.store.dispatch(new registerSaleActions.AddPayment({ amount, type }));
   }
 
   closeSale(): void {
@@ -108,13 +127,14 @@ export class RegisterSaleComponent implements OnInit {
     this.sidenav.close();
   }
 
-  private addLineItemForSale(product: Product) {
+  private addLineItemForSale(product: Product, variantId?: string) {
     if (!this.currentSale) {
       this.createNewSale();
     }
     this.store.dispatch(new registerSaleActions.AddLineItem({
       product,
       productId: product.id,
+      variantId
     }));
   }
 

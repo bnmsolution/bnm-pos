@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "u": "npm i ../pos-models/pos-models-0.0.1.tgz"
+    "u": "npm i ../pos-models/pos-models-0.0.12.tgz"
   },
   "private": true,
   "dependencies": {
@@ -36,12 +36,13 @@
     "ngrx-store-freeze": "^0.2.4",
     "ngrx-store-logger": "^0.2.1",
     "papaparse": "4.6.2",
-    "pos-models": "file:../pos-models/pos-models-0.0.1.tgz",
+    "pos-models": "file:../pos-models/pos-models-0.0.12.tgz",
     "pouchdb": "^7.0.0",
     "pouchdb-browser": "^7.0.0",
     "pouchdb-find": "^7.0.0",
     "randomcolor": "^0.5.3",
     "rxjs": "^6.0.0",
+    "socket.io-client": "^2.2.0",
     "uuid": "^3.2.1",
     "zone.js": "^0.8.26"
   },

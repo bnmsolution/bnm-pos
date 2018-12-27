@@ -17,7 +17,8 @@ import { CategoryResolverService } from 'src/app/services/category-resolver.serv
 import { StoreResolverService } from 'src/app/services/store.resolver.service';
 import { TaxResolverService } from 'src/app/services/tax-resolver.service';
 import { VendorResolverService } from 'src/app/services/vendor-resolver.service';
-import {ImportService} from '../services/import.service';
+import { ImportService } from '../services/import.service';
+import { MessageService } from '../services/message.service';
 
 @NgModule({
   providers: [
@@ -38,7 +39,8 @@ import {ImportService} from '../services/import.service';
     StoreResolverService,
     TaxResolverService,
     VendorResolverService,
-    ImportService
+    ImportService,
+    MessageService
   ]
 })
 export class CoreModule { }

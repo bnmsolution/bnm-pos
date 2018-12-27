@@ -1,32 +1,17 @@
-<form class="app-form"
-      (keydown.enter)="$event.preventDefault()"
-      (ngSubmit)="onSubmit()"
-      #form="ngForm">
-  <app-create-content-header title="레지스터 설정"
-                             returnUrl="/register"
-                             [canSubmit]="true"></app-create-content-header>
-  <div class="sections"
-       *ngIf="register">
+<form class="app-form" (keydown.enter)="$event.preventDefault()" (ngSubmit)="onSubmit()" #form="ngForm">
+  <app-create-content-header title="레지스터 설정" returnUrl="/register" [canSubmit]="true"></app-create-content-header>
+  <div class="sections" *ngIf="register">
     <mat-form-field>
-      <input matInput
-             [(ngModel)]="register.name"
-             name="name"
-             placeholder="레지스터명"
-             required>
+      <input matInput [(ngModel)]="register.name" name="name" placeholder="레지스터명" required>
     </mat-form-field>
     <section fxLayout>
       <div class="label">빠른상품 설정</div>
       <div>
         <mat-form-field>
-          <input matInput
-                 placeholder="상품검색"
-                 [formControl]="productCtrl"
-                 [matAutocomplete]="auto">
+          <input matInput placeholder="상품검색" [formControl]="productCtrl" [matAutocomplete]="auto">
         </mat-form-field>
         <mat-autocomplete #auto="matAutocomplete">
-          <mat-option *ngFor="let product of filteredProducts | async"
-                      [value]="product.name"
-                      (click)="onOptionClick(product)">
+          <mat-option *ngFor="let product of filteredProducts | async" [value]="product.name" (click)="onOptionClick(product)">
             <div class="product-option">
               <div>{{product.name}}</div>
               <span flex></span>
@@ -36,38 +21,26 @@
         </mat-autocomplete>
 
         <!-- SHOW NON-GROUP PRODUCTS -->
-        <div fxLayout
-             *ngIf="currentQuickProductGroup == null">
-          <app-quick-products [registerTabs]="register.tabs"
-                              (clicked)="onQuickProductClick($event)"
-                              (dropped)="onQuickProductDrop($event)"
-                              (tabChange)="onTabChange($event)"
-                              [(selectedPosition)]="selectedQuickProductPosition">
+        <div fxLayout *ngIf="currentQuickProductGroup == null">
+          <app-quick-products [registerTabs]="register.tabs" (clicked)="onQuickProductClick($event)" (dropped)="onQuickProductDrop($event)"
+                              (tabChange)="onTabChange($event)" [(selectedPosition)]="selectedQuickProductPosition">
           </app-quick-products>
-          <button mat-icon-button
-                  type="button"
-                  (click)="openTabEditDialog()">
+          <button mat-icon-button type="button" (click)="openTabEditDialog()">
             <mat-icon svgIcon="editIcon"></mat-icon>
           </button>
         </div>
 
         <!-- SHOW GROUP PRODUCTS -->
-        <div class="group-quick-products-wrapper"
-             *ngIf="currentQuickProductGroup">
-          <div class="group-header"
-               [style.background-color]="currentQuickProductGroup.background">
-            <mat-icon svgIcon="editIcon"
-                      (click)="openGroupEditDialog()"></mat-icon>
+        <div class="group-quick-products-wrapper" *ngIf="currentQuickProductGroup">
+          <div class="group-header" [style.background-color]="currentQuickProductGroup.background">
+            <mat-icon svgIcon="editIcon" (click)="openGroupEditDialog()"></mat-icon>
             <span>{{currentQuickProductGroup.label}}</span>
-            <mat-icon svgIcon="closeIcon"
-                      (click)="closeGroup()"></mat-icon>
+            <mat-icon svgIcon="closeIcon" (click)="closeGroup()"></mat-icon>
           </div>
           <div class="quick-products">
             <app-quick-product *ngFor="let qp of currentQuickProductGroup.members; let i = index; trackBy: index"
-                               [isSelected]="selectedQuickProductPosition === i"
-                               [quickProduct]="qp"
-                               (quickProductClick)="onQuickProductClick($event)"
-                               (quickProductDrop)="onQuickProductDrop($event)">
+                               [isSelected]="selectedQuickProductPosition === i" [quickProduct]="qp"
+                               (quickProductClick)="onQuickProductClick($event)" (quickProductDrop)="onQuickProductDrop($event)">
             </app-quick-product>
           </div>
         </div>
