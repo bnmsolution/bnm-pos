@@ -3,7 +3,7 @@
   <div class="name" (click)="openProductViewDialog(lineItem)">{{lineItem.name}}</div>
   <div class="price">
     <div>{{lineItem.finalTotal | number}}</div>
-    <div class="price-original" *ngIf="lineItem.discount > 0">{{lineItem.originalPrice * lineItem.quantity | number}}</div>
+    <div class="price-original" *ngIf="lineItem.discounts.length > 0">{{lineItem.originalPrice * lineItem.quantity | number}}</div>
     <div class="addon" *ngFor="let addon of lineItem.addons">{{addon.name}} <span *ngIf="addon.price !== 0">{{addon.price}}</span></div>
   </div>
   <button mat-icon-button (click)="handleRemoveClick($event)">

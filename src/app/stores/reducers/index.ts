@@ -11,20 +11,20 @@ import {
  * exception will be thrown. This is useful during development mode to
  * ensure that none of the reducers accidentally mutates the state.
  */
-import {storeFreeze} from 'ngrx-store-freeze';
+import { storeFreeze } from 'ngrx-store-freeze';
 
-import {environment} from '../../../environments/environment';
-import {categoryListReducer, CategoryListState} from './category-list.reducer';
-import {taxListReducer, TaxListState} from './tax-list.reducer';
-import {productListReducer, ProductListState} from './product-list.reducer';
-import {storeReducer, StoresState} from './store.reducer';
-import {employeeListReducer, EmployeeListState} from './employee-list.reducer';
-import {customerListReducer, CustomerListState} from './customer-list.reducer';
-import {vendorListReducer, VendorListState} from './vendor-list.reducer';
-import {registerListReducer, RegisterListState} from './register-list.reducer';
-import {authReducer, AuthState} from './auth.reducer';
-import {registerSaleReducer, RegisterSaleState} from './register-sale.reducers';
-import {saleListReducer, SalesListState} from './sale-list.reducer';
+import { environment } from '../../../environments/environment';
+import { categoryListReducer, CategoryListState } from './category-list.reducer';
+import { taxListReducer, TaxListState } from './tax-list.reducer';
+import { productListReducer, ProductListState } from './product-list.reducer';
+import { storeReducer, StoresState } from './store.reducer';
+import { employeeListReducer, EmployeeListState } from './employee-list.reducer';
+import { customerListReducer, CustomerListState } from './customer-list.reducer';
+import { vendorListReducer, VendorListState } from './vendor-list.reducer';
+import { registerListReducer, RegisterListState } from './register-list.reducer';
+import { authReducer, AuthState } from './auth.reducer';
+import { registerSaleReducer, RegisterSaleState } from './register-sale.reducers';
+import { saleListReducer, SalesListState } from './sale-list.reducer';
 
 export interface State {
   categories: CategoryListState;
@@ -74,8 +74,7 @@ export function logger(reducer: ActionReducer<State>): ActionReducer<State> {
  * that will be composed to form the root meta-reducer.
  */
 export const metaReducers: MetaReducer<State>[] = !environment.production
-  ? [logger, storeFreeze]
-  : [logger];
+  ? [logger, storeFreeze] : [];
 
 export function getInitialState() {
   return {
@@ -91,5 +90,4 @@ export function getInitialState() {
     registerSale: null,
     sales: null
   };
-};
-
+}

@@ -1,0 +1,12 @@
+<app-main-toolbar></app-main-toolbar>
+<mat-sidenav-container autosize="true">
+  <mat-sidenav mode="side" opened="true">
+    <app-menu></app-menu>
+  </mat-sidenav>
+  <main>
+    <div>
+      <mat-progress-spinner [value]="repliactionProgress"></mat-progress-spinner>
+      <div>앱 데이터를 동기화 중입니다.</div>
+    </div>
+  </main>
+</mat-sidenav-container>

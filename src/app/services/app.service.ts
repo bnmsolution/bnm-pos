@@ -1,29 +1,39 @@
-import {Injectable} from '@angular/core';
-import {Store} from '@ngrx/store';
-import {BehaviorSubject} from 'rxjs';
-import {PosStore, Employee} from 'pos-models';
+import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { PosStore, Employee } from 'pos-models';
 
-import {cloneDeep} from '../shared/utils/lang';
+import { cloneDeep } from '../shared/utils/lang';
 import * as actions from '../stores/actions/store.actions';
-import {EmployeeService} from './employee.service';
+import { EmployeeService } from './employee.service';
 
 declare const window: any;
 
 @Injectable()
 export class AppState {
+  isSynced = false;
   currentUser: Employee;
   currentStore: PosStore;
   appState$ = new BehaviorSubject<any>({});
 
   constructor(private employeeService: EmployeeService, private store: Store<any>) {
+  }
+
+  inistStore(): Observable<any> {
+    const subject = new Subject();
     this.store.select('stores')
-      .subscribe((stores: PosStore) => {
-        this.currentStore = stores ? stores[0] : {};
-        this.notify();
-        window.__localeId__ = this.currentStore.locale;
+      .subscribe((stores: PosStore[]) => {
+        if (stores && stores.length) {
+          this.currentStore = stores[0];
+          this.notify();
+          window.__localeId__ = this.currentStore.locale;
+          subject.next('');
+          subject.complete();
+        }
       });
     this.store.dispatch(new actions.LoadStores());
     this.setUser();
+    return subject;
   }
 
   setUser() {

@@ -31,7 +31,7 @@ export class AuthService {
     this.scheduleRenewal();
   }
 
-  public handleAuthentication(): void {
+  handleAuthentication(): void {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken) {
         this.setSession(authResult);

@@ -6,10 +6,11 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Register, RegisterSale, RegisterSaleStatus, Customer, Product } from 'pos-models';
 
-import { RegisterService, RegisterSaleService, ProductService, CustomerService, AppState } from 'src/app/core';
+import { ProductService, AppState } from 'src/app/core';
 import * as registerActions from 'src/app/stores/actions/register.actions';
 import * as registerSaleActions from 'src/app/stores/actions/register-sale.actions';
 import { VariantSelectDialogComponent } from './variant-select-dialog/variant-select-dialog.component';
+import { MessageService } from 'src/app/services/message.service';
 
 @Component({
   selector: 'app-register',
@@ -27,7 +28,7 @@ export class RegisterSaleComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private productService: ProductService,
-    private customerService: CustomerService,
+    private messageService: MessageService,
     private route: ActivatedRoute,
     private appState: AppState,
     private router: Router,
@@ -50,6 +51,7 @@ export class RegisterSaleComponent implements OnInit {
         })
       );
     this.store.dispatch(new registerActions.LoadRegisters());
+
   }
 
   addCustomer({ customer }) {
@@ -66,7 +68,7 @@ export class RegisterSaleComponent implements OnInit {
   addLineItem({ productId, variantId }) {
     this.productService.getProductById(productId)
       .subscribe(product => {
-        if (product.variants && !variantId) {
+        if (product.variants.length && !variantId) {
           this.openVariantSelectDialog(product);
         } else {
           if (this.currentSale && this.currentSale.status === RegisterSaleStatus.Return) {

@@ -79,14 +79,14 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.addSvgIcons();
-    this.auth.profile$
-      .subscribe(profile => {
-        if (profile) {
-          const tenantId = profile['https://bnm.com/app_metadata'].tenantId;
-          this.messageService.init(tenantId);
-          this.startLiveReplication(tenantId, profile.name);
-        }
-      });
+    // this.auth.profile$
+    //   .subscribe(profile => {
+    //     if (profile) {
+    //       const tenantId = profile['https://bnm.com/app_metadata'].tenantId;
+    //       this.messageService.init(tenantId);
+    //       this.startLiveReplication(tenantId, profile.name);
+    //     }
+    //   });
   }
 
   private addSvgIcons(): void {
@@ -98,8 +98,8 @@ export class AppComponent implements OnInit {
   }
 
   private startLiveReplication(tenantId: string, name: string): void {
-    this.localDbService.init(tenantId, name);
-    this.localDbService.replicate();
-    this.localDbService.startLiveReplication();
+    // this.localDbService.init(tenantId, name);
+    // this.localDbService.replicate();
+    // this.localDbService.startLiveReplication();
   }
 }

@@ -61,19 +61,46 @@ class PouchWorker {
 
   replicate(messageId) {
     this.db.replicate.from(this.remoteDb, {
-      batch_size: 500,
+      batch_size: 10,
       filter: doc => doc.fromRemote || doc._deleted === true
     }).on('change', info => {
+      postMessage({
+        messageId,
+        data: {
+          status: 'change',
+          info
+        }
+      });
       this.logReplicationStatus('change', info);
     }).on('paused', err => {
       this.logReplicationStatus('paused', err);
     }).on('active', () => {
       this.logReplicationStatus('active');
     }).on('complete', () => {
+      postMessage({
+        messageId,
+        data: {
+          status: 'complated'
+        }
+      });
       this.logReplicationStatus('complete');
     }).on('denied', err => {
+      postMessage({
+        messageId,
+        data: {
+          status: 'denied',
+          error: err
+        }
+      });
       this.logReplicationStatus('denied', err);
     }).on('error', err => {
+      postMessage({
+        messageId,
+        data: {
+          status: 'error',
+          error: err
+        }
+      });
       this.logReplicationStatus('error', err);
     });
   }
