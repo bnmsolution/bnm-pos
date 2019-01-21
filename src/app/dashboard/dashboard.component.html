@@ -1,6 +1,6 @@
 <section *ngIf="summary">
   <div class="header">
-    <div class="headerLabel">대시보드<span class="date">{{formatDate(summary.dates.startDate, 'YYYY. MM. dd iiii')}}</span>
+    <div class="headerLabel">대시보드<span class="date">{{formatDate(summary.dates.startDate, 'YYYY. MM. DD dddd')}}</span>
     </div>
     <mat-button-toggle-group #group="matButtonToggleGroup" [value]="period" (change)="periodChange($event.value)">
       <mat-button-toggle value="days">오늘</mat-button-toggle>

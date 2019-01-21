@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit, Input, ViewChild, ElementRef, OnChanges} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, Input, ViewChild, ElementRef, OnChanges } from '@angular/core';
 import Chart from 'chart.js';
 
 @Component({
@@ -16,7 +16,7 @@ export class PaymentTypesComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    const {cash, credit, other} = this.paymentRates;
+    const { cash, credit, other } = this.paymentRates;
     const chartData = {
       datasets: [{
         data: [cash, credit, other],
@@ -54,7 +54,7 @@ export class PaymentTypesComponent implements OnInit, OnChanges {
           datalabels: {
             color: '#ffffff',
             formatter: (value, context) => {
-              return value ? value + '%': '';
+              return value ? value + '%' : '';
             }
           }
         }

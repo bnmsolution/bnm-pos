@@ -1,0 +1,52 @@
+@import '../../../assets/styles/variables';
+
+.edit-section {
+  padding-right: 16px;
+  border-right: $border;
+  max-width: 250px;
+}
+
+.info-section {
+  padding-left: 16px;
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -2px;
+  button {
+    flex: 1;
+    height: 40px;
+    margin: 2px;
+  }
+}
+
+.customer-stats {
+  padding-bottom: 4px;
+  margin-bottom: 16px;
+  border-bottom: $border;
+}
+
+
+.detail-line {
+  display: flex;
+  margin-bottom: 12px;
+  > div:first-child {
+    width: 200px;
+    color: $lable-color;
+  }
+}
+
+.product-header {
+  font-size: 14px;
+  color: $lable-color;
+  margin-bottom: 6px;
+}
+
+.product-line {
+  display: flex;
+  font-size: 14px;
+  > div {
+    width: 30px;
+  }
+}

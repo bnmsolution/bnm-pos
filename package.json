@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "u": "npm i ../pos-models/pos-models-0.0.12.tgz"
+    "u": "yarn add ../pos-models/pos-models-0.0.13.tgz"
   },
   "private": true,
   "dependencies": {
@@ -36,7 +36,7 @@
     "ngrx-store-freeze": "^0.2.4",
     "ngrx-store-logger": "^0.2.1",
     "papaparse": "4.6.2",
-    "pos-models": "file:../pos-models/pos-models-0.0.12.tgz",
+    "pos-models": "../pos-models/pos-models-0.0.13.tgz",
     "pouchdb": "^7.0.0",
     "pouchdb-browser": "^7.0.0",
     "pouchdb-find": "^7.0.0",

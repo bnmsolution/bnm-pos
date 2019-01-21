@@ -1,24 +1,19 @@
-import {Component, OnInit, OnDestroy, ViewChild, AfterViewInit} from '@angular/core';
-import {ActivatedRoute, Router, ParamMap} from '@angular/router';
-import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {Store} from '@ngrx/store';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
+import { ActivatedRoute, Router, ParamMap } from '@angular/router';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { Store } from '@ngrx/store';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
-import {RegisterSale, RegisterSaleStatus, PaymentType, Product, Customer} from 'pos-models';
-import {isSameDay, startOfMonth, endOfMonth, isWithinInterval} from 'date-fns';
+import { RegisterSale, RegisterSaleStatus, PaymentType, Product, Customer } from 'pos-models';
+import { isSameDay, startOfMonth, endOfMonth, isWithinInterval } from 'date-fns';
 
-import {detailExpand} from '../shared/utils/animation';
+import { detailExpand } from '../shared/utils/animation';
 import * as salesListActions from '../stores/actions/sales.actions';
 import * as salesActions from '../stores/actions/register-sale.actions';
-import {CustomerService} from '../services/customer.service';
-import {AppState} from '../core';
-import {FilterPeriod} from '../shared/utils/filter-period';
-
-
-// export enum FilterPeriod {
-//   Today, ThisWeek, ThisMonth, ThisYear, OneWeek, OneMonth, OneYear, Custom
-// }
+import { CustomerService } from '../services/customer.service';
+import { AppState } from '../core';
+import { FilterPeriod } from '../shared/utils/filter-period';
 
 export interface SalesFilter {
   status: RegisterSaleStatus;
@@ -91,13 +86,13 @@ export class SalesComponent implements OnInit, AfterViewInit {
   }
 
   continueSale(sale: RegisterSale) {
-    this.store.dispatch(new salesActions.ContinueSale({sale}));
+    this.store.dispatch(new salesActions.ContinueSale({ sale }));
     this.router.navigate(['./register']);
   }
 
   returnSale(sale: RegisterSale) {
     const appState = this.appState.appState$.getValue();
-    this.store.dispatch(new salesActions.ReturnSale({sale}));
+    this.store.dispatch(new salesActions.ReturnSale({ sale }));
     this.router.navigate(['./register']);
   }
 
@@ -121,9 +116,9 @@ export class SalesComponent implements OnInit, AfterViewInit {
     // custom filter function
     this.dataSource.filterPredicate = (sale: RegisterSale, filter: string) => {
       const filterObject: SalesFilter = JSON.parse(filter);
-      const {startDate, endDate, status, customerId} = filterObject;
+      const { startDate, endDate, status, customerId } = filterObject;
 
-      if (!isWithinInterval(sale.salesDate, {start: startDate, end: endDate})) {
+      if (!isWithinInterval(new Date(sale.salesDate), { start: new Date(startDate), end: new Date(endDate) })) {
         return false;
       }
 

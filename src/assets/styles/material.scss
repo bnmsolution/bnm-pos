@@ -89,3 +89,21 @@ mat-table {
   }
 }
 
+// dense style form field
+mat-form-field.dense {
+  .mat-form-field-wrapper {
+    padding-bottom: 0.5em;
+  }
+
+  .mat-form-field-flex {
+    padding: .5em .5em 0 .5em;
+  }
+
+  .mat-form-field-infix {
+    padding: .25em 0 .5em 0;
+  }
+
+  .mat-form-field-underline {
+    bottom: 0.5em;
+  }
+}

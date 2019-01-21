@@ -25,14 +25,14 @@
       <mat-form-field>
         <mat-select [(ngModel)]="filter.period" (ngModelChange)="periodChange($event)"
                     placeholder="판매 기간">
-          <mat-option [value]="0">오늘</mat-option>
-          <mat-option [value]="1">이번주</mat-option>
-          <mat-option [value]="2">이번달</mat-option>
-          <mat-option [value]="6">직접선택</mat-option>
+          <mat-option [value]="1">오늘</mat-option>
+          <mat-option [value]="2">이번주</mat-option>
+          <mat-option [value]="3">이번달</mat-option>
+          <mat-option [value]="8">직접선택</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
-    <div *ngIf="filter.period === 6">
+    <div *ngIf="filter.period === 8">
       <mat-form-field>
         <input matInput
                placeholder="기간선택"

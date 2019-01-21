@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { PosStore, Employee } from 'pos-models';
+import * as moment from 'moment';
 
 import { cloneDeep } from '../shared/utils/lang';
 import * as actions from '../stores/actions/store.actions';
@@ -27,6 +28,7 @@ export class AppState {
           this.currentStore = stores[0];
           this.notify();
           window.__localeId__ = this.currentStore.locale;
+          moment.locale(this.currentStore.locale);
           subject.next('');
           subject.complete();
         }

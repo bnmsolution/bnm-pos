@@ -92,7 +92,8 @@ export class SalesWidgetComponent implements OnInit, OnChanges {
         return data.map(s => s.salesAmountPreviousPeriod);
       }
       case SalesChartTypes.Average: {
-        return data.map(s => s.salesAmountPreviousPeriod !== null ? s.salesPrevious.length === 0 ? 0 : Math.round(s.salesAmountPreviousPeriod / s.salesPrevious.length) : null);
+        return data.map(s => s.salesAmountPreviousPeriod !== null ?
+          s.salesPrevious.length === 0 ? 0 : Math.round(s.salesAmountPreviousPeriod / s.salesPrevious.length) : null);
       }
       case SalesChartTypes.Count: {
         return data.map(s => s.salesAmountPreviousPeriod !== null ? s.salesPrevious.length : null);

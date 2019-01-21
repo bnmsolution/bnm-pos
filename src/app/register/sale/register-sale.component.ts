@@ -1,9 +1,9 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatSidenav, MatDialog } from '@angular/material';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 import { Register, RegisterSale, RegisterSaleStatus, Customer, Product } from 'pos-models';
 
 import { ProductService, AppState } from 'src/app/core';
@@ -11,17 +11,19 @@ import * as registerActions from 'src/app/stores/actions/register.actions';
 import * as registerSaleActions from 'src/app/stores/actions/register-sale.actions';
 import { VariantSelectDialogComponent } from './variant-select-dialog/variant-select-dialog.component';
 import { MessageService } from 'src/app/services/message.service';
+import { CustomerQuickEditDialogComponent } from '../customer-quick-edit-dialog/customer-quick-edit-dialog.component';
 
 @Component({
   selector: 'app-register',
   styleUrls: ['./register-sale.component.scss'],
   templateUrl: './register-sale.component.html'
 })
-export class RegisterSaleComponent implements OnInit {
+export class RegisterSaleComponent implements OnInit, OnDestroy {
   register: Observable<Register>;
   sale: Observable<RegisterSale>;
   currentRegister: Register;
   currentSale: RegisterSale;
+  unsubscribe$ = new Subject();
 
   @ViewChild('sidenav') sidenav: MatSidenav;
 
@@ -38,7 +40,8 @@ export class RegisterSaleComponent implements OnInit {
   ngOnInit() {
     this.sale = this.store.select('registerSale')
       .pipe(
-        map(sale => this.currentSale = sale)
+        map(sale => this.currentSale = sale),
+        takeUntil(this.unsubscribe$)
       );
 
     this.register = this.store.select('registers')
@@ -48,10 +51,24 @@ export class RegisterSaleComponent implements OnInit {
             this.currentRegister = Register.Create(registers[0]);
             return this.currentRegister;
           }
-        })
+        }),
+        takeUntil(this.unsubscribe$)
       );
+
+    this.messageService.message$
+      .pipe(
+        takeUntil(this.unsubscribe$)
+      ).subscribe(({customer}) => {
+        this.openCustomerQuickEditDialog(customer);
+      });
+
     this.store.dispatch(new registerActions.LoadRegisters());
 
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   addCustomer({ customer }) {
@@ -88,6 +105,12 @@ export class RegisterSaleComponent implements OnInit {
       if (variantId) {
         this.addLineItemForSale(product, variantId);
       }
+    });
+  }
+
+  openCustomerQuickEditDialog(customer: Customer) {
+    this.dialog.open(CustomerQuickEditDialogComponent, {
+      data: customer
     });
   }
 

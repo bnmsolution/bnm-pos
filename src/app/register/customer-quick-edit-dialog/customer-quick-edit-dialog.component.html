@@ -1,0 +1,72 @@
+<h1 mat-dialog-title>{{customer.phone}}</h1>
+<div mat-dialog-content fxLayout>
+  <section class="edit-section" fxLayout="column">
+    <mat-form-field appearance="fill" class="dense">
+      <mat-label>이름</mat-label>
+      <input matInput [(ngModel)]="customer.name">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="dense">
+      <mat-label>생일</mat-label>
+      <input matInput [matDatepicker]="picker" [(ngModel)]="customer.dateOfBirth">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker touchUi #picker></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="dense">
+      <mat-label>메모</mat-label>
+      <textarea matInput></textarea>
+    </mat-form-field>
+
+    <div class="button-group">
+      <button mat-stroked-button [ngClass]="customer.gender === 'male' ? 'mat-flat-button mat-primary' : ''" (click)="customer.gender = 'male'">남자</button>
+      <button mat-stroked-button [ngClass]="customer.gender === 'female' ? 'mat-flat-button mat-primary' : ''" (click)="customer.gender = 'female'">여자</button>
+    </div>
+
+    <div class="button-group">
+      <button mat-stroked-button *ngFor="let group of ageGroups" [ngClass]="customer.ageGroup === group ? 'mat-flat-button mat-primary' : ''"
+              (click)="customer.ageGroup = group" >{{group
+        === 60 ? '60 대+' : group
+        + ' 대'}}</button>
+
+    </div>
+
+  </section>
+
+  <section class="info-section">
+    <div class="customer-stats">
+      <div class="detail-line">
+        <div>포인트</div>
+        <div>{{customer.currentStorePoint | number}}</div>
+      </div>
+      <div class="detail-line">
+        <div>총 적립 포인트</div>
+        <div>{{customer.totalStorePoint | number}}</div>
+      </div>
+      <div class="detail-line">
+        <div>매출</div>
+        <div>{{customer.totalSalesAmount | appCurrency}} ({{customer.totalSalesCount}}건)</div>
+      </div>
+      <div class="detail-line">
+        <div>마지막 방문</div>
+        <div>{{customer.lastPurchasedDate}}</div>
+      </div>
+    </div>
+    <div fxLayout>
+      <div>
+        <div class="product-header">즐겨찾는 상품</div>
+        <div class="product-line" *ngFor="let item of customerStats.topProducts">
+          <div>{{item.count}}</div>{{item.name}}
+        </div>
+      </div>
+      <app-payment-types [paymentRates]="customerStats"></app-payment-types>
+    </div>
+    <div fxLayout>
+      <app-line-chart-widget [chartData]="lineChartData" [chartOptions]="lineChartOptions"></app-line-chart-widget>
+      <app-line-chart-widget [chartData]="salesByDayChartData" [chartOptions]="lineChartOptions"></app-line-chart-widget>
+    </div>
+  </section>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button color="primary">고객 업데이트</button>
+</div>

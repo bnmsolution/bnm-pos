@@ -48,6 +48,13 @@ export class SyncComponent implements OnInit {
       });
 
     this.startReplication();
+
+
+    // this.appState.isSynced = true;
+    // this.appState.inistStore()
+    //   .subscribe(() => {
+    //     this.router.navigateByUrl(this.returnUrl);
+    //   });
   }
 
   startReplication() {
