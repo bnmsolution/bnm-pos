@@ -1,0 +1,19 @@
+<section class="table-filter-container">
+  <form [formGroup]="filterForm" fxLayout fxFlex>
+    <div class="filters">
+      <mat-form-field class="search" appearance="outline" floatLabel="always">
+        <mat-label>거래처명, 대표명, 연략처 검색</mat-label>
+        <mat-icon matPrefix svgIcon="searchIcon"></mat-icon>
+        <input matInput formControlName="search" #searchInput>
+        <button mat-button type="button" *ngIf="filterForm.value.search" matSuffix mat-icon-button aria-label="Clear"
+                (click)="removeSearchText()">
+          <mat-icon svgIcon="closeIcon"></mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </form>
+  <div class="filter-actions">
+    <button mat-button [disabled]="isFilterEmpty()" (click)="clearFilter()">필터제거</button>
+    <button mat-raised-button color="primary" routerLink="/vendor/add">거래처 추가</button>
+  </div>
+</section>

@@ -1,35 +1,58 @@
-<app-common-page-header title="카테고리" buttonTitle="카테고리 추가"
-                        (buttonClick)="openAddCategoryDialog()"></app-common-page-header>
+<!-- <app-common-page-header title="카테고리" buttonTitle="카테고리 추가" (buttonClick)="openAddCategoryDialog()"></app-common-page-header> -->
 
-<section>
-  <mat-progress-bar mode="indeterminate" *ngIf="!tableInitiated"></mat-progress-bar>
-  <mat-table #table [dataSource]="dataSource" matSort>
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>카테고리명</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.name}}</mat-cell>
-    </ng-container>
+<section fxLayout="column">
 
-    <ng-container matColumnDef="numberOfProducts">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>상품수</mat-header-cell>
-      <mat-cell *matCellDef="let row"><a routerLink="/product"
-                                         [queryParams]="{category: row.id}">{{row.numberOfProducts}}</a>
-      </mat-cell>
-    </ng-container>
+  <div class="list-header">
+    <div>카테고리 목록</div>
+    <span fxFlex></span>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon svgIcon="moreVert"></mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <mat-icon svgIcon="download"></mat-icon>
+        <span>카테고리 내려받기</span>
+      </button>
+      <button mat-menu-item disabled>
+        <mat-icon svgIcon="upload"></mat-icon>
+        <span>카테고리 올리기</span>
+      </button>
+    </mat-menu>
+  </div>
 
-    <ng-container matColumnDef="actions">
-      <mat-header-cell *matHeaderCellDef></mat-header-cell>
-      <mat-cell class="actions" *matCellDef="let row">
-        <mat-icon class="editIcon" svgIcon="editIcon" matTooltip="수정" (click)="openEditCategoryDialog(row)"></mat-icon>
-        <mat-icon class="deleteIcon" svgIcon="deleteIcon" matTooltip="삭제" (click)="deleteCategory(row.id)"></mat-icon>
-      </mat-cell>
-    </ng-container>
+  <mat-card>
+    <app-category-filter [filter$]="filter$" (addCategory)="openAddCategoryDialog()"></app-category-filter>
+    <section class="table-container">
+      <mat-progress-bar mode="indeterminate" *ngIf="!tableInitiated"></mat-progress-bar>
+      <table mat-table #table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>카테고리명</th>
+          <td mat-cell *matCellDef="let row"> {{row.name}}</td>
+        </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <ng-container matColumnDef="numberOfProducts">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>상품수</th>
+          <td mat-cell *matCellDef="let row"><a routerLink="/product" [queryParams]="{category: row.id}">{{row.numberOfProducts}}</a>
+          </td>
+        </ng-container>
 
-    <mat-row *matRowDef="let row; columns: displayedColumns;">
-    </mat-row>
-  </mat-table>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell class="actions" *matCellDef="let row">
+            <mat-icon class="editIcon" svgIcon="editIcon" matTooltip="수정" (click)="openEditCategoryDialog(row)"></mat-icon>
+            <mat-icon class="deleteIcon" svgIcon="deleteIcon" matTooltip="삭제" (click)="deleteCategory(row.id)"></mat-icon>
+          </td>
+        </ng-container>
 
-  <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
-  </mat-paginator>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+        </tr>
+      </table>
+
+      <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
+      </mat-paginator>
+    </section>
+  </mat-card>
+
 </section>

@@ -1,7 +1,16 @@
-@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
-@import '_variables';
-@import '~saturn-datepicker/bundle.css';
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import "~@angular/material/theming";
 
+@import "_variables";
+@import "~saturn-datepicker/bundle.css";
+
+// Define a custom typography config that overrides the font-family as well as the
+// `headlines` and `body-1` levels.
+$custom-typography: mat-typography-config(
+  $font-family: "Nanum Gothic, sans-serif"
+);
+
+@include mat-core($custom-typography);
 
 // Anuglar Material Overwrite
 .mat-autocomplete-panel {
@@ -13,7 +22,7 @@
 }
 
 .mat-option {
-  >span {
+  > span {
     width: 100%;
   }
 }
@@ -22,18 +31,42 @@
   background-color: $main-content-background-color !important;
 }
 
-mat-table {
+.table-container {
+  position: relative;
+  overflow: auto;
+  // padding: 12px 36px;
+}
+
+.mat-table {
+  width: 100%;
   background: transparent !important;
-  margin: 12px 36px;
-  .detail-row {
-    background-color: #f9f9f9;
-    padding: 24px 36px;
+
+  .element-row:not(.expanded-row):hover {
+    background: #f5f5f5;
+  }
+
+  .element-row:not(.expanded-row):active {
+    background: #efefef;
+  }
+
+  // for multiTemplateDataRows
+  .element-row td {
+    border-bottom-width: 0;
+  }
+
+  .element-detail {
+    overflow: hidden;
+    display: flex;
+  }
+
+  tr.detail-row {
+    height: 0;
   }
 
   .detail {
     display: flex;
-    flex:1;
-    >div:not(:last-child) {
+    flex: 1;
+    > div:not(:last-child) {
       margin-right: 36px;
     }
     section {
@@ -42,7 +75,7 @@ mat-table {
     .actions {
       flex: 1;
       max-width: 200px;
-      >section {
+      > section {
         display: flex;
         flex-direction: column;
       }
@@ -62,11 +95,11 @@ mat-table {
   .detail-line {
     display: flex;
     margin-bottom: 10px;
-    >div:first-child {
+    > div:first-child {
       flex: 0 35%;
       color: $text-color-secondary;
     }
-    >div:last-child {
+    > div:last-child {
       flex: 0 65%;
     }
   }
@@ -96,14 +129,31 @@ mat-form-field.dense {
   }
 
   .mat-form-field-flex {
-    padding: .5em .5em 0 .5em;
+    padding: 0.5em 0.5em 0 0.5em;
   }
 
   .mat-form-field-infix {
-    padding: .25em 0 .5em 0;
+    padding: 0.25em 0 0.5em 0;
   }
 
   .mat-form-field-underline {
     bottom: 0.5em;
   }
+}
+
+.mat-button:not(.mat-icon-button),
+.mat-stroked-button:not(.mat-icon-button),
+.mat-raised-button:not(.mat-icon-button) {
+  .mat-icon {
+    margin-right: 4px;
+    // color: $icon-color-default;
+  }
+}
+
+
+.mat-form-field-appearance-legacy {
+	.mat-form-field-prefix,
+	.mat-form-field-suffix {
+		align-self: flex-end;
+	}
 }

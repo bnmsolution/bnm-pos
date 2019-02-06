@@ -1,7 +1,7 @@
-import {Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef} from '@angular/core';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
-import {Store} from '@ngrx/store';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
 import {
   RegisterSale,
   sortSales,
@@ -13,9 +13,9 @@ import {
 import Chart from 'chart.js';
 import format from '../shared/utils/format';
 
-import {AppState} from '../core';
+import { AppState } from '../core';
 import * as actions from '../stores/actions/sales.actions';
-import {cloneDeep} from '../shared/utils/lang';
+import { cloneDeep } from '../shared/utils/lang';
 
 @Component({
   selector: 'app-dashboard',
@@ -35,7 +35,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   formatDate = format;
 
   constructor(private cdr: ChangeDetectorRef,
-              private appState: AppState, private store: Store<any>) {
+    private appState: AppState, private store: Store<any>) {
   }
 
   ngOnInit() {
@@ -87,7 +87,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
 
   get salesDiff() {
-    const {current, previous} = this.summary;
+    const { current, previous } = this.summary;
     const salesAmountDiff = current.salesAmount - previous.salesAmount;
     const avgDiff = current.avgPerSaleAmount - previous.avgPerSaleAmount;
     return {
@@ -108,87 +108,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       summary.previous = generateDashboard(summary.salesInPreviousPeriod);
       this.topSaleProducts = generateTopSaleProducts(summary.current.products, summary.previous.products);
       this.summary = summary;
-      // this.renderChart();
     }
   }
-
-  renderChart() {
-    const data = this.summary.chartData;
-    if (this.chartInstance) {
-      this.chartInstance.destroy();
-    }
-    this.chartInstance = new Chart(this.chartElement.nativeElement, {
-      type: 'line',
-      data: {
-        labels: data.map(s => s.label),
-        datasets: [
-          {
-            label: this.legendLabel[0],
-            data: data.map(s => s.salesAmount),
-            borderColor: '#3F51B5',
-            backgroundColor: '#3F51B5',
-            borderWidth: 1,
-            lineTension: 0.3,
-            fill: false
-          },
-          {
-            label: this.legendLabel[1],
-            data: data.map(s => s.salesAmountPreviousPeriod),
-            borderColor: '#E0E0E0',
-            backgroundColor: '#E0E0E0',
-            borderWidth: 1,
-            lineTension: 0.3,
-            fill: false
-          },
-        ]
-      },
-      options: {
-        responsive: false,
-        scales: {
-          yAxes: [
-            {
-              type: 'linear',
-              position: 'left',
-              ticks: {
-                callback: (value, index, values) => {
-                  return value.toLocaleString(this.appState.currentStore.locale);
-                }
-              }
-            },
-          ],
-          xAxes: [
-            {
-              gridLines: {
-                display: false
-              }
-            }
-          ]
-        },
-        tooltips: {
-          mode: 'index',
-          bodySpacing: 5,
-          callbacks: {
-            label: (tooltipItem) => {
-              const index = tooltipItem.index;
-              const chartData = this.summary.chartData;
-              if (tooltipItem.datasetIndex === 0) {
-                return `${chartData[index].tooltipCurrent}: ${tooltipItem.yLabel.toLocaleString(this.appState.currentStore.locale)}`;
-              } else {
-                return `${chartData[index].tooltipPrevious}: ${tooltipItem.yLabel.toLocaleString(this.appState.currentStore.locale)}`;
-              }
-            },
-            title: (tooltipItem, data) => {
-              return '';
-            }
-          }
-        },
-        plugins: {
-          datalabels: {
-            display: false
-          }
-        }
-      }
-    });
-  }
-
 }

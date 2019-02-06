@@ -15,6 +15,7 @@
 
 .gridViewContainer {
   flex: 1;
+  padding: 12px 24px;
 }
 
 .floatingAddButton {
@@ -30,13 +31,9 @@
   }
 }
 
-// Common style for Material cdk table
-.cdk-column-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  min-width: 90px;
-  max-width: 90px;
+// Common style for Material table
+.mat-column-actions {
+  text-align: right;
   mat-icon {
     color: $icon-color-light;
     margin-left: 2px;
@@ -53,29 +50,60 @@
   }
 }
 
-.element-row {
-  position: relative;
-}
+// .element-row {
+//   position: relative;
+// }
 
-.element-row:not(.expanded) {
-  cursor: pointer;
-}
+// .element-row:not(.expanded) {
+//   cursor: pointer;
+// }
 
-.element-row:not(.expanded):hover {
-  background: #f5f5f5;
-}
+// .element-row:not(.expanded):hover {
+//   background: #f5f5f5;
+// }
 
 // .element-row.expanded {
 //   border-bottom-color: transparent;
 // }
 
 .list-header {
-  padding: 12px 48px;
+  padding: 12px 0;
   display: flex;
   align-items: center;
 
   > div:first-child {
-    font-size: 20px;
-    color: $accent-color;
+    font-size: 18px;
   }
 }
+
+.table-action-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 12px 12px 24px;
+}
+
+
+// Filter stlye in table
+.table-filter-container {
+  display: flex;
+  align-items: center;
+  padding: 12px 12px 0 24px;
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+     mat-form-field {
+       margin-right: 14px;
+     }
+   }
+
+  .search {
+    width: 300px;
+  }
+}
+
+.filter-actions {
+  padding-bottom: 1.34375em;
+}
+
+

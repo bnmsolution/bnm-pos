@@ -1,13 +1,18 @@
-import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatPaginator, MatSnackBar, MatSort, MatTableDataSource} from '@angular/material';
-import {Store} from '@ngrx/store';
-import {filter, takeUntil, tap} from 'rxjs/operators';
-import {Category} from 'pos-models';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatDialog, MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
+import { Subject } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { filter, takeUntil, tap } from 'rxjs/operators';
+import { Category } from 'pos-models';
 
 import * as actions from '../../stores/actions/category.actions';
-import {AddCategoryDialogComponent} from '../add-category-dialog/add-category-dialog.component';
-import {DeleteCategoryDialogComponent} from '../delete-category-dialog/delete-category-dialog.component';
-import {Subject} from 'rxjs';
+import { AddCategoryDialogComponent } from '../add-category-dialog/add-category-dialog.component';
+import { DeleteCategoryDialogComponent } from '../delete-category-dialog/delete-category-dialog.component';
+
+export interface CategoryFilter {
+  search: string;
+}
+
 
 @Component({
   selector: 'app-category-list',
@@ -16,7 +21,8 @@ import {Subject} from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CategoryListComponent implements OnInit, OnDestroy {
-  dataSource: any;
+  dataSource: MatTableDataSource<Category>;
+  filter$: Subject<CategoryFilter>;
   displayedColumns = ['name', 'numberOfProducts', 'actions'];
   unsubscribe$ = new Subject();
   tableInitiated = false;
@@ -25,8 +31,9 @@ export class CategoryListComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private dialog: MatDialog,
-              private snackBar: MatSnackBar,
-              private store: Store<any>) {
+    private snackBar: MatSnackBar,
+    private store: Store<any>) {
+    this.filter$ = new Subject();
   }
 
   ngOnInit() {
@@ -48,14 +55,18 @@ export class CategoryListComponent implements OnInit, OnDestroy {
   private initTable(data) {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+    this.dataSource.filterPredicate = this.categoryFilterFunction;
     this.dataSource.data = data;
     this.tableInitiated = true;
+    this.filter$.subscribe(searchFilter => {
+      this.dataSource.filter = JSON.stringify(searchFilter);
+    });
   }
 
   deleteCategory(categoryId: string): void {
     this.dialog
       .open(DeleteCategoryDialogComponent, {
-        data: {categoryId}
+        data: { categoryId }
       })
       .afterClosed()
       .pipe(
@@ -79,7 +90,7 @@ export class CategoryListComponent implements OnInit, OnDestroy {
   openEditCategoryDialog(item: Category) {
     this.dialog
       .open(AddCategoryDialogComponent, {
-        data: {category: Object.assign({}, item)}
+        data: { category: Object.assign({}, item) }
       })
       .afterClosed()
       .pipe(
@@ -90,6 +101,16 @@ export class CategoryListComponent implements OnInit, OnDestroy {
   }
 
   openSnackBar(message: string) {
-    this.snackBar.open(message, '확인', {duration: 2000});
+    this.snackBar.open(message, '확인', { duration: 2000 });
+  }
+
+  /**
+ * Filter function for string search
+ * @param category
+ * @param searchFilter
+ */
+  private categoryFilterFunction(category: Category, searchFilter: string): boolean {
+    const filterObject: CategoryFilter = JSON.parse(searchFilter);
+    return category.name.contains(filterObject.search);
   }
 }

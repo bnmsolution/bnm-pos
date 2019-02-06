@@ -38,4 +38,8 @@ export class MainToolbarComponent implements OnInit {
   logout() {
     this.authService.logout();
   }
+
+  requestFullScreen() {
+    document.body.requestFullscreen();
+  }
 }

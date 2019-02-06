@@ -15,7 +15,7 @@
 
     <mat-form-field appearance="fill" class="dense">
       <mat-label>메모</mat-label>
-      <textarea matInput></textarea>
+      <textarea matInput [(ngModel)]="customer.note"></textarea>
     </mat-form-field>
 
     <div class="button-group">
@@ -25,7 +25,7 @@
 
     <div class="button-group">
       <button mat-stroked-button *ngFor="let group of ageGroups" [ngClass]="customer.ageGroup === group ? 'mat-flat-button mat-primary' : ''"
-              (click)="customer.ageGroup = group" >{{group
+              (click)="customer.ageGroup = group">{{group
         === 60 ? '60 대+' : group
         + ' 대'}}</button>
 
@@ -53,10 +53,10 @@
       </div>
     </div>
     <div fxLayout>
-      <div>
+      <div fxFlex>
         <div class="product-header">즐겨찾는 상품</div>
-        <div class="product-line" *ngFor="let item of customerStats.topProducts">
-          <div>{{item.count}}</div>{{item.name}}
+        <div class="product-line" *ngFor="let item of customerStats.topProducts; let i = index">
+          {{i + 1}}. {{item.name}}
         </div>
       </div>
       <app-payment-types [paymentRates]="customerStats"></app-payment-types>
@@ -68,5 +68,5 @@
   </section>
 </div>
 <div mat-dialog-actions align="end">
-  <button mat-button color="primary">고객 업데이트</button>
+  <button mat-button color="primary" (click)="updateCustomer()">고객 업데이트</button>
 </div>

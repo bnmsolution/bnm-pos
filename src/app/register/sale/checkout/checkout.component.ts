@@ -17,6 +17,8 @@ import { AddCustomerDialogComponent } from '../add-customer-dialog/add-customer-
 import { LineItemComponent } from './line-item/line-item.component';
 import { CustomerViewDialogComponent } from '../../../customer/customer-view-dialog/customer-view-dialog.component';
 import { CustomerService } from '../../../services/customer.service';
+import { CustomerQuickEditDialogComponent } from '../../customer-quick-edit-dialog/customer-quick-edit-dialog.component';
+
 
 @Component({
   selector: 'app-checkout',
@@ -96,10 +98,14 @@ export class CheckoutComponent implements AfterViewInit {
   openCustomerInfoDialog(customerId: string) {
     this.customerService.getItemById(customerId)
       .subscribe(customer => {
-        this.dialog.open(CustomerViewDialogComponent, {
-          data: {
-            customer: customer
-          }
+        // this.dialog.open(CustomerViewDialogComponent, {
+        //   data: {
+        //     customer: customer
+        //   }
+        // });
+        this.dialog.open(CustomerQuickEditDialogComponent, {
+          autoFocus: false,
+          data: customer
         });
       });
   }

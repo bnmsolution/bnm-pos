@@ -1,8 +1,27 @@
-<!-- <a class="back-button" mat-icon-button [routerLink]="returnUrl">
-  <mat-icon class="menu-icon" svgIcon="backspaceIcon"></mat-icon>
-</a> -->
-<!-- <mat-icon class="menu-icon" svgIcon="settingIcon"></mat-icon> -->
+<button mat-icon-button [routerLink]="returnUrl" matTooltip="돌아가기">
+  <mat-icon svgIcon="back"></mat-icon>
+</button>
+
 <div class="title">{{title}}</div>
 <span flex></span>
-<a mat-button class="cancel" [routerLink]="returnUrl">취소</a>
-<button type="submit" class="submit" mat-button >저장</button>
+
+<section *ngIf="type === 'edit'">
+  <button type="submit" mat-stroked-button color="primary">
+    <mat-icon svgIcon="check"></mat-icon>
+    <span>저장</span>
+  </button>
+</section>
+
+<section *ngIf="type === 'add'">
+  <button type="submit" mat-stroked-button color="primary">
+    <mat-icon svgIcon="check"></mat-icon>
+    <span>저장</span>
+  </button>
+</section>
+
+<section *ngIf="type === 'view'">
+  <button mat-stroked-button color="primary">
+    <mat-icon svgIcon="copy"></mat-icon>
+    <span>복사</span>
+  </button>
+</section>

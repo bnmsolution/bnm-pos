@@ -1,13 +1,13 @@
-import {ChangeDetectionStrategy, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {Subject, forkJoin, Subscription, fromEvent} from 'rxjs';
-import {debounceTime, distinctUntilChanged, take} from 'rxjs/operators';
-import {Category, Vendor} from 'pos-models';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Subject, forkJoin, Subscription, fromEvent } from 'rxjs';
+import { debounceTime, distinctUntilChanged, take } from 'rxjs/operators';
+import { Category, Vendor } from 'pos-models';
 
-import {ProductFilter} from 'src/app/product';
-import {CategoryService} from '../../services/category.service';
-import {VendorService} from '../../services/vendor.service';
-import {ActivatedRoute} from '@angular/router';
+import { ProductFilter } from 'src/app/product';
+import { CategoryService } from '../../services/category.service';
+import { VendorService } from '../../services/vendor.service';
 
 @Component({
   selector: 'app-product-filter',
@@ -68,7 +68,7 @@ export class ProductFilterComponent implements OnInit, OnDestroy {
       .subscribe((e: any) => {
         if (e.target.tagName !== 'INPUT') {
           this.searchInput.nativeElement.focus();
-          this.filterForm.patchValue({search: e.key});
+          this.filterForm.patchValue({ search: e.key });
           e.preventDefault();
         }
       });

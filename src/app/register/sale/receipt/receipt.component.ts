@@ -1,5 +1,8 @@
-import {Component, Input, ChangeDetectionStrategy} from '@angular/core';
-import {RegisterSale, getTotalTaxablePrice, PaymentType} from 'pos-models';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { RegisterSale, getTotalTaxablePrice, PaymentType } from 'pos-models';
+
+import * as registerSaleActions from '../../../stores/actions/register-sale.actions';
 
 @Component({
   selector: 'app-receipt',
@@ -10,7 +13,10 @@ import {RegisterSale, getTotalTaxablePrice, PaymentType} from 'pos-models';
 export class ReceiptComponent {
   @Input() sale: RegisterSale;
   getTotalTaxablePrice = getTotalTaxablePrice;
-  // getTotalTaxFreePrice = getTotalTaxFreePrice;
+
+  constructor(
+    private store: Store<any>) {
+  }
 
   // Temporary code
   getTypeNameKo(paymentType: PaymentType) {
@@ -24,5 +30,13 @@ export class ReceiptComponent {
       case PaymentType.StorePoint:
         return '포인트';
     }
+  }
+
+  trackByFnction(index) {
+    return index;
+  }
+
+  removePayment(paymentId: string) {
+    this.store.dispatch(new registerSaleActions.RemovePayment({ id: paymentId }));
   }
 }

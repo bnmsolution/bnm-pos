@@ -45,17 +45,17 @@ export const getPeriodDates = (period: FilterPeriod): Period => {
       break;
     }
     case FilterPeriod.OneWeek: {
-      endDate = startOfDay(today);
+      endDate = endOfDay(today);
       startDate = subWeeks(endDate, 1);
       break;
     }
     case FilterPeriod.OneMonth: {
-      endDate = startOfDay(today);
+      endDate = endOfDay(today);
       startDate = subMonths(endDate, 1);
       break;
     }
     case FilterPeriod.OneYear: {
-      endDate = startOfDay(today);
+      endDate = endOfDay(today);
       startDate = subYears(endDate, 1);
       break;
     }

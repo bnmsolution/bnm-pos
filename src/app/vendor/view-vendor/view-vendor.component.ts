@@ -11,6 +11,8 @@ export class ViewVendorComponent implements OnInit {
 
   vendorForm: FormGroup;
   title = '거래처 정보';
+  formType = 'view';
+  readonly = true;
 
   constructor(
     private fb: FormBuilder,

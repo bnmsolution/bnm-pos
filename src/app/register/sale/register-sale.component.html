@@ -1,6 +1,5 @@
 <mat-sidenav-container>
-
-  <mat-sidenav #sidenav aplign="end" position="end" opened="false">
+  <mat-sidenav #sidenav aplign="end" position="end" opened="false" autoFocus="false">
     <div class="sidenav-wrapper">
       <app-receipt [sale]="sale | async"></app-receipt>
       <app-payment [sale]="sale | async" (pay)="addPayment($event)" (close)="closeSale()"></app-payment>
@@ -25,5 +24,4 @@
                   (removeCustomer)="removeCustomer()"
                   (addCustomer)="addCustomer($event)"></app-checkout>
   </div>
-
 </mat-sidenav-container>

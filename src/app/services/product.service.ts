@@ -1,12 +1,12 @@
 
-import {Injectable} from '@angular/core';
-import {Observable, forkJoin, from, of} from 'rxjs';
-import {map, switchMap} from 'rxjs/operators';
-import {Product, Category, Vendor, Tax} from 'pos-models';
+import { Injectable } from '@angular/core';
+import { Observable, forkJoin, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+import { Product, Category, Vendor, Tax } from 'pos-models';
 
-import {CrudService} from './crudService';
-import {HttpService} from './http.service';
-import {LocalDbService} from './localDb.service';
+import { CrudService } from './crudService';
+import { HttpService } from './http.service';
+import { LocalDbService } from './localDb.service';
 
 const documentName = 'product';
 
@@ -60,6 +60,24 @@ export class ProductService extends CrudService {
           product.vendor = vendor;
           product.tax = tax;
           return product;
+        })
+      );
+  }
+
+  getProductByBarcode(barcode: string): Observable<Product> {
+    return this.getAll()
+      .pipe(
+        map(products => {
+          return products.find(p => p.barcode === barcode);
+        })
+      );
+  }
+
+  getProductBySKU(sku: string): Observable<Product> {
+    return this.getAll()
+      .pipe(
+        map(products => {
+          return products.find(p => p.sku === sku);
         })
       );
   }

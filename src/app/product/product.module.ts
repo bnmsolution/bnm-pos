@@ -11,6 +11,7 @@ import { ProductResolverService } from './product-resolver.service';
 import { ViewProductComponent } from './view-product/view-product.component';
 import { ImportProductDialogComponent } from './import-product-dialog/import-product-dialog.component';
 import { ProductAddonsComponent } from './product-addons/product-addons.component';
+import { VariantListComponent } from './variant-list/variant-list.component';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { ProductAddonsComponent } from './product-addons/product-addons.componen
     ProductFilterComponent,
     ViewProductComponent,
     ImportProductDialogComponent,
-    ProductAddonsComponent
+    ProductAddonsComponent,
+    VariantListComponent
   ],
   providers: [
     ProductResolverService

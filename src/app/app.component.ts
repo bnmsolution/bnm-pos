@@ -8,7 +8,7 @@ import { MessageService } from './services/message.service';
 
 const svgIconList = [
   ['toogleIcon', 'ic_keyboard_arrow_up_24px'],
-  ['backspaceIcon', 'ic_keyboard_backspace_24px'],
+  ['backspace', 'outline-backspace-24px'],
   ['editIcon', 'outline-create-24px'],
   ['closeIcon', 'ic_close_24px'],
   ['addCustomerIcon', 'ic_person_add_24px'],
@@ -20,7 +20,7 @@ const svgIconList = [
   ['localAtmIcon', 'ic_local_atm_24px'],
   ['loyaltyIcon', 'ic_loyalty_24px'],
   ['printIcon', 'ic_print_24px'],
-  ['moreVertIcon', 'ic_more_vert_24px'],
+  ['moreVert', 'ic_more_vert_24px'],
   ['addIcon', 'ic_add_24px'],
   ['listIcon', 'ic_list_24px'],
   ['searchIcon', 'ic_search_24px'],
@@ -55,11 +55,19 @@ const svgIconList = [
   ['upload', 'outline-cloud_upload-24px'],
   ['addCircle', 'outline-add_circle_outline-24px'],
   ['warning', 'outline-warning-24px'],
-  ['check', 'outline-check_circle-24px'],
+  ['check', 'outline-check-24px'],
+  ['check-circle', 'outline-check_circle-24px'],
   ['shipping', 'outline-local_shipping-24px'],
   ['category', 'outline-local_offer-24px'],
   ['add', 'outline-add-24px'],
-  ['remove', 'outline-remove-24px']
+  ['remove', 'outline-remove-24px'],
+  ['indicator', 'outline-drag_indicator-24px'],
+  ['product', 'gift'],
+  ['fullscreen', 'outline-fullscreen-24px'],
+  ['back', 'outline-arrow_back-24px'],
+  ['copy', 'outline-file_copy-24px'],
+  ['download', 'outline-cloud_download-24px'],
+  ['upload', 'outline-cloud_upload-24px'],
 ];
 
 @Component({

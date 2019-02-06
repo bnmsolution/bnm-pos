@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
-import {CrudService} from './crudService';
-import {HttpService} from './http.service';
-import {LocalDbService} from './localDb.service';
+import { CrudService } from './crudService';
+import { HttpService } from './http.service';
+import { LocalDbService } from './localDb.service';
 
 const documentName = 'store';
 

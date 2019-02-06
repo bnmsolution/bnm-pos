@@ -58,6 +58,10 @@ import { WidgetsModule } from '../widgets/widgets.module';
     AddCustomerDialogComponent,
     VariantSelectDialogComponent,
     CustomerQuickEditDialogComponent,
+    CustomerViewDialogComponent
+  ],
+  exports: [
+    CustomerQuickEditDialogComponent
   ],
   entryComponents: [
     ProductViewDialogComponent,

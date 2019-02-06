@@ -1,20 +1,21 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import {
+  Component, ChangeDetectorRef, OnInit, Output,
+  EventEmitter, ViewChild, ElementRef, OnDestroy, ChangeDetectionStrategy
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription, fromEvent, Subject } from 'rxjs';
 import { map, takeUntil, debounceTime } from 'rxjs/operators';
-import { Product, Customer, ProductVariant, getConcatenatedVariantName, flattenProduct } from 'pos-models';
+import { Product, Customer, ProductVariant, flattenProduct } from 'pos-models';
 
-// import { VariantSelectDialogComponent } from '../variant-select-dialog/variant-select-dialog.component';
-// import { Variant } from '../../../product/models/variant';
 import * as productActions from 'src/app/stores/actions/product.actions';
 import * as customerActions from 'src/app/stores/actions/customer.actions';
 
 @Component({
   selector: 'app-register-search',
   templateUrl: './register-search.component.html',
-  styleUrls: ['./register-search.component.scss']
+  styleUrls: ['./register-search.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterSearchComponent implements OnInit, OnDestroy {
   @Output() productSelect = new EventEmitter();
@@ -30,8 +31,8 @@ export class RegisterSearchComponent implements OnInit, OnDestroy {
   unsubscribe$ = new Subject();
 
   constructor(
-    private dialog: MatDialog,
-    private store: Store<any>) {
+    private store: Store<any>,
+    private changeDetectorRef: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -45,10 +46,14 @@ export class RegisterSearchComponent implements OnInit, OnDestroy {
         products ? this.products = flattenProduct(products) : this.store.dispatch(new productActions.LoadProducts()));
 
     this.store.select('customers')
+      .pipe(
+        takeUntil(this.unsubscribe$)
+      )
       .subscribe(customers => customers ? this.customers = customers : this.store.dispatch(new customerActions.LoadCustomers()));
 
     this.searchCtrl.valueChanges
       .pipe(
+        takeUntil(this.unsubscribe$),
         debounceTime(300),
         map(filter => {
           return {
@@ -61,6 +66,7 @@ export class RegisterSearchComponent implements OnInit, OnDestroy {
       .subscribe(({ filter, products, customers }) => {
         this.handleProductSearch(filter, products);
         this.handleCustomerSearch(filter, customers);
+        this.changeDetectorRef.markForCheck();
       });
 
     /** Allows typing or scanning without input focus */
@@ -69,7 +75,8 @@ export class RegisterSearchComponent implements OnInit, OnDestroy {
         takeUntil(this.unsubscribe$)
       )
       .subscribe((e: any) => {
-        if (e.target.tagName !== 'INPUT') {
+        // Ignore if this event comes from input elements
+        if (['INPUT', 'TEXTAREA'].indexOf(e.target.tagName) === -1) {
           this.searchInput.nativeElement.focus();
           this.searchCtrl.setValue(e.key);
           e.preventDefault();
@@ -96,27 +103,13 @@ export class RegisterSearchComponent implements OnInit, OnDestroy {
         console.log('product without variant clicked');
       }
     }
+    this.searchInput.nativeElement.blur();
   }
 
   clickCustomer(customer: Customer) {
     this.customerSelect.emit({ customer });
+    this.searchInput.nativeElement.blur();
   }
-
-  // /**
-  //  * Opens dialog for variants selection.
-  //  */
-  // selectVariants(product: Product): void {
-  //   const dialogRef = this.dialog.open(VariantSelectDialogComponent, {
-  //     width: '500px',
-  //     data: { product },
-  //   });
-
-  //   dialogRef.afterClosed().subscribe((varint: Variant) => {
-  //     if (varint) {
-  //       this.productSelect.emit({ product, productId: varint.id });
-  //     }
-  //   });
-  // }
 
   private handleProductSearch(filter, products) {
     if (products.length === 1 && products[0].barcode === filter) {
@@ -164,6 +157,4 @@ export class RegisterSearchComponent implements OnInit, OnDestroy {
   resetControl() {
     this.searchCtrl.setValue('', { emitEvent: false });
   }
-
-
 }

@@ -12,6 +12,7 @@ export const UPDATE_LINE_ITEM = '[Register Sale] Update line item';
 export const UPDATE_LINE_ITEM_ADDONS = '[Register Sale] Update line item addons';
 export const REMOVE_LINE_ITEM = '[Register Sale] Remove line item';
 export const ADD_PAYMENT = '[Register Sale] Add payment';
+export const REMOVE_PAYMENT = '[Register Sale] Remove payment';
 export const HOLD_SALE = '[Register Sale] Hold sale';
 export const HOLD_SALE_SUCCESS = '[Register Sale] Hold sale success';
 export const VOID_SALE = '[Register Sale] Void sale';
@@ -104,6 +105,13 @@ export class AddPayment implements Action {
   }
 }
 
+export class RemovePayment implements Action {
+  readonly type = REMOVE_PAYMENT;
+
+  constructor(public payload: { id: string }) {
+  }
+}
+
 export class CalculateSalesTotals implements Action {
   readonly type = CALCULATE_SALES_TOTALS;
 }
@@ -169,6 +177,6 @@ export class HoldExchangeSuccess implements Action {
 }
 
 export type RegisterSaleActions = SelectRegister | CreateSale | UpdateSale | CloseSale | AddLineItem
-  | RemoveLineItem | UpdateLineItem | UpdateAddons | AddPayment | CalculateSalesTotals | HoldSale | VoidSale | AddSaleCustomer
-  | RemoveSaleCustomer | ContinueSale | ReturnSale | ExchangeSale | HoldReturn | HoldReturnSuccess
-  | HoldExchange | HoldExchangeSuccess;
+  | RemoveLineItem | UpdateLineItem | UpdateAddons | AddPayment | RemovePayment | CalculateSalesTotals
+  | HoldSale | VoidSale | AddSaleCustomer | RemoveSaleCustomer | ContinueSale | ReturnSale | ExchangeSale
+  | HoldReturn | HoldReturnSuccess | HoldExchange | HoldExchangeSuccess;

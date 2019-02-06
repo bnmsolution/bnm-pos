@@ -1,6 +1,6 @@
-import {Component, EventEmitter, Input, Output, ChangeDetectionStrategy, OnChanges} from '@angular/core';
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy, OnChanges } from '@angular/core';
 
-import {RegisterSale, RegisterSaleStatus, PaymentType} from 'pos-models';
+import { RegisterSale, RegisterSaleStatus, PaymentType, getCashPaymentOptions } from 'pos-models';
 
 @Component({
   selector: 'app-payment',
@@ -14,6 +14,8 @@ export class PaymentComponent implements OnChanges {
   @Output() close = new EventEmitter();
 
   amountToPay: any;
+  numericPadValue: any = '';
+  showNumericPad = false;
   paymentType = PaymentType;
 
   get buttonColor() {
@@ -26,6 +28,7 @@ export class PaymentComponent implements OnChanges {
   ngOnChanges(simpleChange) {
     if (this.sale) {
       this.amountToPay = this.sale.balance;
+      this.numericPadValue = this.amountToPay;
     }
   }
 
@@ -43,9 +46,17 @@ export class PaymentComponent implements OnChanges {
     });
   }
 
+  addQuickCashPayment(amount: number) {
+    this.pay.emit({
+      amount,
+      type: PaymentType.Cash
+    });
+  }
+
   isRegularSalePaymentCompleted(): boolean {
     return this.sale && this.sale.status === RegisterSaleStatus.Open && this.sale.balance === 0;
   }
+
 
   getAvailablePoints(): number {
     if (this.sale && this.sale.customer) {
@@ -53,7 +64,7 @@ export class PaymentComponent implements OnChanges {
         .filter(p => p.paymentType === PaymentType.StorePoint)
         .map(p => p.amount)
         .reduce((acc, cur) => acc + cur, 0);
-      return this.sale.customer.totalStorePoint - pointsUsed;
+      return this.sale.customer.currentStorePoint - pointsUsed;
     } else {
       return 0;
     }
@@ -61,6 +72,15 @@ export class PaymentComponent implements OnChanges {
 
   isReturnSalePaymentCompleted(): boolean {
     return this.sale.status === RegisterSaleStatus.Return && this.sale.balance === 0;
+  }
+
+  toggleNumericPad() {
+    this.showNumericPad = !this.showNumericPad;
+  }
+
+
+  getQuickCashPayOptions() {
+    return getCashPaymentOptions(this.amountToPay);
   }
 
   // isExchangePaymentCompleted(): boolean {

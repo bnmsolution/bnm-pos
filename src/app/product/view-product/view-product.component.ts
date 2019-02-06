@@ -3,7 +3,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Category, Product, Tax, Vendor } from 'pos-models';
 
-import { productForm } from '../product.form';
+import { getProductFrom } from '../product.form';
+import { ProductService } from 'src/app/core';
 
 @Component({
   selector: 'app-view-product',
@@ -18,9 +19,11 @@ export class ViewProductComponent implements OnInit {
   vendors: Vendor[] = [];
   taxes: Tax[] = [];
   readonly = true;
+  formType = 'view';
 
   constructor(
     private fb: FormBuilder,
+    private productService: ProductService,
     private route: ActivatedRoute) {
     this.createForm();
   }
@@ -37,9 +40,13 @@ export class ViewProductComponent implements OnInit {
   }
 
   createForm() {
-    this.productForm = this.fb.group(productForm);
+    this.productForm = this.fb.group(getProductFrom(this.productService, true));
   }
 
   onSubmit() {
+  }
+
+  getFormControlValidity() {
+    return true;
   }
 }

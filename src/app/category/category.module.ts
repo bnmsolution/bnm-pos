@@ -5,6 +5,7 @@ import { CategoryListComponent } from './category-list/category-list.component';
 import { CategoryRoutingModule } from './category-routing.module';
 import { AddCategoryDialogComponent } from './add-category-dialog/add-category-dialog.component';
 import { DeleteCategoryDialogComponent } from './delete-category-dialog/delete-category-dialog.component';
+import { CategoryFilterComponent } from './category-filter/category-filter.component';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { DeleteCategoryDialogComponent } from './delete-category-dialog/delete-c
   declarations: [
     CategoryListComponent,
     AddCategoryDialogComponent,
-    DeleteCategoryDialogComponent
+    DeleteCategoryDialogComponent,
+    CategoryFilterComponent
   ],
   entryComponents: [
     AddCategoryDialogComponent,

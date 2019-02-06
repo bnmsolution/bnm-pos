@@ -4,6 +4,7 @@ import {
   createSale,
   calculateTotals,
   addPayment,
+  removePayment,
   RegisterSaleLineItem,
   createLineItem,
   setDiscountRate,
@@ -45,7 +46,8 @@ const lineItemsReducer = (state: RegisterSaleLineItem[], action) => {
         //
         // if (lineItem.retailPrice !== retailPrice) {
         //   newLineItem = setRetailPrice(newLineItem, retailPrice);
-        //}
+        // }
+
 
         if (lineItem.quantity !== quantity) {
           newLineItem = setQuantity(newLineItem, quantity);
@@ -96,6 +98,12 @@ export function registerSaleReducer(state: RegisterSaleState = null, action) {
     case actions.ADD_PAYMENT: {
       const { type, amount } = action.payload;
       const newState = addPayment(state, type, amount);
+      return calculateTotals(newState);
+    }
+
+    case actions.REMOVE_PAYMENT: {
+      const { id } = action.payload;
+      const newState = removePayment(state, id);
       return calculateTotals(newState);
     }
 

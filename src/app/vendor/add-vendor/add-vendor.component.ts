@@ -1,15 +1,15 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material';
-import {Store} from '@ngrx/store';
-import {merge} from 'rxjs';
-import {filter, take} from 'rxjs/operators';
-import {Vendor} from 'pos-models';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material';
+import { Store } from '@ngrx/store';
+import { merge } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
+import { Vendor } from 'pos-models';
 
-import {vendorForm} from '../vendor.form';
+import { vendorForm } from '../vendor.form';
 import * as actions from '../../stores/actions/vendor.actions';
-import {VendorEffects} from 'src/app/stores/effects/vendor.effects';
+import { VendorEffects } from 'src/app/stores/effects/vendor.effects';
 
 @Component({
   selector: 'app-add-vendor',
@@ -20,6 +20,8 @@ export class AddVendorComponent implements OnInit {
   vendorForm: FormGroup;
   vendor = {} as Vendor;
   isNewVendor = true;
+  readonly = false;
+  formType = 'add';
 
   constructor(
     private fb: FormBuilder,
@@ -39,9 +41,7 @@ export class AddVendorComponent implements OnInit {
     this.route.data
       .subscribe((data) => {
         if (data.vendor) {
-          this.vendor = data.vendor;
-          this.isNewVendor = false;
-          this.vendorForm.patchValue(this.vendor);
+          this.setVendorForEdit(data.vendor);
         }
       });
   }
@@ -51,6 +51,8 @@ export class AddVendorComponent implements OnInit {
   }
 
   onSubmit() {
+    Object.assign(this.vendor, this.vendorForm.value);
+
     if (this.vendorForm.valid) {
       merge(this.vendorEffects.addVendor$, this.vendorEffects.updateVendor$)
         .pipe(
@@ -59,7 +61,7 @@ export class AddVendorComponent implements OnInit {
         )
         .subscribe(action2 => {
           const message = action2.type === actions.ADD_VENDOR_SUCCESS ? '거래처가 추가되었습니다' : '거래처가 업데이트 되었습니다';
-          this.snackBar.open(message, '확인', {duration: 2000});
+          this.snackBar.open(message, '확인', { duration: 2000 });
           this.router.navigate(['./vendor']);
         });
 
@@ -69,4 +71,10 @@ export class AddVendorComponent implements OnInit {
     }
   }
 
+  private setVendorForEdit(vendor: Vendor) {
+    this.vendor = vendor;
+    this.isNewVendor = false;
+    this.vendorForm.patchValue(this.vendor);
+    this.formType = 'edit';
+  }
 }

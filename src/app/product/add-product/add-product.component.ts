@@ -8,8 +8,8 @@ import { filter, take } from 'rxjs/operators';
 import { Product, Category, Vendor, Tax, PosStore, getProductPriceFromRetailPrice, getProductPriceFromMarkup, getMarkup } from 'pos-models';
 import * as uuid from 'uuid/v1';
 
-import { AppState } from '../../core';
-import { productForm } from '../product.form';
+import { AppState, ProductService } from '../../core';
+import { getProductFrom } from '../product.form';
 import * as actions from '../../stores/actions/product.actions';
 import { ProductEffects } from 'src/app/stores/effects/product.effects';
 
@@ -33,6 +33,7 @@ export class AddProductComponent implements OnInit {
   taxes: Tax[] = [];
   settings: PosStore;
   readonly = false;
+  formType = 'add';
 
   constructor(
     private fb: FormBuilder,
@@ -41,6 +42,7 @@ export class AddProductComponent implements OnInit {
     private snackBar: MatSnackBar,
     private store: Store<any>,
     private productEffects: ProductEffects,
+    private productService: ProductService,
     private appState: AppState) {
     this.createForm();
   }
@@ -48,6 +50,7 @@ export class AddProductComponent implements OnInit {
   get title(): string {
     return this.isNewProduct ? '상품 추가' : '상품 수정';
   }
+
 
   ngOnInit() {
     this.route.data
@@ -63,12 +66,10 @@ export class AddProductComponent implements OnInit {
           this.setProductForEdit(data.editProduct);
         }
       });
-
-      console.log(this.product);
   }
 
   createForm() {
-    this.productForm = this.fb.group(productForm);
+    this.productForm = this.fb.group(getProductFrom(this.productService));
 
     this.productForm.controls.retailPrice.valueChanges.subscribe(() => this.onPriceChange('retailPrice'));
     this.productForm.controls.supplyPrice.valueChanges.subscribe(() => this.onPriceChange('supplyPrice'));
@@ -141,10 +142,25 @@ export class AddProductComponent implements OnInit {
     }
   }
 
-  setProductForEdit(product) {
+  private setCopyProduct(product) {
+    // todo
+    // this.product = createNewProduct(product);
+    this.productForm.patchValue(product);
+  }
+
+  private setProductForEdit(product) {
     this.isNewProduct = false;
     this.product = product;
     this.productForm.patchValue(product);
+    this.formType = 'edit';
+  }
+
+  getFormControlValidity(controlName: string, validationName: string): boolean {
+    const errors = this.productForm.controls[controlName].errors;
+    if (errors && errors[validationName]) {
+      return false;
+    }
+    return true;
   }
 
   onSubmit(): void {
@@ -164,7 +180,6 @@ export class AddProductComponent implements OnInit {
 
       let action;
       if (this.isNewProduct) {
-
 
         // Currently only supporting a single store
         this.product.storeId = this.appState.currentStore.id;

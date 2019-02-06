@@ -1,19 +1,21 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material';
-import {Store} from '@ngrx/store';
-import {merge} from 'rxjs';
-import {filter, take} from 'rxjs/operators';
-import {Customer, CustomerType} from 'pos-models';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material';
+import { Store } from '@ngrx/store';
+import { merge } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
+import { Customer, CustomerType } from 'pos-models';
 import * as uuid from 'uuid/v1';
 
+import { getCustomerForm } from '../customer.form';
 import * as actions from '../../stores/actions/customer.actions';
-import {CustomerEffects} from 'src/app/stores/effects/customer.effects';
+import { CustomerEffects } from 'src/app/stores/effects/customer.effects';
+import { CustomerService } from 'src/app/core';
 
 @Component({
   selector: 'app-add-customer',
-  templateUrl: './add-customer.component.html'
+  templateUrl: '../customer.form.html'
 })
 export class AddCustomerComponent implements OnInit {
 
@@ -21,6 +23,8 @@ export class AddCustomerComponent implements OnInit {
   isNewCustomer = true;
   customer = {} as Customer;
   type = CustomerType;
+  readonly = false;
+  formType = 'add';
 
   constructor(
     private fb: FormBuilder,
@@ -28,32 +32,17 @@ export class AddCustomerComponent implements OnInit {
     private router: Router,
     private snackBar: MatSnackBar,
     private store: Store<any>,
+    private customerService: CustomerService,
     private customerEffects: CustomerEffects) {
     this.createForm();
   }
 
+  get title(): string {
+    return this.isNewCustomer ? '고객 추가' : '고객 수정';
+  }
+
   createForm() {
-    this.customerForm = this.fb.group({
-      id: uuid(),
-      type: CustomerType.Individual,
-      businessName: null,
-      name: '',
-      gender: null,
-      phone: '',
-      email: '',
-      address: '',
-      web: null,
-      contactName: null,
-      contactPhone: null,
-      dateOfJoin: new Date(),
-      birthDay: null,
-      totalStorePoint: 0,
-      currentStorePoint: 0,
-      totalSalesCount: 0,
-      totalSalesAmount: 0,
-      totalReturnsCount: 0,
-      note: ''
-    });
+    this.customerForm = this.fb.group(getCustomerForm(this.customerService));
   }
 
   get customerType() {
@@ -86,7 +75,7 @@ export class AddCustomerComponent implements OnInit {
         )
         .subscribe(ac => {
           const message = ac.type === actions.ADD_CUSTOMER_SUCCESS ? '고객이 추가되었습니다' : '고객이 업데이트 되었습니다';
-          this.snackBar.open(message, '확인', {duration: 2000});
+          this.snackBar.open(message, '확인', { duration: 2000 });
           this.router.navigate(['./customer']);
         });
 

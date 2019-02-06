@@ -4,6 +4,8 @@ mat-toolbar {
   background-color: white;
   height: 50px;
   box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.16);
+  position: relative;
+  z-index: 10;
 }
 
 .mat-menu-item {

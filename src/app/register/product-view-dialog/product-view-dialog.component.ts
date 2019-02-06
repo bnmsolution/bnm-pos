@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Product, ProductAddon, getConcatenatedVariantName } from 'pos-models';
+import { Store } from '@ngrx/store';
+
+import * as registerSaleActions from '../../stores/actions/register-sale.actions';
 
 @Component({
   selector: 'app-product-view-dialog',
@@ -13,6 +16,7 @@ export class ProductViewDialogComponent {
   variantId: string;
   checked = false;
   addons: ProductAddon[] = [];
+  quantity: number;
 
   get productName(): string {
     const { name, variants } = this.product;
@@ -35,10 +39,12 @@ export class ProductViewDialogComponent {
   }
 
   constructor(
-    public dialogRef: MatDialogRef<ProductViewDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) data: any) {
+    private store: Store<any>,
+    private dialogRef: MatDialogRef<ProductViewDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) private data: any) {
     this.product = data.product;
     this.variantId = data.lineItem.variantId;
+    this.quantity = data.lineItem.quantity;
     this.addons = this.product.addons.map(a => Object.assign({}, a));
     this.addons.forEach((a: any) => {
       if (data.lineItem.addons.find(lineItemAddon => lineItemAddon.name === a.name)) {
@@ -46,5 +52,23 @@ export class ProductViewDialogComponent {
       }
     });
     data.addons = this.addons;
+  }
+
+  decreaseQuantity() {
+    if (this.quantity > 0) {
+      this.quantity--;
+      this.updateLineItem();
+    }
+  }
+
+  increaseQuantity() {
+    this.quantity++;
+    this.updateLineItem();
+  }
+
+  updateLineItem() {
+    const { id, retailPrice, discountRate } = this.data.lineItem;
+    this.store.dispatch(new registerSaleActions.UpdateLineItem(
+      { id, quantity: this.quantity, retailPrice, discountRate }));
   }
 }

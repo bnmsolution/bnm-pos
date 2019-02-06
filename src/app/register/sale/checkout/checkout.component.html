@@ -14,18 +14,23 @@
   <mat-card-content>
     <div class="add-customer" fxLayout fxLayoutAlign="start center" *ngIf="!sale || !sale.customer">
       <button mat-button (click)="openAddCustomerDialog()">
-        <mat-icon svgIcon="addCustomerIcon"></mat-icon>
+        <mat-icon svgIcon="addCustomerIcon" class="customer-icon"></mat-icon>
         <span>고객등록</span>
       </button>
     </div>
     <div class="customer" fxLayout fxLayoutAlign="start center" *ngIf="sale && sale.customer">
-      <mat-icon svgIcon="customerIcon"></mat-icon>
+      <mat-icon svgIcon="customerIcon"  class="customer-icon"></mat-icon>
       <div fxFlex>
         <div>{{sale.customer.name}}</div>
         <div class="phone">{{sale.customer.phone}} {{sale.customer.email}}</div>
       </div>
-      <mat-icon svgIcon="info" (click)="openCustomerInfoDialog(sale.customer.id)"></mat-icon>
-      <mat-icon svgIcon="closeIcon" (click)="removeCustomer.emit()"></mat-icon>
+      <button mat-icon-button (click)="openCustomerInfoDialog(sale.customer.id)">
+        <mat-icon svgIcon="info"></mat-icon>
+      </button>
+
+      <button mat-icon-button (click)="removeCustomer.emit()">
+        <mat-icon svgIcon="closeIcon"></mat-icon>
+      </button>
     </div>
     <div class="lineItems scroller" #lineItems *ngIf="sale">
       <ul>
@@ -69,7 +74,3 @@
     </button>
   </mat-card-actions>
 </mat-card>
-<!--
-<div class="test" #quantityEdit>
-
-</div> -->

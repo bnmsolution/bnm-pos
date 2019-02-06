@@ -1,6 +1,8 @@
 <form class="app-form" [formGroup]="productForm" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()"
-  novalidate>
-  <app-create-content-header [title]="title" returnUrl="/product"></app-create-content-header>
+      novalidate>
+
+  <app-create-content-header [title]="title" [type]="formType" returnUrl="/product"></app-create-content-header>
+
   <section class="accordion">
     <mat-accordion multi="true">
       <mat-expansion-panel [expanded]="true">
@@ -13,11 +15,13 @@
             <mat-form-field appearance="outline" #nameField>
               <mat-label>상품명</mat-label>
               <input matInput formControlName="name" [readonly]="readonly">
+              <mat-error *ngIf="!getFormControlValidity('name', 'required')">상품명은 필수입니다.</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline" #barcodeField>
               <mat-label>바코드</mat-label>
               <input matInput formControlName="barcode" [readonly]="readonly">
+              <mat-error *ngIf="!getFormControlValidity('barcode', 'takenBarcode')">이미 사용중인 바코드 입니다.</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline" id="categoryField" *ngIf="!readonly">
@@ -86,17 +90,18 @@
 
             <mat-form-field appearance="outline" #supplyPriceField>
               <mat-label>공급가</mat-label>
-              <input type="number" matInput currencyMask formControlName="supplyPrice" [readonly]="readonly">
+              <input type="number" matInput currencyMask formControlName="supplyPrice" [readonly]="readonly" min=0>
             </mat-form-field>
 
             <mat-form-field appearance="outline" #retailPriceField>
               <mat-label>판매가</mat-label>
-              <input type="number" matInput currencyMask formControlName="retailPrice" [readonly]="readonly">
+              <input type="number" matInput currencyMask formControlName="retailPrice" [readonly]="readonly" min=0>
+              <mat-error *ngIf="!getFormControlValidity('retailPrice', 'required')">판매가는 필수입니다.</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline" #markupField>
               <mat-label>마진율</mat-label>
-              <input type="number" matInput currencyMask formControlName="markup" [readonly]="readonly">
+              <input type="number" matInput currencyMask formControlName="markup" [readonly]="readonly" min=0>
             </mat-form-field>
 
             <mat-form-field appearance="outline" #productPriceField>
@@ -153,7 +158,7 @@
 
             <mat-form-field appearance="outline" #reOrderPointField>
               <mat-label>적정재고</mat-label>
-              <input type="number" matInput formControlName="reOrderPoint" placeholder="">
+              <input type="number" matInput formControlName="reOrderPoint" placeholder="" min=0>
             </mat-form-field>
           </div>
           <div fxFlex>

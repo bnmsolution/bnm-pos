@@ -1,9 +1,10 @@
-@import '../../../shared/common-style';
+@import "../../../shared/common-style";
 
 $receipt-width: 380px;
 $padding-bottom: 6px;
 $margin-bottom: 6px;
 $price-width: 80px;
+
 :host {
   display: flex;
   flex-direction: column;
@@ -16,9 +17,9 @@ $price-width: 80px;
 
   > section {
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 30px;
   }
-
 }
 
 pre {
@@ -82,13 +83,30 @@ pre {
 }
 
 .payment-line {
+  position: relative;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  padding-bottom: $padding-bottom;
+  height: 40px;
   &:last-child {
     margin-bottom: $margin-bottom;
     border-bottom: $border;
   }
+
+  button {
+    position: absolute;
+    right: -36px;
+    top: 0;
+    color: $icon-color-default;
+  }
+}
+
+.change {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: $padding-bottom;
+  margin-bottom: $margin-bottom;
+  border-bottom: $border;
 }
 
 .balance {
@@ -96,4 +114,3 @@ pre {
   font-weight: bold;
   justify-content: space-between;
 }
-

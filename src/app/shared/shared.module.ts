@@ -1,17 +1,17 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
-import {HttpClientModule} from '@angular/common/http';
-import {RouterModule} from '@angular/router';
-import {FormsModule, ReactiveFormsModule, NG_VALIDATORS} from '@angular/forms';
-import {FlexLayoutModule} from '@angular/flex-layout';
+import { HttpClientModule } from '@angular/common/http';
+import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule, NG_VALIDATORS } from '@angular/forms';
+import { FlexLayoutModule } from '@angular/flex-layout';
 // import { TextMaskModule } from 'angular2-text-mask';
 
-import {MenuComponent} from '../menu';
-import {MainToolbarComponent} from '../main-toolbar';
-import {ToggleSectionComponent, ToggleSectionDirective} from '../menu/toggle';
-import {LinkMenuComponent} from '../menu/link';
-import {CreateContentHeaderComponent, CommonPageHeaderComponent, EmailWithOptionsComponent} from '../shared/components';
+import { MenuComponent } from '../menu';
+import { MainToolbarComponent } from '../main-toolbar';
+import { ToggleSectionComponent, ToggleSectionDirective } from '../menu/toggle';
+import { LinkMenuComponent } from '../menu/link';
+import { CreateContentHeaderComponent, CommonPageHeaderComponent, EmailWithOptionsComponent } from '../shared/components';
 import {
   AppCurrencyFormatterDirective,
   DroppableDirective,
@@ -19,14 +19,15 @@ import {
   DraggableDirective,
   ValidateCustomerPhoneNumberNotTakenDirective
 } from '../shared/directives';
-import {AppCurrencyPipe, AppDatePipe} from '../shared/pipes';
-import {LayoutComponent} from '../layout/layout.component';
-import {PosMaterialModule} from '../app.material.module';
-import {ConfirmDialogComponent} from './components/confirm-dialog/confirm-dialog.component';
-import {CdkDetailRowDirective} from './directives/cdk-detail-row/cdk-detail-row.directive';
-import {RecentSalesComponent} from './components/recent-sales/recent-sales.component';
-import {ValidatePhoneNumberDirective} from './directives/validators/validate-phone-number.directive';
-import {CustomerViewDialogComponent} from '../customer/customer-view-dialog/customer-view-dialog.component';
+import { AppCurrencyPipe, AppDatePipe } from '../shared/pipes';
+import { LayoutComponent } from '../layout/layout.component';
+import { PosMaterialModule } from '../app.material.module';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { CdkDetailRowDirective } from './directives/cdk-detail-row/cdk-detail-row.directive';
+import { RecentSalesComponent } from './components/recent-sales/recent-sales.component';
+import { ValidatePhoneNumberDirective } from './directives/validators/validate-phone-number.directive';
+import { NumericPadComponent } from './components/numeric-pad/numeric-pad.component';
+import { ProductValidator } from './validators/product.validator';
 
 @NgModule({
   imports: [
@@ -60,6 +61,7 @@ import {CustomerViewDialogComponent} from '../customer/customer-view-dialog/cust
     LayoutComponent,
     ConfirmDialogComponent,
     RecentSalesComponent,
+    NumericPadComponent,
 
     // Directives
     ToggleSectionDirective,
@@ -86,7 +88,8 @@ import {CustomerViewDialogComponent} from '../customer/customer-view-dialog/cust
     LayoutComponent,
     ConfirmDialogComponent,
     RecentSalesComponent,
-    CustomerViewDialogComponent,
+    NumericPadComponent,
+    NumericPadComponent,
 
     // Directives
     ToggleSectionDirective,
@@ -101,10 +104,13 @@ import {CustomerViewDialogComponent} from '../customer/customer-view-dialog/cust
     // Pipes
     AppCurrencyPipe,
     AppDatePipe,
+
+  ],
+  providers: [
+    ProductValidator
   ],
   entryComponents: [
-    ConfirmDialogComponent,
-    CustomerViewDialogComponent
+    ConfirmDialogComponent
   ]
 })
 export class SharedModule {

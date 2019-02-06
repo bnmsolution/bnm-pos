@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { MatDialog, MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -30,14 +29,13 @@ export class ProductListComponent implements OnInit, OnDestroy {
   unsubscribe$ = new Subject();
   displayedColumns = ['name', 'created', 'category', 'vendor', 'retailPrice', 'count', 'actions'];
   tableInitiated = false;
+  expandedElement;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
     private dialog: MatDialog,
-    private route: ActivatedRoute,
-    private snackBar: MatSnackBar,
     private store: Store<any>) {
     this.filter$ = new Subject();
   }
@@ -65,25 +63,32 @@ export class ProductListComponent implements OnInit, OnDestroy {
   private initTable(data) {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.dataSource.filterPredicate = (product: Product, filter: string) => {
-      const filterObject: ProductFilter = JSON.parse(filter);
-
-      if (filterObject.categoryId.length > 0 && product.categoryId !== filterObject.categoryId) {
-        return false;
-      }
-
-      if (filterObject.vendorId.length > 0 && product.vendorId !== filterObject.vendorId) {
-        return false;
-      }
-
-      const str = [product.name, product.sku, product.barcode].join('');
-
-      return str.contains(filterObject.search);
-    };
+    this.dataSource.filterPredicate = this.productFilterFunction;
     this.dataSource.data = data;
     this.tableInitiated = true;
     this.filter$.subscribe(filter => {
       this.dataSource.filter = JSON.stringify(filter);
     });
+  }
+
+  /**
+   * Filter funtion for string search.
+   * @param product
+   * @param filter
+   */
+  private productFilterFunction(product: Product, filter: string): boolean {
+    const filterObject: ProductFilter = JSON.parse(filter);
+
+    if (filterObject.categoryId.length > 0 && product.categoryId !== filterObject.categoryId) {
+      return false;
+    }
+
+    if (filterObject.vendorId.length > 0 && product.vendorId !== filterObject.vendorId) {
+      return false;
+    }
+
+    const str = [product.name, product.sku, product.barcode].join('');
+
+    return str.contains(filterObject.search);
   }
 }

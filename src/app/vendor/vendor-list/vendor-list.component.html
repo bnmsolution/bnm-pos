@@ -1,45 +1,66 @@
-<app-common-page-header title="거래처" buttonTitle="거래처 추가" buttonLink="/vendor/add"></app-common-page-header>
+<section fxLayout="column">
 
-<section class="table">
-  <mat-progress-bar mode="indeterminate" *ngIf="!tableInitiated"></mat-progress-bar>
-  <mat-table #table [dataSource]="dataSource" matSort>
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>거래처명</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.name}}</mat-cell>
-    </ng-container>
+  <div class="list-header">
+    <div>거래처 목록</div>
+    <span fxFlex></span>
+    <!-- <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon svgIcon="moreVert"></mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <mat-icon svgIcon="download"></mat-icon>
+        <span>거래처 내려받기</span>
+      </button>
+      <button mat-menu-item disabled>
+        <mat-icon svgIcon="upload"></mat-icon>
+        <span>거래처 올리기</span>
+      </button>
+    </mat-menu> -->
+  </div>
 
-    <ng-container matColumnDef="ownerName">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>대표자</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.ownerName}}</mat-cell>
-    </ng-container>
+  <mat-card>
+    <app-vendor-filter [filter$]="filter$"></app-vendor-filter>
+    <section class="table-container">
+      <mat-progress-bar mode="indeterminate" *ngIf="!tableInitiated"></mat-progress-bar>
+      <table mat-table #table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>거래처명</th>
+          <td mat-cell *matCellDef="let row"> {{row.name}}</td>
+        </ng-container>
 
-    <ng-container matColumnDef="phone">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>연락처</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.phone}}</mat-cell>
-    </ng-container>
+        <ng-container matColumnDef="ownerName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>대표명</th>
+          <td mat-cell *matCellDef="let row"> {{row.ownerName}}</td>
+        </ng-container>
 
-    <ng-container matColumnDef="numberOfProducts">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>상품수</mat-header-cell>
-      <mat-cell *matCellDef="let row"><a routerLink="/product" [queryParams]="{vendor: row.id}">
-        {{row.numberOfProducts}} </a></mat-cell>
-    </ng-container>
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>연락처</th>
+          <td mat-cell *matCellDef="let row"> {{row.phone}}</td>
+        </ng-container>
 
-    <ng-container matColumnDef="actions">
-      <mat-header-cell *matHeaderCellDef></mat-header-cell>
-      <mat-cell class="actions" *matCellDef="let row">
-        <!--<mat-icon class="listIcon" svgIcon="viewListIcon" matTooltip="상품보기" routerLink="/product" [queryParams]="{vendor: row.id}"></mat-icon>-->
-        <mat-icon class="editIcon" svgIcon="previewIcon" matTooltip="자세히"
-                  [routerLink]="'/vendor/detail/' + row.id"></mat-icon>
-        <mat-icon class="editIcon" svgIcon="editIcon" matTooltip="수정"
-                  [routerLink]="'/vendor/edit/' + row.id"></mat-icon>
-        <mat-icon class="deleteIcon" svgIcon="deleteIcon" matTooltip="삭제" (click)="deleteVendor(row.id)"></mat-icon>
-      </mat-cell>
-    </ng-container>
+        <ng-container matColumnDef="numberOfProducts">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>상품수</th>
+          <td mat-cell *matCellDef="let row"><a routerLink="/product" [queryParams]="{vendor: row.id}">
+              {{row.numberOfProducts}} </a></td>
+        </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell class="actions" *matCellDef="let row">
+            <!--<mat-icon class="listIcon" svgIcon="viewListIcon" matTooltip="상품보기" routerLink="/product" [queryParams]="{vendor: row.id}"></mat-icon>-->
+            <mat-icon class="editIcon" svgIcon="previewIcon" matTooltip="자세히" [routerLink]="'/vendor/detail/' + row.id"></mat-icon>
+            <mat-icon class="editIcon" svgIcon="editIcon" matTooltip="수정" [routerLink]="'/vendor/edit/' + row.id"></mat-icon>
+            <mat-icon class="deleteIcon" svgIcon="deleteIcon" matTooltip="삭제" (click)="deleteVendor(row.id)"></mat-icon>
+          </td>
+        </ng-container>
 
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
-  <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
-  </mat-paginator>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
+      </mat-paginator>
+    </section>
+  </mat-card>
+
 </section>

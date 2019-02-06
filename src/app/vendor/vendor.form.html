@@ -1,62 +1,65 @@
-<form class="app-form" [formGroup]="vendorForm" (ngSubmit)="onSubmit()">
-  <app-create-content-header [title]="title" returnUrl="/vendor"></app-create-content-header>
+<form class="app-form" [formGroup]="vendorForm" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()"
+      novalidate>
+
+  <app-create-content-header [title]="title" [type]="formType" returnUrl="/vendor"></app-create-content-header>
+
   <div class="cardWidthDescription">
     <div fxFlex>
       <mat-card>
         <mat-card-content>
           <mat-form-field appearance="outline">
             <mat-label>거래처명</mat-label>
-            <input matInput formControlName="name" placeholder="">
+            <input matInput formControlName="name" [readonly]="readonly">
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>사업자명</mat-label>
-            <input matInput formControlName="ownerName" placeholder="" >
+            <input matInput formControlName="ownerName" [readonly]="readonly">
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>사업자 등록번호</mat-label>
-            <input matInput formControlName="businessNumber" placeholder="" >
+            <input matInput formControlName="businessNumber" [readonly]="readonly">
           </mat-form-field>
 
           <div class="h-form-fields">
             <mat-form-field appearance="outline">
               <mat-label>업종</mat-label>
-              <input matInput formControlName="businessType1" placeholder="" >
+              <input matInput formControlName="businessType1" [readonly]="readonly">
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>업태</mat-label>
-              <input matInput formControlName="businessType2" placeholder="" >
+              <input matInput formControlName="businessType2" [readonly]="readonly">
             </mat-form-field>
           </div>
           <mat-form-field appearance="outline">
             <mat-label>주소</mat-label>
-            <input matInput formControlName="address" placeholder="" >
+            <input matInput formControlName="address" [readonly]="readonly">
           </mat-form-field>
 
           <div class="h-form-fields">
             <mat-form-field appearance="outline">
               <mat-label>전화번호</mat-label>
-              <input matInput formControlName="phone" placeholder="" >
+              <input matInput formControlName="phone" [readonly]="readonly">
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>팩스</mat-label>
-              <input matInput formControlName="fax" placeholder="" >
+              <input matInput formControlName="fax" [readonly]="readonly">
             </mat-form-field>
           </div>
 
           <div class="h-form-fields">
             <mat-form-field appearance="outline">
               <mat-label>이메일</mat-label>
-              <input type="email" matInput formControlName="email" placeholder="" >
+              <input type="email" matInput formControlName="email" [readonly]="readonly">
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>웹사이트</mat-label>
-              <input matInput formControlName="web" placeholder="" >
+              <input matInput formControlName="web" [readonly]="readonly">
             </mat-form-field>
           </div>
 
           <mat-form-field appearance="outline">
             <mat-label>거래처 설명</mat-label>
-            <textarea matInput formControlName="description" placeholder=""></textarea>
+            <textarea matInput formControlName="description" [readonly]="readonly"></textarea>
           </mat-form-field>
         </mat-card-content>
       </mat-card>

@@ -1,0 +1,22 @@
+@import '../../../shared/common-style.scss';
+
+
+.buttons {
+  width: 361px;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #fff;
+
+  button {
+    width: 33.33%;
+    height: 80px;
+    border-bottom: $border;
+    border-right: $border;
+    border-radius: 0;
+
+    &:nth-child(3n) {
+      border-right: none;
+    }
+  }
+
+}

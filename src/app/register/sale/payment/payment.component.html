@@ -1,23 +1,60 @@
-<section class="scroller" *ngIf="sale">
-  <div class="payment-header" *ngIf="needPayOrRefund()">
+<section class="scroller" *ngIf="sale && needPayOrRefund()">
+  <div class="payment-header">
     <div class="label">
       {{sale.balance > 0 ? '결제 금액' : '환불 금액'}}
     </div>
     <div class="input-wrapper">
-      <input type="number" matInput [(ngModel)]="amountToPay" currencyMask/>
+      <button mat-icon-button (click)="showNumericPad = !showNumericPad;">
+        <mat-icon svgIcon="indicator"></mat-icon>
+      </button>
+      <input type="number" matInput [(ngModel)]="amountToPay" currencyMask />
+      <div class="numeric-pad-wrapper ">
+        <app-numeric-pad [value]="numericPadValue" (change)="amountToPay=$event;" *ngIf="showNumericPad && needPayOrRefund()"></app-numeric-pad>
+      </div>
     </div>
   </div>
-  <div class="payments" *ngIf="needPayOrRefund()">
-    <button mat-stroked-button class="pay-button" [color]="buttonColor" (click)="addPayment(paymentType.Cash)">현금
+
+  <div class="payments">
+    <button mat-stroked-button class="pay-button" [color]="buttonColor" (click)="addPayment(paymentType.Cash)"
+            [disabled]="!amountToPay">현금
     </button>
-    <button mat-stroked-button class="pay-button" [color]="buttonColor" (click)="addPayment(paymentType.CreditCard)">
+    <button mat-stroked-button class="pay-button" [color]="buttonColor" (click)="addPayment(paymentType.CreditCard)"
+            [disabled]="!amountToPay">
       신용카드
     </button>
-    <!--<button mat-button class="pay-button" color="primary" (click)="addPayment(paymentType.StorePoint)">-->
-    <!--<span>기프트카드</span>-->
-    <!--</button>-->
   </div>
 
+  <div class="quick-cas-label">빠른 현금 결제</div>
+  <div class="quick-cash">
+    <button mat-stroked-button *ngFor="let quickCash of getQuickCashPayOptions()"
+    (click)="addQuickCashPayment(quickCash)" [color]="buttonColor">{{quickCash | number}}</button>
+  </div>
+
+  <div fxFlex></div>
+
+  <section *ngIf="sale.customer">
+    <div class="customer-info">
+      <div class="customer-line"><span>고객명</span> {{sale.customer.name}}</div>
+      <div class="customer-line"><span>총매출</span> {{sale.customer.totalSalesAmount | appCurrency}}
+        ({{sale.customer.totalSalesCount}}건)</div>
+      <div class="customer-line"><span>포인트</span> {{getAvailablePoints() | number}}</div>
+      <div class="customer-line"><span>마지막 방문</span> {{sale.customer.lastPurchasedDate}}</div>
+    </div>
+
+    <div fxLayout>
+      <button mat-stroked-button class="pay-button" [color]="buttonColor" (click)="addPayment(paymentType.StorePoint)"
+              [disabled]="amountToPay > getAvailablePoints()">
+        <span>{{amountToPay > getAvailablePoints() ? '포인트 부족' : '포인트 사용'}}</span>
+      </button>
+      <span fxFlex></span>
+    </div>
+
+  </section>
+</section>
+
+
+
+<section class="scroller" *ngIf="sale && !needPayOrRefund()">
   <!-- Payment completed for regular sale -->
   <div class="payment-header" *ngIf="isRegularSalePaymentCompleted()">
     <div class="done-label">결제가 완료되었습니다!</div>
@@ -45,28 +82,4 @@
     </div>
     <button mat-button class="done-button" (click)="close.emit()">환불완료</button>
   </div>
-
-  <!-- Payment completed for exchange sale -->
-  <!-- <div class="payment-header" *ngIf="isExchangePaymentCompleted()">
-    <div class="done-label">교환이 완료되었습니다!</div>
-    <div class="receipt-options">
-      <button mat-button (click)="addPayment(0)">
-        <mat-icon svgIcon="printIcon"></mat-icon>
-        <span>영수증 출력</span>
-      </button>
-    </div>
-    <button mat-button class="done-button" (click)="onCloseClicked.emit()">교환완료</button>
-  </div> -->
-
-  <section *ngIf="sale.customer">
-    <div class="customer-header">{{sale.customer.name}}</div>
-    <div>
-      {{getAvailablePoints()}}
-      <span>포인트</span>
-    </div>
-    <button mat-button class="pay-button" (click)="addPayment(paymentType.StorePoint)"
-            [disabled]="amountToPay > getAvailablePoints()">
-      <span>포인트</span>
-    </button>
-  </section>
 </section>

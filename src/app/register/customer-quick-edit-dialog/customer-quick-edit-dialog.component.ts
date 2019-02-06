@@ -1,16 +1,20 @@
-import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Component, OnInit, OnDestroy, Inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { MatSnackBar, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
 import { RegisterSale, RegisterPayment, PaymentType, Customer } from 'pos-models';
 import { getHours, getDay, getYear } from 'date-fns';
 
 import * as salesListActions from '../../stores/actions/sales.actions';
+import * as customerActions from '../../stores/actions/customer.actions';
+import { CustomerEffects } from '../../stores/effects/customer.effects';
 
 @Component({
   selector: 'app-customer-quick-edit-dialog',
   templateUrl: './customer-quick-edit-dialog.component.html',
-  styleUrls: ['./customer-quick-edit-dialog.component.scss']
+  styleUrls: ['./customer-quick-edit-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomerQuickEditDialogComponent implements OnInit, OnDestroy {
 
@@ -23,7 +27,11 @@ export class CustomerQuickEditDialogComponent implements OnInit, OnDestroy {
   lineChartOptions: any;
 
   constructor(
+    private changeDetectorRef: ChangeDetectorRef,
     private store: Store<any>,
+    private customerEffects: CustomerEffects,
+    private snackBar: MatSnackBar,
+    private dialogRef: MatDialogRef<CustomerQuickEditDialogComponent>,
     @Inject(MAT_DIALOG_DATA) data: any) {
     this.customer = data;
   }
@@ -34,6 +42,7 @@ export class CustomerQuickEditDialogComponent implements OnInit, OnDestroy {
         if (sales) {
           const salesByCustomer = sales.filter(s => s.customerId === this.customer.id);
           this.findFavorateProducts(salesByCustomer);
+          this.changeDetectorRef.markForCheck();
         } else {
           this.store.dispatch(new salesListActions.LoadSales());
         }
@@ -103,26 +112,34 @@ export class CustomerQuickEditDialogComponent implements OnInit, OnDestroy {
     this.lineChartData = {
       labels: this.customerStats.salesCountByHour.map(d => d.hour),
       datasets: [{
-        label: 'test',
         data: this.customerStats.salesCountByHour.map(d => d.count),
-        borderWidth: 1
+        borderWidth: 1,
+        pointRadius: 0,
       }]
     };
 
     this.salesByDayChartData = {
       labels: ['월', '화', '수', '목', '금', '토', '일'],
       datasets: [{
-        label: 'test',
         data: salesCountByDay,
-        borderWidth: 1
+        borderWidth: 1,
+        pointRadius: 0,
       }]
     };
 
     this.lineChartOptions = {
+      legend: {
+        display: false
+      },
       scales: {
         xAxes: [{
           gridLines: {
             display: false
+          }
+        }],
+        yAxes: [{
+          ticks: {
+            maxTicksLimit: 3
           }
         }]
       },
@@ -141,8 +158,6 @@ export class CustomerQuickEditDialogComponent implements OnInit, OnDestroy {
       .reduce((acc, cur) => acc + cur, 0);
   }
 
-
-
   calcCustomerAgeGroup() {
     if (this.customer.dateOfBirth) {
       const yearToday = getYear(new Date());
@@ -151,4 +166,16 @@ export class CustomerQuickEditDialogComponent implements OnInit, OnDestroy {
     }
   }
 
+  updateCustomer() {
+    this.customerEffects.updateCustomer$
+      .pipe(
+        filter(ac => ac.type === customerActions.UPDATE_CUSTOMER_SUCCESS),
+        take(1)
+      )
+      .subscribe(ac => {
+        this.snackBar.open('고객이 업데이트 되었습니다', '확인', { duration: 2000 });
+        this.dialogRef.close();
+      });
+    this.store.dispatch(new customerActions.UpdateCustomer(this.customer));
+  }
 }
