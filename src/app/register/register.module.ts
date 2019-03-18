@@ -23,7 +23,8 @@ import { CustomerViewDialogComponent } from '../customer/customer-view-dialog/cu
 import { VariantSelectDialogComponent } from './sale/variant-select-dialog/variant-select-dialog.component';
 import { CustomerQuickEditDialogComponent } from './customer-quick-edit-dialog/customer-quick-edit-dialog.component';
 import { WidgetsModule } from '../widgets/widgets.module';
-
+import { DiscountInputsComponent } from './discount-inputs/discount-inputs.component';
+import { DiscountDialogComponent } from './sale/checkout/discount-dialog/discount-dialog.component';
 
 @NgModule({
   imports: [
@@ -58,7 +59,9 @@ import { WidgetsModule } from '../widgets/widgets.module';
     AddCustomerDialogComponent,
     VariantSelectDialogComponent,
     CustomerQuickEditDialogComponent,
-    CustomerViewDialogComponent
+    CustomerViewDialogComponent,
+    DiscountInputsComponent,
+    DiscountDialogComponent
   ],
   exports: [
     CustomerQuickEditDialogComponent
@@ -71,7 +74,8 @@ import { WidgetsModule } from '../widgets/widgets.module';
     AddCustomerDialogComponent,
     CustomerViewDialogComponent,
     VariantSelectDialogComponent,
-    CustomerQuickEditDialogComponent
+    CustomerQuickEditDialogComponent,
+    DiscountDialogComponent
   ],
   providers: [
     // ShiftGuardService,

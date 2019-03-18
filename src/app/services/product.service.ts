@@ -18,32 +18,35 @@ export class ProductService extends CrudService {
     super(localDbService, httpService, documentName);
   }
 
-  getAllProducts(): Observable<Product[]> {
-    return forkJoin(
-      this.localDbService.findAllDocs('product'),
-      this.localDbService.findAllDocs('category'),
-      this.localDbService.findAllDocs('vendor'),
-      this.localDbService.findAllDocs('tax'),
-      this.localDbService.findAllDocs('inventory')
-    ).pipe(
-      map(([products, categories, vendors, taxes, inventories]: [any, any, any, any, any]) => {
-        console.log(products);
-        return products.map(p => {
-          // todo: create map to reduce time
-          if (p.categoryId) {
-            p.category = categories.find(c => c.id === p.categoryId);
-          }
-          if (p.vendorId) {
-            p.vendor = vendors.find(v => v.id === p.vendorId);
-          }
-          if (p.taxId) {
-            p.tax = taxes.find(t => t.id === p.taxId);
-          }
-          p.inventory = inventories.find(i => i.productId === p.id);
-          return p;
-        });
-      })
-    );
+  getAllProducts(withAllReferences = true): Observable<Product[]> {
+    if (withAllReferences) {
+      return forkJoin(
+        this.localDbService.findAllDocs('product'),
+        this.localDbService.findAllDocs('category'),
+        this.localDbService.findAllDocs('vendor'),
+        this.localDbService.findAllDocs('tax'),
+        this.localDbService.findAllDocs('inventory')
+      ).pipe(
+        map(([products, categories, vendors, taxes, inventories]: [any, any, any, any, any]) => {
+          return products.map(p => {
+            // todo: create map to reduce time
+            if (p.categoryId) {
+              p.category = categories.find(c => c.id === p.categoryId);
+            }
+            if (p.vendorId) {
+              p.vendor = vendors.find(v => v.id === p.vendorId);
+            }
+            if (p.taxId) {
+              p.tax = taxes.find(t => t.id === p.taxId);
+            }
+            p.inventory = inventories.find(i => i.productId === p.id);
+            return p;
+          });
+        })
+      );
+    } else {
+      return this.localDbService.findAllDocs('product');
+    }
   }
 
   getProductById(productId: string): Observable<Product> {

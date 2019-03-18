@@ -1,44 +1,53 @@
-<div class="upperContent" fxLayout>
-  <div class="image">
-    <mat-icon svgIcon='product'></mat-icon>
-  </div>
-  <div flex>
-    <div class="header">
-      <div class="product-name">{{productName}}</div>
-      <div class="product-price">{{productPrice | number}}</div>
+<section *ngIf="!showDiscountInputs">
+  <section class="header">
+    <h1 mat-dialog-title>{{productName}}</h1>
+    <!-- <div class="price">{{productPrice | number}}</div> -->
+
+    <div fxLayout="column">
+      <mat-checkbox class="example-margin" [checked]="addon.value" *ngFor="let addon of addons; let i = index;" (change)="updateAddons(i)">
+        {{addon.name}}</mat-checkbox>
     </div>
-    <div class="description">{{product.description}}</div>
-  </div>
-</div>
-<div class="lowerContent" fxLayout>
-  <!-- <mat-list>
-    <mat-list-item>
-      <mat-icon matListIcon svgIcon="category"></mat-icon>
-      <h3 matLine>카테고리 </h3>
-      <p matLine> {{product.category ? product.category.name : "-"}}</p>
-    </mat-list-item>
-    <mat-list-item>
-      <mat-icon matListIcon svgIcon="shipping"></mat-icon>
-      <h3 matLine> 공급자</h3>
-      <p matLine>{{product.vendor ? product.vendor.name : "-"}} </p>
-    </mat-list-item>
-  </mat-list> -->
-  <div fxLayout="column" fxFlex *ngIf="addons.length">
-      <div class="label">에드온</div>
-      <div class="addons">
-        <mat-checkbox class="example-margin" [(ngModel)]="addon.value" *ngFor="let addon of addons; let i = index;">{{addon.name}}</mat-checkbox>
-      </div>
+  </section>
+
+  <section class="quantityInput">
+    <button mat-button (click)="decreaseQuantity()">
+      <mat-icon svgIcon="remove"></mat-icon>
+    </button>
+    <input type="number" [value]="quantity" min=0 (input)="quantityInputChange($event.target.value)">
+    <button mat-button (click)="increaseQuantity()">
+      <mat-icon svgIcon="add"></mat-icon>
+    </button>
+  </section>
+
+  <button mat-button *ngIf="!lineItemDiscount" (click)="showDiscountInputs = true" class="discount-button">
+    할인추가
+  </button>
+
+  <button mat-button *ngIf="lineItemDiscount" (click)="showDiscountInputs = true" class="discount-button">
+    <div *ngIf="lineItemDiscount.method === discountMethods.FixedAmount" class="discount-label">
+      <div *ngIf="lineItemDiscount.calculateMethod === calculateMethods.ApplyToEachQuantity">개별 할인
+        {{lineItemDiscount.amount | appCurrency}} x {{quantity}}</div>
+      <div *ngIf="lineItemDiscount.calculateMethod === calculateMethods.ApplyToTotalPrice">전체금액 할인
+        {{lineItemDiscount.amount | appCurrency}}</div>
     </div>
-  <div>
-    <div class="label">수량</div>
-    <div class="quantityInput">
-      <button mat-stroked-button (click)="decreaseQuantity()">
-        <mat-icon svgIcon="remove"></mat-icon>
-      </button>
-      <input type="number" [(ngModel)]="quantity" min=0>
-      <button mat-stroked-button (click)="increaseQuantity()">
-        <mat-icon svgIcon="add"></mat-icon>
-      </button>
+
+    <div *ngIf="lineItemDiscount && lineItemDiscount.method === discountMethods.Percentage" class="discount-label">
+      <div>할인 {{lineItemDiscount.percentage}}%</div>
     </div>
-  </div>
-</div>
+  </button>
+
+</section>
+
+<section *ngIf="showDiscountInputs">
+  <section class="discount-header">
+    <button mat-icon-button (click)="showDiscountInputs = false">
+      <mat-icon svgIcon="back"></mat-icon>
+    </button>
+    <h1 mat-dialog-title>할인 추가</h1>
+  </section>
+
+  <section class="discount-inputs">
+    <app-discount-inputs [discount]="lineItemDiscount" [isLineItemDiscount]="true" (addDiscount)="addDiscount($event)" (removeDiscount)="removeDiscount()">
+    </app-discount-inputs>
+  </section>
+</section>

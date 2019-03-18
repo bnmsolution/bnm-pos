@@ -1,4 +1,4 @@
-@import '_variables';
+@import "_variables";
 .app-form {
   // make input-container full width and enough space for error message
   mat-form-field {
@@ -19,7 +19,7 @@
 .cardWidthDescription {
   position: relative;
   display: flex;
-  >div:first-child {
+  > div:first-child {
     min-width: 60%;
     max-width: 60%;
     margin-right: 40px;
@@ -27,7 +27,7 @@
       max-width: initial;
     }
   }
-  >div:last-child {
+  > div:last-child {
     position: relative;
     font-size: 14px;
     color: rgba(0, 0, 0, 0.38);
@@ -35,7 +35,7 @@
     @media #{$media-sm} {
       display: none;
     }
-    >p {
+    > p {
       position: absolute;
       left: 0;
       top: 0;
@@ -49,7 +49,7 @@
   align-items: center;
   margin-bottom: 20px;
   padding-top: 10px;
-  >div {
+  > div {
     width: 80px;
     font-size: 16px;
     color: $form-input-label-color;
@@ -62,10 +62,10 @@
 }
 
 .inputWithBox {
-  padding: .375rem .75rem;
+  padding: 0.375rem 0.75rem;
   line-height: 1.5;
   border: 1px solid #ced4da;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
   color: $text-color-primary;
 }
 
@@ -79,16 +79,16 @@
 }
 
 .exampleTable {
-  >thead {
-    >tr{
-      >th {
+  > thead {
+    > tr {
+      > th {
         text-align: left;
       }
     }
   }
-  >tbody {
-    >tr {
-      >td:last-child {
+  > tbody {
+    > tr {
+      > td:last-child {
         text-align: right;
       }
     }
@@ -101,4 +101,16 @@
 
 .readonly-wrapper .readonly-block {
   pointer-events: none;
+}
+
+.form-errors {
+  padding: 16px 24px;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  margin: 24px 24px 0 24px;
+  color: #721c24;
+  font-size: 14px;
+  > div {
+    margin-bottom: 4px;
+  }
 }

@@ -27,7 +27,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<Product>;
   filter$: Subject<ProductFilter>;
   unsubscribe$ = new Subject();
-  displayedColumns = ['name', 'created', 'category', 'vendor', 'retailPrice', 'count', 'actions'];
+  displayedColumns = ['name', 'created', 'category', 'vendor', 'retailPrice', 'count', 'options', 'actions'];
   tableInitiated = false;
   expandedElement;
 

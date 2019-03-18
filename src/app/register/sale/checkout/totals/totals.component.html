@@ -1,75 +1,66 @@
 <ul *ngIf="sale">
+
   <li>
     <div class="total-line">
-      <div>합계</div>
-      <div>{{sale.subTotal | appCurrency}}</div>
+      <div>전체금액</div>
+      <div>{{origianlTotal | appCurrency}}</div>
     </div>
-  </li>
-  <li>
     <div class="total-line">
-      <div (click)="openSection('discount')">할인</div>
+      <div (click)="openDiscountDialog()">할인금액</div>
       <div>{{sale.totalDiscount | appCurrency}}</div>
     </div>
-    <div class="edit" [appToggleSection]="openedSection === 'discount'">
-      <div class="edit-wrapper">
-        <mat-form-field class="edit-discount-amount" floatPlaceholder="always">
-          <input matInput [(ngModel)]="sale.totalDiscount" name="label" placeholder="할인액">
-        </mat-form-field>
-        <mat-form-field class="edit-discount-rate" floatPlaceholder="always">
-          <input matInput [(ngModel)]="discountRate" name="label" placeholder="할인율(%)">
-        </mat-form-field>
-      </div>
-      <div class="group-border" [style.opacity]="openedSection === 'discount' ? 1 : 0"></div>
-    </div>
   </li>
+
   <li>
     <div class="total-line">
-      <div>과세 매출</div>
+      <div>과세금액</div>
       <div>{{sale.subTotal - sale.totalTax | appCurrency}}</div>
     </div>
-  </li>
-  <li>
     <div class="total-line">
-      <div (click)="openSection('tax')">부가세</div>
+      <div>부가세액</div>
       <div>{{sale.totalTax | appCurrency}}</div>
     </div>
   </li>
-  <li *ngIf="sale.priceAdjustment > 0">
+
+  <li>
     <div class="total-line">
+      <div>전체금액</div>
+      <div>{{sale.subTotal | appCurrency}}</div>
+    </div>
+    <div class="total-line" *ngIf="sale.priceAdjustment > 0">
       <div>판매금액 절사</div>
       <div class="priceAdjust">{{-sale.priceAdjustment | appCurrency}}</div>
     </div>
   </li>
-  <div class="edit" [appToggleSection]="openedSection === 'tax'">
-    <div class="edit-wrapper">
-    </div>
-  </div>
-  <div class="edit" [appToggleSection]="isOpen">
-  </div>
+
 </ul>
 
 <ul *ngIf="!sale">
   <li>
     <div class="total-line">
-      <div>합계</div>
+      <div>전체금액</div>
+      <div>0</div>
+    </div>
+    <div class="total-line">
+      <div>할인금액</div>
       <div>0</div>
     </div>
   </li>
+
   <li>
     <div class="total-line">
-      <div>할인</div>
+      <div>과세금액</div>
+      <div>0</div>
+    </div>
+    <div class="total-line">
+      <div>부가세액</div>
       <div>0</div>
     </div>
   </li>
+
   <li>
     <div class="total-line">
-      <div>과세 매출</div>
-      <div>0</div>
-    </div>
-  </li>
-  <li>
-    <div class="total-line">
-      <div>부가세</div>
+      <div>전체금액</div>
       <div>0</div>
     </div>
   </li>

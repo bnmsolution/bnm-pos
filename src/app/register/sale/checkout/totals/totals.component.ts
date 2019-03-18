@@ -1,19 +1,33 @@
-import {Component, Input, OnInit, ChangeDetectionStrategy} from '@angular/core';
-import {RegisterSale} from 'pos-models';
+import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { RegisterSale } from 'pos-models';
+import { DiscountDialogComponent } from '../discount-dialog/discount-dialog.component';
 
 @Component({
   selector: 'app-totals',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './totals.component.html',
-  styleUrls: ['./totals.component.scss']
+  styleUrls: ['./totals.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TotalsComponent {
   @Input() sale: RegisterSale;
 
-  openedSection: string;
-  discountRate: number;
+  constructor(private dialog: MatDialog) {
+  }
 
-  openSection(section: string) {
-    this.openedSection = this.openedSection === section ? undefined : section;
+  openDiscountDialog() {
+    this.dialog.open(DiscountDialogComponent, {
+      autoFocus: false
+    });
+  }
+
+
+  get origianlTotal(): number {
+    let total = 0;
+    this.sale.lineItems.forEach(li => {
+      const lineTotal = (li.originalPrice + li.addons.map(a => a.price).reduce((a, b) => a + b, 0)) * li.quantity;
+      total += lineTotal;
+    });
+    return total;
   }
 }

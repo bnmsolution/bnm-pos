@@ -1,27 +1,30 @@
 <section class="search">
-  <mat-icon  class="search-icon" svgIcon="searchIcon"></mat-icon>
   <mat-form-field>
-    <input matInput placeholder="상품 또는 고객 검색" [matAutocomplete]="auto" name="search" [formControl]="searchCtrl" #searchInput>
+    <mat-icon matPrefix svgIcon="searchIcon"></mat-icon>
+    <input matInput placeholder="상품 또는 고객 검색" [matAutocomplete]="auto" name="search" [formControl]="searchCtrl"
+           #searchInput>
     <button mat-button *ngIf="searchCtrl.value" matSuffix mat-icon-button aria-label="Clear" (click)="searchCtrl.setValue('')">
       <mat-icon svgIcon="closeIcon"></mat-icon>
     </button>
   </mat-form-field>
   <mat-autocomplete #auto="matAutocomplete" (optionSelected)="resetControl()">
-    <div class="autocomplete-label">상품</div>
-    <div class="no-result" *ngIf="filteredProducts.length === 0">상품검색 결과가 없습니다.</div>
-    <mat-option *ngFor="let product of filteredProducts" [value]="product.name" (click)="clickProduct(product)">
-      <div class="autocomplete-option">
-        <div class="product-name">{{product.name}}</div>
-        <div class="price">{{product.retailPrice | number}}</div>
-      </div>
-    </mat-option>
-    <div class="autocomplete-label">고객</div>
-    <div class="no-result" *ngIf="filteredCustomers.length === 0">고객검색 결과가 없습니다.</div>
-    <mat-option *ngFor="let customer of filteredCustomers" [value]="customer.name" (click)="clickCustomer(customer)">
-      <div class="autocomplete-option">
-        <div class="customer-name">{{customer.name}}</div>
-        <div class="customer-contact">{{customer.phone}}</div>
-      </div>
-    </mat-option>
+    <section *ngIf="searchCtrl.value">
+        <div class="autocomplete-label">상품</div>
+        <div class="no-result" *ngIf="filteredProducts.length === 0">상품검색 결과가 없습니다.</div>
+        <mat-option *ngFor="let product of filteredProducts" [value]="product.name" (click)="clickProduct(product)">
+          <div class="autocomplete-option">
+            <div class="product-name">{{product.name}}</div>
+            <div class="price">{{product.retailPrice | number}}</div>
+          </div>
+        </mat-option>
+        <div class="autocomplete-label">고객</div>
+        <div class="no-result" *ngIf="filteredCustomers.length === 0">고객검색 결과가 없습니다.</div>
+        <mat-option *ngFor="let customer of filteredCustomers" [value]="customer.name" (click)="clickCustomer(customer)">
+          <div class="autocomplete-option">
+            <div class="customer-name">{{customer.name}}</div>
+            <div class="customer-contact">{{customer.phone}}</div>
+          </div>
+        </mat-option>
+    </section>
   </mat-autocomplete>
 </section>

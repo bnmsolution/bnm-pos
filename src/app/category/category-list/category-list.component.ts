@@ -13,7 +13,6 @@ export interface CategoryFilter {
   search: string;
 }
 
-
 @Component({
   selector: 'app-category-list',
   templateUrl: './category-list.component.html',

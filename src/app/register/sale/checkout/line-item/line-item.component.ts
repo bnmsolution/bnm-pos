@@ -2,18 +2,20 @@ import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy, OnChan
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { distinctUntilChanged } from 'rxjs/operators';
-import { RegisterSaleLineItem, RegisterSale } from 'pos-models';
+import { RegisterSaleLineItem, RegisterSale, DiscountType, DiscountMethod, DiscountCalculateMethod } from 'pos-models';
 
 import { ProductService } from 'src/app/core';
 import { ProductViewDialogComponent } from '../../../product-view-dialog/product-view-dialog.component';
+import { AppCurrencyPipe } from 'src/app/shared';
 
 @Component({
   selector: 'app-line-item',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './line-item.component.html',
-  styleUrls: ['./line-item.component.scss']
+  styleUrls: ['./line-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [AppCurrencyPipe]
 })
-export class LineItemComponent implements OnInit, OnChanges {
+export class LineItemComponent implements OnInit {
   @Input() lineItem: RegisterSaleLineItem;
   @Input() isOpen: boolean;
   @Input() isReturn = false;
@@ -22,54 +24,19 @@ export class LineItemComponent implements OnInit, OnChanges {
   @Output() remove = new EventEmitter();
   @Output() update = new EventEmitter();
   @Output() updateAddons = new EventEmitter();
-  @Output() modifyQuantity = new EventEmitter();
 
+  discountTypes = DiscountType;
+  discountCalculateMethods = DiscountCalculateMethod;
   lineItemForm: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private dialog: MatDialog,
-    private productService: ProductService) {
-
-  }
-
-  ngOnChanges(simpleChange) {
-    if (simpleChange.lineItem && this.lineItemForm) {
-      const { quantity } = this.lineItem;
-      // We don't want to trigger valueChanges event
-      // Input changes was made by form value change(this.lineItemForm.valueChanges)
-      this.lineItemForm.setValue({ quantity }, { emitEvent: false });
-    }
+    private productService: ProductService,
+    private currencyPipe: AppCurrencyPipe) {
   }
 
   ngOnInit() {
-    this.createForm();
-  }
-
-  createForm() {
-    const { quantity } = this.lineItem;
-    const quantityValidator = this.isReturn ? Validators.min(-this.maxReturnQuantity) : Validators.min(1);
-    this.lineItemForm = this.fb.group({
-      quantity: [quantity, [Validators.required, quantityValidator]],
-      // retailPrice: [{value: retailPrice, disabled: this.isReturn}, [Validators.required, Validators.min(0)]],
-      // discountRate: [{value: discountRate, disabled: this.isReturn}, [Validators.min(0), Validators.max(100)]],
-    });
-
-    this.lineItemForm.valueChanges
-      .pipe(
-        // temporary fix for Angular bug
-        // Number input fires valueChanges twice https://github.com/angular/angular/issues/12540
-        // this only fix when user types, using arrow key still fires change event twice
-        distinctUntilChanged()
-      )
-      .subscribe(values => {
-        if (this.lineItemForm.valid) {
-          this.update.emit({
-            id: this.lineItem.id,
-            ...values
-          });
-        }
-      });
   }
 
   handleClick() {
@@ -82,23 +49,43 @@ export class LineItemComponent implements OnInit, OnChanges {
     this.remove.emit({ id: this.lineItem.id });
   }
 
-  openProductViewDialog(lineItem: RegisterSaleLineItem): void {
+  openProductViewDialog() {
     this.productService.getProductById(this.lineItem.productId)
       .subscribe(product => {
         const data = {
           product,
-          lineItem,
+          lineItem: this.lineItem,
           addons: []
         };
-        const dialogRef = this.dialog.open(ProductViewDialogComponent, {
-          width: '650px',
-          data
-        });
-        dialogRef.afterClosed().subscribe(() => {
-          const selectedAddons = data.addons.filter(a => a.value);
-          console.log(selectedAddons);
-          this.updateAddons.emit({ id: this.lineItem.id, addons: selectedAddons });
+        this.dialog.open(ProductViewDialogComponent, {
+          width: '350px',
+          data,
+          autoFocus: false
         });
       });
+  }
+
+  get discountLabels() {
+    return this.lineItem.discounts.map(discount => {
+      const { type, name, method, calculateMethod, amount, percentage } = discount;
+      if (type === DiscountType.Promotion) {
+
+      }
+
+      if (type === DiscountType.LineItemDiscount) {
+        if (method === DiscountMethod.FixedAmount) {
+          if (calculateMethod === DiscountCalculateMethod.ApplyToEachQuantity) {
+            return `개별 할인 ${this.currencyPipe.transform(amount)}x${this.lineItem.quantity}
+             -${this.currencyPipe.transform(amount * this.lineItem.quantity)}`;
+          } else {
+            return `전체 할인 -${this.currencyPipe.transform(amount)}`;
+          }
+        } else {
+          const discountAmount = calculateMethod === DiscountCalculateMethod.ApplyToEachQuantity ?
+            amount * this.lineItem.quantity : amount;
+          return `할인 ${percentage}% -${this.currencyPipe.transform(discountAmount)}`;
+        }
+      }
+    });
   }
 }

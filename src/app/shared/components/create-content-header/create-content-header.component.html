@@ -15,7 +15,7 @@
 <section *ngIf="type === 'add'">
   <button type="submit" mat-stroked-button color="primary">
     <mat-icon svgIcon="check"></mat-icon>
-    <span>저장</span>
+    <span>{{addButtonLabel ? addButtonLabel : '저장'}}</span>
   </button>
 </section>
 

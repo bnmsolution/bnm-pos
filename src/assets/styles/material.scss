@@ -128,16 +128,18 @@ mat-form-field.dense {
     padding-bottom: 0.5em;
   }
 
-  .mat-form-field-flex {
-    padding: 0.5em 0.5em 0 0.5em;
-  }
-
   .mat-form-field-infix {
     padding: 0.25em 0 0.5em 0;
   }
 
   .mat-form-field-underline {
     bottom: 0.5em;
+  }
+}
+
+.mat-form-field-appearance-fill.dense {
+  .mat-form-field-flex {
+    padding: 0.5em 0.5em 0 0.5em;
   }
 }
 
@@ -150,10 +152,15 @@ mat-form-field.dense {
   }
 }
 
-
 .mat-form-field-appearance-legacy {
-	.mat-form-field-prefix,
-	.mat-form-field-suffix {
-		align-self: flex-end;
-	}
+  .mat-form-field-prefix,
+  .mat-form-field-suffix {
+    align-self: flex-end;
+  }
+}
+
+
+// using Korean font, icon rendered slightly lower than center
+.mat-mini-fab {
+  font-family: sans-serif;
 }

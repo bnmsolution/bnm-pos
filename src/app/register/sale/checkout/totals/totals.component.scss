@@ -2,25 +2,25 @@
 
 ul {
   list-style-type: none;
-  padding: 0;
+  padding: 4px 0;
   font-weight: 500;
   border-top: $border;
   border-bottom: $border;
   -webkit-margin-after: 0;
 }
-   
+
 li {
   position: relative;
   list-style: none;
   display: flex;
   justify-content: space-between;
-  flex-direction: column;
 }
 
 .total-line {
   display: flex;
   justify-content: space-between;
   padding: 8px 24px;
+  width: 50%;
 }
 
 .edit {

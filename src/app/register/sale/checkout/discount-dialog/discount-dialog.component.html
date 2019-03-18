@@ -1,0 +1,31 @@
+<div mat-dialog-content *ngIf="!showDiscountInputs">
+  <div class="discount-summary">
+    <div class="label">개별항목 할인</div>
+    <div class="amount">{{totalLineItemDiscount | appCurrency}}</div>
+  </div>
+  <mat-divider [vertical]="true">
+  </mat-divider>
+  <div class="discount-summary">
+    <div class="label">최종금액 할인</div>
+    <div class="amount">{{totalDiscount ? totalDiscount.amount : 0 | appCurrency}}</div>
+    <button mat-icon-button (click)="showDiscountInputs = true">
+      <mat-icon [svgIcon]="totalDiscount ? 'editIcon' : 'addIcon'" [matTooltip]="totalDiscount ? '할인 수정' : '할인 추가'"></mat-icon>
+    </button>
+  </div>
+</div>
+
+
+<section *ngIf="showDiscountInputs">
+  <section class="discount-header">
+    <button mat-icon-button (click)="showDiscountInputs = false">
+      <mat-icon svgIcon="back"></mat-icon>
+    </button>
+    <h1 mat-dialog-title>{{totalDiscount ? '할인 수정' : '할인 추가'}}</h1>
+  </section>
+
+  <section class="discount-inputs">
+    <app-discount-inputs [discount]="totalDiscount" (addDiscount)="addDiscount($event)"
+                         (removeDiscount)="removeDiscount()">
+    </app-discount-inputs>
+  </section>
+</section>

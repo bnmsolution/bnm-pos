@@ -33,11 +33,10 @@ export class RegisterSearchComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<any>,
     private changeDetectorRef: ChangeDetectorRef) {
+    this.searchCtrl = new FormControl();
   }
 
   ngOnInit() {
-    this.searchCtrl = new FormControl();
-
     this.store.select('products')
       .pipe(
         takeUntil(this.unsubscribe$)

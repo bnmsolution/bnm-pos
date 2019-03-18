@@ -118,14 +118,14 @@ export class RegisterSaleComponent implements OnInit, OnDestroy {
     this.store.dispatch(new registerSaleActions.RemoveLineItem({ id }));
   }
 
-  updateLineItem({ id, quantity, retailPrice, discountRate }) {
-    this.store.dispatch(new registerSaleActions.UpdateLineItem(
-      { id, quantity, retailPrice, discountRate }));
-  }
+  // updateLineItem({ id, quantity, retailPrice, discountRate }) {
+  //   this.store.dispatch(new registerSaleActions.UpdateLineItem(
+  //     { id, quantity, retailPrice, discountRate }));
+  // }
 
-  updateLineItemAddons({ id, addons }) {
-    this.store.dispatch(new registerSaleActions.UpdateAddons({ id, addons }));
-  }
+  // updateLineItemAddons({ id, addons }) {
+  //   this.store.dispatch(new registerSaleActions.UpdateAddons({ id, addons }));
+  // }
 
   openPaymentSidenav(): void {
     if (this.currentSale.lineItems.length > 0) {

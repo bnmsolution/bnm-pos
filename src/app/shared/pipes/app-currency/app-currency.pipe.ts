@@ -29,7 +29,8 @@ export class AppCurrencyPipe implements PipeTransform {
     // integer = integer.replace(/\B(?=(\d{3})+(?!\d))/g, this.THOUSANDS_SEPARATOR);
 
     if (this.appState.currentStore.displayCurrencySymbol) {
-      return val.toLocaleString(this.appState.currentStore.locale, { style: 'currency', currency: this.appState.currentStore.currencyCode });
+      return val.toLocaleString(this.appState.currentStore.locale,
+        { style: 'currency', currency: this.appState.currentStore.currencyCode });
     } else {
       return val.toLocaleString(this.appState.currentStore.locale);
     }

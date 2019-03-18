@@ -1,0 +1,57 @@
+@import "../../../../shared/common-style.scss";
+
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+.mat-dialog-content {
+  display: flex;
+}
+
+.discount-summary {
+  width: 200px;
+  text-align: center;
+  position: relative;
+  padding: 16px 0;
+
+  button {
+    position: absolute;
+    top: 18px;
+    right: 0;
+  }
+}
+
+.label {
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.amount {
+  font-size: 20px;
+}
+
+.discount-header {
+  padding-bottom: 16px;
+  margin: 0 -24px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-bottom: $border;
+
+  h1 {
+    margin: 0;
+  }
+
+  button {
+    position: absolute;
+    left: 24px;
+  }
+}
+
+
+.discount-inputs {
+  padding-top: 24px;
+}

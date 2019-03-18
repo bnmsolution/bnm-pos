@@ -28,7 +28,7 @@ export class AppState {
           this.currentStore = stores[0];
           this.notify();
           window.__localeId__ = this.currentStore.locale;
-          moment.locale(this.currentStore.locale);
+          // moment.locale(this.currentStore.locale);
           subject.next('');
           subject.complete();
         }

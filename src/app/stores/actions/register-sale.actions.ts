@@ -1,5 +1,8 @@
 import { Action } from '@ngrx/store';
-import { Register, RegisterSale, Product, PaymentType, Customer, PriceAdjustmentType } from 'pos-models';
+import {
+  Register, RegisterSale, Product, PaymentType, Customer,
+  PriceAdjustmentType, DiscountMethod, DiscountCalculateMethod
+} from 'pos-models';
 
 export const SELECT_REGISTER = '[Register Sale] Select register';
 export const CREATE_SALE = '[Register Sale] Create sale';
@@ -8,7 +11,7 @@ export const CLOSE_SALE = '[Register Sale] Close sale';
 export const CLOSE_SALE_SUCCESS = '[Register Sale] Close sale success';
 export const ADD_LINE_ITEM = '[Register Sale] Add line item';
 export const ADD_LINE_ITEM_SUCCESS = '[Register Sale] Add line item success';
-export const UPDATE_LINE_ITEM = '[Register Sale] Update line item';
+export const UPDATE_LINE_ITEM_QUANTITY = '[Register Sale] Update line item quantity';
 export const UPDATE_LINE_ITEM_ADDONS = '[Register Sale] Update line item addons';
 export const REMOVE_LINE_ITEM = '[Register Sale] Remove line item';
 export const ADD_PAYMENT = '[Register Sale] Add payment';
@@ -26,6 +29,10 @@ export const HOLD_RETURN_SUCCESS = '[Register Sale] Hold return success';
 export const EXCHANGE_SALE = '[Register Sale] Exchange sale';
 export const HOLD_EXCHANGE = '[Register Sale] Hold exchange';
 export const HOLD_EXCHANGE_SUCCESS = '[Register Sale] Hold exchange success';
+export const ADD_LINE_ITEM_DISCOUNT = '[Register Sale] Add line item discount';
+export const REMOVE_LINE_ITEM_DISCOUNT = '[Register Sale] Remove line item discount';
+export const ADD_TOTAL_LINE_DISCOUNT = '[Register Sale] Add total line discount';
+export const REMOVE_TOTAL_LINE_DISCOUNT = '[Register Sale] Remove total line discount';
 
 export class SelectRegister implements Action {
   readonly type = SELECT_REGISTER;
@@ -79,14 +86,12 @@ export class RemoveLineItem implements Action {
   }
 }
 
-export class UpdateLineItem implements Action {
-  readonly type = UPDATE_LINE_ITEM;
+export class UpdateLineItemQuantity implements Action {
+  readonly type = UPDATE_LINE_ITEM_QUANTITY;
 
   constructor(public payload: {
     id: string,
-    quantity: number,
-    retailPrice: number,
-    discountRate: number
+    quantity: number
   }) {
   }
 }
@@ -176,7 +181,36 @@ export class HoldExchangeSuccess implements Action {
   readonly type = HOLD_EXCHANGE_SUCCESS;
 }
 
+export class AddLineItemDiscount implements Action {
+  readonly type = ADD_LINE_ITEM_DISCOUNT;
+
+  constructor(public payload: {
+    id: string, name: string, method: DiscountMethod,
+    calculateMethod: DiscountCalculateMethod, amount?: number, percentage?: number
+  }) {
+  }
+}
+
+export class RemoveLineItemDiscount implements Action {
+  readonly type = REMOVE_LINE_ITEM_DISCOUNT;
+
+  constructor(public payload: { id: string }) {
+  }
+}
+
+export class AddTotalLineDiscount implements Action {
+  readonly type = ADD_TOTAL_LINE_DISCOUNT;
+
+  constructor(public payload: { name: string, method: DiscountMethod, amount?: number, percentage?: number }) {
+  }
+}
+
+export class RemoveTotalLineDiscount implements Action {
+  readonly type = REMOVE_TOTAL_LINE_DISCOUNT;
+}
+
 export type RegisterSaleActions = SelectRegister | CreateSale | UpdateSale | CloseSale | AddLineItem
-  | RemoveLineItem | UpdateLineItem | UpdateAddons | AddPayment | RemovePayment | CalculateSalesTotals
+  | RemoveLineItem | UpdateLineItemQuantity | UpdateAddons | AddPayment | RemovePayment | CalculateSalesTotals
   | HoldSale | VoidSale | AddSaleCustomer | RemoveSaleCustomer | ContinueSale | ReturnSale | ExchangeSale
-  | HoldReturn | HoldReturnSuccess | HoldExchange | HoldExchangeSuccess;
+  | HoldReturn | HoldReturnSuccess | HoldExchange | HoldExchangeSuccess | AddLineItemDiscount | RemoveLineItemDiscount
+  | AddTotalLineDiscount | RemoveTotalLineDiscount;

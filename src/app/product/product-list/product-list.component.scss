@@ -3,9 +3,9 @@
   @extend .gridViewContainer;
 }
 
-.mat-column-name {
-  max-width: 200px;
-}
+// .mat-column-name {
+//   max-width: 200px;
+// }
 
 // .mat-column-created {
 //   flex: 0 0 100px;
@@ -20,9 +20,13 @@
 //   flex: 0 0 100px;
 // }
 
-// .mat-column-count {
-//   flex: 0 0 40px;
-// }
+.mat-column-count,
+.mat-column-options {
+  width: 65px;
+}
 
 
+.mat-column-actions {
+  width: 80px;
+}
 

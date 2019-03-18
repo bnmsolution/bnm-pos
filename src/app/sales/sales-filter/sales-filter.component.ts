@@ -67,6 +67,11 @@ export class SalesFilterComponent implements OnInit {
     this.filterForm.valueChanges.subscribe(values => this.filter$.next(values));
   }
 
+  clearFilter() {
+  }
+
+  removeSearchText() {
+  }
 
 
   isFilterEmpty(): boolean {

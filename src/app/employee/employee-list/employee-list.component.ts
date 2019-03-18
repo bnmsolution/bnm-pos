@@ -1,48 +1,61 @@
-import {Component, OnInit, AfterViewInit, ViewChild} from '@angular/core';
-import {MatDialog, MatSnackBar, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {Store} from '@ngrx/store';
-import {filter, tap} from 'rxjs/operators';
-import {EmployeeRole} from 'pos-models';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatDialog, MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
+import { Subject } from 'rxjs';
+import { filter, takeUntil, tap } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { EmployeeRole, Employee } from 'pos-models';
 
 import * as actions from '../../stores/actions/employee.actions';
-import {DeleteEmployeeDialogComponent} from '../delete-employee-dialog/delete-employee-dialog.component';
+import { DeleteEmployeeDialogComponent } from '../delete-employee-dialog/delete-employee-dialog.component';
 
 @Component({
   selector: 'app-employee-list',
   templateUrl: './employee-list.component.html',
-  styleUrls: ['./employee-list.component.scss']
+  styleUrls: ['./employee-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EmployeeListComponent implements OnInit, AfterViewInit {
-  dataSource: any;
+export class EmployeeListComponent implements OnInit, OnDestroy {
+  dataSource: MatTableDataSource<Employee>;
   roles = EmployeeRole;
   displayedColumns = ['code', 'name', 'phone', 'role', 'actions'];
+  unsubscribe$ = new Subject();
+  tableInitiated = false;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private dialog: MatDialog,
-              private snackBar: MatSnackBar,
-              private store: Store<any>) {
+    private snackBar: MatSnackBar,
+    private store: Store<any>) {
   }
 
   ngOnInit() {
     this.dataSource = new MatTableDataSource();
     this.store.select('employees')
-      .subscribe(employees => {
-        this.dataSource.data = employees || [];
+      .pipe(
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe(categories => {
+        categories ? this.initTable(categories) : this.store.dispatch(new actions.LoadEmployees());
       });
-    this.store.dispatch(new actions.LoadEmployees());
   }
 
-  ngAfterViewInit() {
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
+  private initTable(data) {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+    this.dataSource.data = data;
+    this.tableInitiated = true;
   }
 
   deleteEmployee(employeeId: string): void {
     this.dialog
       .open(DeleteEmployeeDialogComponent, {
-        data: {employeeId}
+        data: { employeeId }
       })
       .afterClosed()
       .pipe(
@@ -53,7 +66,7 @@ export class EmployeeListComponent implements OnInit, AfterViewInit {
   }
 
   openSnackBar(message: string) {
-    this.snackBar.open(message, '확인', {duration: 2000});
+    this.snackBar.open(message, '확인', { duration: 2000 });
   }
 
 }

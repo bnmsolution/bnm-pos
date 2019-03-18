@@ -26,7 +26,7 @@
 
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>상품명</th>
-          <td mat-cell *matCellDef="let row"> {{row.name}}</td>
+          <td mat-cell *matCellDef="let row"><mat-icon svgIcon=""></mat-icon> {{row.name}}</td>
         </ng-container>
 
         <ng-container matColumnDef="created">
@@ -62,6 +62,13 @@
             row.inventory.count
             :
             "-"}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="options">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>옵션</th>
+          <td mat-cell *matCellDef="let row">
+            <div>{{row.variants.length}}</div>
           </td>
         </ng-container>
 

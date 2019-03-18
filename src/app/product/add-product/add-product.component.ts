@@ -1,17 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 import { Store } from '@ngrx/store';
 import { merge } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
-import { Product, Category, Vendor, Tax, PosStore, getProductPriceFromRetailPrice, getProductPriceFromMarkup, getMarkup } from 'pos-models';
+import {
+  Product, Category, Vendor, Tax, PosStore,
+  getProductPriceFromRetailPrice, getProductPriceFromMarkup, getMarkup, ProductVariant
+} from 'pos-models';
 import * as uuid from 'uuid/v1';
 
 import { AppState, ProductService } from '../../core';
 import { getProductFrom } from '../product.form';
 import * as actions from '../../stores/actions/product.actions';
 import { ProductEffects } from 'src/app/stores/effects/product.effects';
+import { VariantOptionsComponent } from '../variant-options/variant-options.component';
+import { cloneDeep } from 'src/app/shared/utils/lang';
+import { ProductAddonsComponent } from '../product-addons/product-addons.component';
 
 @Component({
   selector: 'app-add-product',
@@ -20,20 +26,24 @@ import { ProductEffects } from 'src/app/stores/effects/product.effects';
 })
 export class AddProductComponent implements OnInit {
 
+  @ViewChild(VariantOptionsComponent)
+  variantOptionComponent: VariantOptionsComponent;
+
+  @ViewChild(ProductAddonsComponent)
+  addonComponent: ProductAddonsComponent;
+
   productForm: FormGroup;
   isNewProduct = true;
-  product = {
-    id: uuid(),
-    variantOptions: [],
-    variants: [],
-    addons: []
-  } as Product;
+  readonly = false;
+  formType = 'add';
+  formErrorMessages: string[] = [];
+  variantErrorMessages: string[] = [];
+
+  // references
   categories: Category[] = [];
   vendors: Vendor[] = [];
   taxes: Tax[] = [];
   settings: PosStore;
-  readonly = false;
-  formType = 'add';
 
   constructor(
     private fb: FormBuilder,
@@ -70,7 +80,6 @@ export class AddProductComponent implements OnInit {
 
   createForm() {
     this.productForm = this.fb.group(getProductFrom(this.productService));
-
     this.productForm.controls.retailPrice.valueChanges.subscribe(() => this.onPriceChange('retailPrice'));
     this.productForm.controls.supplyPrice.valueChanges.subscribe(() => this.onPriceChange('supplyPrice'));
     this.productForm.controls.markup.valueChanges.subscribe(() => this.onPriceChange('markup'));
@@ -150,7 +159,6 @@ export class AddProductComponent implements OnInit {
 
   private setProductForEdit(product) {
     this.isNewProduct = false;
-    this.product = product;
     this.productForm.patchValue(product);
     this.formType = 'edit';
   }
@@ -163,10 +171,16 @@ export class AddProductComponent implements OnInit {
     return true;
   }
 
-  onSubmit(): void {
-    Object.assign(this.product, this.productForm.value);
 
-    if (this.productForm.valid) {
+
+  onSubmit(): void {
+    const product = cloneDeep(this.productForm.value);
+
+    this.updateProductVariantsAndAddons(product);
+    this.setVariantErrorMessages(product);
+    this.setFormErrorMessages();
+
+    if (this.productForm.valid && this.variantErrorMessages.length === 0) {
       merge(this.productEffects.addProduct$, this.productEffects.updateProduct$)
         .pipe(
           filter(action1 => action1.type === actions.ADD_PRODUCT_SUCCESS || action1.type === actions.UPDATE_PRODUCT_SUCCESS),
@@ -178,18 +192,108 @@ export class AddProductComponent implements OnInit {
           this.router.navigate(['./product']);
         });
 
-      let action;
       if (this.isNewProduct) {
-
-        // Currently only supporting a single store
-        this.product.storeId = this.appState.currentStore.id;
-
-        action = new actions.AddProduct(this.product);
+        // todo: Currently only supporting a single store
+        product.storeId = this.appState.currentStore.id;
+        this.store.dispatch(new actions.AddProduct(product));
       } else {
-        action = new actions.UpdateProduct(this.product);
+        this.store.dispatch(new actions.UpdateProduct(product));
       }
-
-      this.store.dispatch(action);
     }
+  }
+
+  /** Assigning data **/
+  private updateProductVariantsAndAddons(product: Product) {
+    product.variantOptions = this.variantOptionComponent.variantOptions;
+    product.variants = this.variantOptionComponent.variants;
+    product.addons = this.addonComponent.addons;
+  }
+
+
+  /** Generates form error messages */
+  setFormErrorMessages() {
+    const messages = [];
+    const controls = this.productForm.controls;
+    for (const name in controls) {
+      if (controls[name].invalid) {
+        switch (name) {
+          case 'name': {
+            messages.push('상품명은 필수입니다.');
+            break;
+          }
+          case 'sku': {
+            messages.push('이미 사용중인 재고관리코드 입니다.');
+            break;
+          }
+          case 'barcode': {
+            messages.push('이미 사용중인 바코드 입니다.');
+            break;
+          }
+          case 'retailPrice': {
+            messages.push('판매가는 필수입니다.');
+            break;
+          }
+        }
+      }
+    }
+    this.formErrorMessages = messages;
+  }
+
+  /** Generates variant error meesages **/
+  setVariantErrorMessages(product: Product) {
+
+    this.productService.getAllProducts(false)
+      .subscribe(products => {
+        const errors = [];
+        // build all barcodes and all skus array
+        const allBarcodes = [this.productForm.value.barcode];
+        const allSKUs = [this.productForm.value.sku];
+        for (let i = 0; i < products.length; i++) {
+          const cur = products[i];
+          if (cur.barcode) {
+            allBarcodes.push(cur.barcode.trim().toLowerCase());
+          }
+
+          if (cur.sku) {
+            allSKUs.push(cur.sku.trim().toLowerCase());
+          }
+        }
+
+        // check barcode and sku uniqueness
+        product.variants.forEach((variant: ProductVariant, i: number) => {
+          const { retailPrice, barcode, sku } = variant;
+          if (variant.retailPrice == null) {
+            errors.push(`옵션라인 ${i + 1}: 판매가는 필수입니다.`);
+          }
+
+          if (barcode) {
+            if (this.isUnique(allBarcodes, barcode)) {
+              allBarcodes.push(barcode);
+            } else {
+              errors.push(`옵션라인 ${i + 1}: 중복되는 바코드(${variant.barcode}) 입니다.`);
+            }
+          }
+
+          if (sku) {
+            if (this.isUnique(allSKUs, sku)) {
+              allSKUs.push(sku);
+            } else {
+              errors.push(`옵션라인 ${i + 1}: 중복되는 재고관리코드(${variant.sku}) 입니다.`);
+            }
+          }
+        });
+
+        this.variantErrorMessages = errors;
+      });
+  }
+
+  isUnique(searchTarget: string[], searchValue: string) {
+    searchValue = searchValue.trim().toLowerCase();
+    for (let i = 0; i < searchTarget.length; i++) {
+      if (searchTarget[i] === searchValue) {
+        return false;
+      }
+    }
+    return true;
   }
 }

@@ -19,7 +19,7 @@
       </button>
     </div>
     <div class="customer" fxLayout fxLayoutAlign="start center" *ngIf="sale && sale.customer">
-      <mat-icon svgIcon="customerIcon"  class="customer-icon"></mat-icon>
+      <mat-icon svgIcon="customerIcon" class="customer-icon"></mat-icon>
       <div fxFlex>
         <div>{{sale.customer.name}}</div>
         <div class="phone">{{sale.customer.phone}} {{sale.customer.email}}</div>
@@ -38,10 +38,11 @@
           <app-line-item [lineItem]="lineItem" [isOpen]="openedLineItemId === lineItem.id"></app-line-item>
         </li>
         <li *ngFor="let lineItem of sale.lineItems; let i = index; trackBy:lineItemTrack ">
-          <app-line-item #li [lineItem]="lineItem" [isOpen]="openedLineItemId === lineItem.id" [isReturn]="isReturnItem(lineItem.productId)"
-                         [maxReturnQuantity]="getMaxReturnQuantity(lineItem.productId)" (remove)="removeLineItem.emit($event)"
-                         (update)="updateLineItem.emit($event)" (updateAddons)="updateLineItemAddons.emit($event)"
-                         (lineItemClick)="openLineItemDetail(lineItem.id)" (modifyQuantity)="editQuantity($event)"></app-line-item>
+          <app-line-item #li [lineItem]="lineItem" [isOpen]="openedLineItemId === lineItem.id"
+                         [isReturn]="isReturnItem(lineItem.productId)"
+                         [maxReturnQuantity]="getMaxReturnQuantity(lineItem.productId)"
+                         (remove)="removeLineItem.emit($event)" (update)="updateLineItem.emit($event)"
+                         (lineItemClick)="openLineItemDetail(lineItem.id)"></app-line-item>
         </li>
       </ul>
     </div>
@@ -54,8 +55,7 @@
   </mat-card-content>
   <mat-card-actions>
     <div *ngIf="sale">
-      <button mat-button [ngClass]="{'refundButton': sale.status === salesStatus.Return}" (click)="pay.emit()"
-              [disabled]="!isValid()">
+      <button mat-button [ngClass]="{'refundButton': sale.status === salesStatus.Return}" (click)="pay.emit()">
         <div fxLayout fxLayoutAlign="space-between">
           <div [ngSwitch]="sale.status">
             <span *ngSwitchCase="salesStatus.Open">결제</span>

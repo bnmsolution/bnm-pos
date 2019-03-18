@@ -18,6 +18,7 @@ import { LineItemComponent } from './line-item/line-item.component';
 import { CustomerViewDialogComponent } from '../../../customer/customer-view-dialog/customer-view-dialog.component';
 import { CustomerService } from '../../../services/customer.service';
 import { CustomerQuickEditDialogComponent } from '../../customer-quick-edit-dialog/customer-quick-edit-dialog.component';
+import { DiscountDialogComponent } from './discount-dialog/discount-dialog.component';
 
 
 @Component({
@@ -110,6 +111,8 @@ export class CheckoutComponent implements AfterViewInit {
       });
   }
 
+
+
   // tracking fucntion for lineItems ngFor
   lineItemTrack(index, item) {
     return item.id;
@@ -121,13 +124,6 @@ export class CheckoutComponent implements AfterViewInit {
 
   voidable() {
     return canVoidSale(this.sale);
-  }
-
-  isValid() {
-    if (this.lineItemComponents) {
-      return this.lineItemComponents.toArray().filter(c => c.lineItemForm.valid === false).length === 0;
-    }
-    return false;
   }
 
   isReturnItem(productId: string): boolean {
@@ -151,11 +147,5 @@ export class CheckoutComponent implements AfterViewInit {
       this.lineItems.nativeElement.scrollTop = this.lineItems.nativeElement.scrollHeight;
     } catch (err) {
     }
-  }
-
-  editQuantity(event) {
-    const { offsetLeft, offsetTop } = event.target;
-    this.quantityEditComponent.nativeElement.style.top = offsetTop + 'px';
-    this.quantityEditComponent.nativeElement.style.left = offsetLeft + 'px';
   }
 }

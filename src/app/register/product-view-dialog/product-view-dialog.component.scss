@@ -1,112 +1,117 @@
-@import '../../shared/common-style.scss';
+@import "../../shared/common-style.scss";
 
 :host {
   display: flex;
   flex-direction: column;
+  margin: -24px;
 }
 
-.upperContent {
-  padding-bottom: 16px;
-  border-bottom: 1px solid $border-color;
+.header {
+  padding: 24px 24px 12px 24px;
+  font-size: 18px;
 }
 
-.lowerContent {
-  padding-top: 16px;
-}
-
-.image {
+.discount-header {
+  padding: 16px 24px;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 120px;
-  height: 120px;
-  // background: #dfdfdf;
-  margin-right: 24px;
-  border: 2px solid #dfdfdf;
-  border-radius: 2px;
 
-  > mat-icon {
-    width: 68px;
-    height: 68px;
+  border-bottom: $border;
+
+  h1 {
+    margin: 0;
+  }
+
+  button {
+    position: absolute;
+    left: 24px;
   }
 }
 
-.wrapper {
-  display: flex;
-  flex-direction: column;
-}
-
-
-.header {
-  display: flex;
-  font-size: 22px;
-  justify-content: space-between;
-  margin-bottom: 16px;
-}
-
-.description {
-  color: rgba(0, 0, 0, 0.54);
-  line-height: 1.4;
-}
-
-.product-price {
-  padding-left: 24px;
-}
-
-.category {
-  text-align: center;
-  >div:first-child {
-    color: $text-color-secondary;
-    margin-bottom: 5px;
-  }
-}
-
-.label {
-  margin-bottom: 4px;
-  padding-left: 2px;
+.price {
+  font-size: 18px;
+  text-align: right;
 }
 
 .quantityInput {
   display: flex;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
   input {
     align-self: stretch;
-    width: 70px;
+    width: 100px;
     text-align: center;
     border: none;
-    border-top: 1px solid #e0e0e0;
-    border-bottom: 1px solid #e0e0e0;
     outline: none;
     padding-left: 10px;
     font-size: 18px;
+    border-left: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0;
   }
 
   button {
     border-radius: 0;
     height: 50px;
+    flex: 1;
   }
-  // >div {
-  //   display: flex;
-  //   align-items: center;
-  //   justify-content: center;
-  //   width: 50px;
-  //   height: 40px;
+  > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 40px;
 
-  //   &:first-child {
-  //     border-right: 1px solid $border-color;
-  //   }
-  //   &:last-child {
-  //     border-left: 1px solid $border-color;
-  //   }
-  // }
+    &:first-child {
+      border-right: 1px solid $border-color;
+    }
+    &:last-child {
+      border-left: 1px solid $border-color;
+    }
+  }
 }
 
-.addons {
+.discount-button {
+  height: 52px;
+  width: 100%;
+}
+
+.discount-label {
+  height: 52px;
   display: flex;
-  flex-wrap: wrap;
-  flex: 1;
   align-items: center;
-  >mat-checkbox {
-    margin-right: 24px;
-    padding-left: 2px;
-  }
+  justify-content: center;
+  padding: 0 24px;
+}
+
+// .addons {
+//   display: flex;
+//   flex-direction: column;
+//   >mat-checkbox {
+//     padding-left: 2px;
+//     margin-bottom: 4px;
+//   }
+// }
+
+// .discount {
+//   width: 225px;
+//   // display: flex;
+//   // align-items: center;
+//   // margin-bottom: 12px;
+
+//   // .label {
+//   //   margin-right: 12px;
+//   // }
+// }
+
+// // .discount {
+// //   button {
+// //     width: 198px;
+// //   }
+
+// // }
+
+.discount-inputs {
+  padding: 24px;
 }

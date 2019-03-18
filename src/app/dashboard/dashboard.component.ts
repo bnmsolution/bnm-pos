@@ -103,7 +103,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   initDashboard() {
     if (this.sales.length > 0) {
-      const summary: any = sortSales(this.sales, this.period);
+      const summary: any = sortSales(this.sales, this.period, format);
       summary.current = generateDashboard(summary.salesInCurrentPeriod);
       summary.previous = generateDashboard(summary.salesInPreviousPeriod);
       this.topSaleProducts = generateTopSaleProducts(summary.current.products, summary.previous.products);

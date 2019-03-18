@@ -14,6 +14,8 @@ export class CreateContentHeaderComponent implements OnInit {
   @Input() returnUrl: string;
   @Input() canSubmit: boolean;
   @Input() type: string;
+  @Input() addButtonLabel: string;
+  @Input() editButtonLabel: string;
 
   constructor(
     private menuService: MenuService) {

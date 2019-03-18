@@ -1,20 +1,23 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { MatChipInputEvent, MatTableDataSource } from '@angular/material';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { Product, ProductVariant, ProductVariantOption } from 'pos-models';
+import { cloneDeep } from 'src/app/shared/utils/lang';
+import { ProductService } from 'src/app/core';
 
 
 @Component({
   selector: 'app-variant-options',
   templateUrl: './variant-options.component.html',
-  styleUrls: ['./variant-options.component.scss']
+  styleUrls: ['./variant-options.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VariantOptionsComponent implements OnInit {
   @Input() product: Product;
   @Input() readonly: boolean;
 
-  variantOptions: ProductVariantOption[] = [];
-  variants: ProductVariant[] = [];
+  variantOptions: ProductVariantOption[];
+  variants: ProductVariant[];
 
   displayedColumns: string[] = ['name', 'values', 'actions'];
   variantDisplayedColumns: string[] = [];
@@ -26,7 +29,11 @@ export class VariantOptionsComponent implements OnInit {
   selectable = true;
   removable = true;
 
+  constructor(private productService: ProductService) { }
+
   ngOnInit() {
+    this.variantOptions = cloneDeep(this.product.variantOptions);
+    this.variants = cloneDeep(this.product.variants);
     this.dataSource = new MatTableDataSource();
     this.variantsDataSource = new MatTableDataSource();
     this.generateProductVariants();
@@ -36,14 +43,14 @@ export class VariantOptionsComponent implements OnInit {
   }
 
   addNewVariantOption() {
-    if (this.product.variantOptions.length < 3) {
-      this.product.variantOptions.push({ name: '', values: [] });
+    if (this.variantOptions.length < 3) {
+      this.variantOptions.push({ name: '', values: [] });
       this.updateVariantOptionTable();
     }
   }
 
   removeVariantOption(index) {
-    this.product.variantOptions = this.product.variantOptions.filter((vo, i) => i !== index);
+    this.variantOptions = this.variantOptions.filter((vo, i) => i !== index);
     this.generateProductVariants();
     this.updateVariantOptionTable();
   }
@@ -51,7 +58,7 @@ export class VariantOptionsComponent implements OnInit {
   addVariantOptionValue(index: number, event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value.trim();
-    const variantOption = this.product.variantOptions[index];
+    const variantOption = this.variantOptions[index];
 
     if (value.length > 0 && variantOption.values.indexOf(value) === -1) {
       variantOption.values.push(value);
@@ -74,40 +81,47 @@ export class VariantOptionsComponent implements OnInit {
       fields.push('count', 'reOrderPoint');
     }
     this.variantDisplayedColumns = [
-      ...this.product.variantOptions.map((v, i) => `option${i + 1}`),
+      ...this.variantOptions.map((v, i) => `option${i + 1}`),
       ...fields
     ];
-    this.dataSource.data = this.product.variantOptions;
+    this.dataSource.data = this.variantOptions;
   }
 
+  /** Generates product variants **/
   private generateProductVariants() {
-    const { variantOptions, variants } = this.product;
-    const originalVariants = JSON.parse(JSON.stringify(variants));
-    const variantOptionsWithValues = variantOptions.filter(vo => vo.values.length);
+    const originalVariants = cloneDeep(this.variants);
+    const variantOptionsWithValues = this.variantOptions.filter(vo => vo.values.length);
 
     if (variantOptionsWithValues.length) {
-      const allPossibleVariants = this.allPossibleCases(variantOptions.filter(vo => vo.values.length).map(v => v.values));
+      const allPossibleVariants = this.allPossibleCases(this.variantOptions.filter(vo => vo.values.length).map(v => v.values));
       const newVariants = allPossibleVariants.map(options => {
         const id = `${this.product.id}_${options}`;
         const originalVariant = originalVariants.find(v => v.id === id);
-        const values = options.split('|');
+        const optionValues = options.split('|');
 
         if (originalVariant) {
           return Object.assign({}, originalVariant);
         } else {
-          const newVariant = { id };
-          values.forEach((v, i) => {
-            newVariant[`variantOptionValue${i + 1}`] = v;
+          const newVariant = { id } as ProductVariant;
+
+          // assining option values
+          optionValues.forEach((ov, i) => {
+            newVariant[`variantOptionValue${i + 1}`] = ov;
           });
+
+          // assining master product's price and supply price
+          newVariant.retailPrice = this.product.retailPrice;
+          newVariant.supplyPrice = this.product.supplyPrice;
+
           return newVariant;
         }
       });
-      this.product.variants = newVariants as ProductVariant[];
+      this.variants = newVariants as ProductVariant[];
     } else {
-      this.product.variants = [];
+      this.variants = [];
     }
 
-    this.variantsDataSource.data = this.product.variants;
+    this.variantsDataSource.data = this.variants;
   }
 
 
@@ -132,4 +146,5 @@ export class VariantOptionsComponent implements OnInit {
       return result;
     }
   }
+
 }

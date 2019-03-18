@@ -3,7 +3,6 @@
 .search {
   display: flex;
   align-items: center; // max-width: $quick-products-width;
-  // padding: 12px 24px;
   mat-input-container {
     width: 100%;
   }
@@ -16,9 +15,6 @@
   }
 }
 
-.search-icon {
-  margin-right: 12px;
-}
 
 .autocomplete-label {
   padding: 8px 16px;

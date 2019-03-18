@@ -1,46 +1,60 @@
-<app-common-page-header title="직원" buttonTitle="직원 추가" buttonLink="/employee/add"></app-common-page-header>
+<section fxLayout="column">
 
-<section>
-  <mat-table #table [dataSource]="dataSource" matSort>
+  <div class="list-header">
+    <div>직원 목록</div>
+  </div>
 
-    <ng-container matColumnDef="code">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>직원코드</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.code}} </mat-cell>
-    </ng-container>
+  <mat-card>
+    <!-- <app-category-filter [filter$]="filter$" (addCategory)="openAddCategoryDialog()"></app-category-filter> -->
+    <section class="table-container">
+      <mat-progress-bar mode="indeterminate" *ngIf="!tableInitiated"></mat-progress-bar>
 
-    <ng-container matColumnDef="name">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>직원명</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.name}} </mat-cell>
-    </ng-container>
+      <table mat-table #table [dataSource]="dataSource" matSort>
 
-    <ng-container matColumnDef="phone">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>전화번호</mat-header-cell>
-      <mat-cell *matCellDef="let row"> {{row.phone}} </mat-cell>
-    </ng-container>
+        <ng-container matColumnDef="code">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>직원코드</th>
+          <td mat-cell *matCellDef="let row"> {{row.code}} </td>
+        </ng-container>
 
-    <ng-container matColumnDef="role">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>권한</mat-header-cell>
-      <mat-cell *matCellDef="let row">
-        <div [ngSwitch]="row.role">
-          <span *ngSwitchCase="roles.Admin">관리자</span>
-          <span *ngSwitchCase="roles.Manager">매니저</span>
-          <span *ngSwitchCase="roles.Clerk">점원</span>
-        </div>
-      </mat-cell>
-    </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>직원명</th>
+          <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+        </ng-container>
 
-    <ng-container matColumnDef="actions">
-      <mat-header-cell *matHeaderCellDef></mat-header-cell>
-      <mat-cell class="actions" *matCellDef="let row">
-        <mat-icon class="editIcon" svgIcon="editIcon" matTooltip="수정" [routerLink]="'/employee/edit/' + row.id"></mat-icon>
-        <mat-icon class="deleteIcon" svgIcon="deleteIcon" matTooltip="삭제" (click)="deleteEmployee(row.id)"></mat-icon>
-      </mat-cell>
-    </ng-container>
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>전화번호</th>
+          <td mat-cell *matCellDef="let row"> {{row.phone}} </td>
+        </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>권한</th>
+          <td mat-cell *matCellDef="let row">
+            <div [ngSwitch]="row.role">
+              <span *ngSwitchCase="roles.Admin">관리자</span>
+              <span *ngSwitchCase="roles.Manager">매니저</span>
+              <span *ngSwitchCase="roles.Clerk">점원</span>
+            </div>
+          </td>
+        </ng-container>
 
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-  </mat-table>
-  <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
-  </mat-paginator>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell class="actions" *matCellDef="let row">
+            <mat-icon class="editIcon" svgIcon="editIcon" matTooltip="수정" [routerLink]="'/employee/edit/' + row.id">
+            </mat-icon>
+            <mat-icon class="deleteIcon" svgIcon="deleteIcon" matTooltip="삭제" (click)="deleteEmployee(row.id)">
+            </mat-icon>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
+      </mat-paginator>
+    </section>
+  </mat-card>
+
 </section>

@@ -1,6 +1,8 @@
 import { Validators } from '@angular/forms';
-import { ProductValidator } from '../shared/validators/product.validator';
-import { ProductService } from '../core';
+import * as uuid from 'uuid/v1';
+
+import { ProductValidator } from 'src/app/shared/validators/product.validator';
+import { ProductService } from 'src/app/core';
 
 export const getProductFrom = (productService: ProductService, readOnly = false) => {
 
@@ -8,6 +10,7 @@ export const getProductFrom = (productService: ProductService, readOnly = false)
   const barcodeValidators = readOnly ? [] : [ProductValidator.isUniqueBarcode(productService)];
 
   return {
+    id: [uuid()],
     name: ['', Validators.required],
     sku: ['', [], skuValidators],
     barcode: ['', [], barcodeValidators],
@@ -27,6 +30,10 @@ export const getProductFrom = (productService: ProductService, readOnly = false)
     count: [{ value: null, disabled: true }],
     reOrderPoint: [{ value: null, disabled: true }],
     reOrderCount: [{ value: null, disabled: true }],
+
+    variantOptions: [[]],
+    variants: [[]],
+    addons: [[]]
   };
 };
 

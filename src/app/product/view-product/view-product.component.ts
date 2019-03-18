@@ -20,6 +20,8 @@ export class ViewProductComponent implements OnInit {
   taxes: Tax[] = [];
   readonly = true;
   formType = 'view';
+  formErrorMessages: string[] = [];
+  variantErrorMessages: string[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -46,7 +48,7 @@ export class ViewProductComponent implements OnInit {
   onSubmit() {
   }
 
-  getFormControlValidity() {
+  getFormControlValidity(controlName: string, validationName: string) {
     return true;
   }
 }
