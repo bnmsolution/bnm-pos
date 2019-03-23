@@ -1,32 +1,34 @@
 <!-- Variant Options Table -->
-<div class="cardWidthDescription">
+<div class="cardWidthDescription" [formGroup]="variantOptionsControl">
   <div>
     <table mat-table [dataSource]="dataSource" class="variant-option-table">
 
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>옵션명</th>
-        <td mat-cell *matCellDef="let element">
-          <input type="text" [(ngModel)]="element.name" placeholder="예) 사이즈" [readonly]="readonly">
+        <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
+          <input type="text" formControlName="name" placeholder="예) 사이즈" [readonly]="readonly">
         </td>
       </ng-container>
 
       <ng-container matColumnDef="values">
         <th mat-header-cell *matHeaderCellDef>옵션값</th>
-        <td mat-cell *matCellDef="let element; let i = index">
+        <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
           <mat-chip-list #chipList>
-            <mat-chip *ngFor="let value of element.values" [selectable]="selectable" [removable]="removable" (removed)="removeVariantOptionValue(element, value)">
+            <mat-chip *ngFor="let value of variantOptionsControl.value[index].values" [selectable]="selectable"
+                      [removable]="removable" (removed)="removeVariantOptionValue(element, value)">
               {{value}}
               <mat-icon matChipRemove *ngIf="removable" svgIcon="closeIcon"></mat-icon>
             </mat-chip>
             <input placeholder="입력하세요" [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-              [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="addVariantOptionValue(i, $event)" *ngIf="!readonly">
+                   (matChipInputTokenEnd)="addVariantOptionValue(index, $event)" *ngIf="!readonly">
           </mat-chip-list>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>
-          <button mat-stroked-button type="button" color="primary" (click)="addNewVariantOption()" *ngIf="!readonly">옵션추가</button>
+          <button mat-stroked-button type="button" color="primary" (click)="addNewVariantOption()"
+                  *ngIf="!readonly">옵션추가</button>
         </th>
         <td mat-cell *matCellDef="let element; let i = index">
           <button type="button" mat-icon-button (click)="removeVariantOption(i)" *ngIf="!readonly">
@@ -48,73 +50,81 @@
 </div>
 
 <!-- Variants table -->
-<table mat-table [dataSource]="variantsDataSource" *ngIf="variants.length">
+<table mat-table [dataSource]="variantsDataSource" *ngIf="variantsControl.value.length" [formGroup]="variantsControl">
 
   <ng-container matColumnDef="sku">
     <th mat-header-cell *matHeaderCellDef>재고관리코드</th>
-    <td mat-cell *matCellDef="let element">
-      <input type="text" [(ngModel)]="element.sku" placeholder="재고관리코드 입력" *ngIf="!readonly">
+    <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index" class="inline-edit-cell">
+      <input type="text" formControlName="sku" placeholder="재고관리코드 입력" *ngIf="!readonly" class="inline-input">
       <div *ngIf="readonly">{{element.sku || "-"}}</div>
+      <span *ngIf="variantsControl.controls[index].controls.sku.invalid" class="inline-input-error">이미 사용중인 재고관리코드
+        입니다.</span>
     </td>
   </ng-container>
 
   <ng-container matColumnDef="barcode">
     <th mat-header-cell *matHeaderCellDef>바코드</th>
-    <td mat-cell *matCellDef="let element">
-      <input type="text" [(ngModel)]="element.barcode" placeholder="바코드 입력" *ngIf="!readonly">
+    <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index" class="inline-edit-cell">
+      <input type="text" formControlName="barcode" placeholder="바코드 입력" *ngIf="!readonly" class="inline-input">
       <div *ngIf="readonly">{{element.barcode || "-"}}</div>
+      <span *ngIf="variantsControl.controls[index].controls.barcode.invalid" class="inline-input-error">이미 사용중인 바코드
+        입니다.</span>
     </td>
   </ng-container>
 
   <ng-container matColumnDef="option1">
-    <th mat-header-cell *matHeaderCellDef>{{variantOptions[0].name}}</th>
-    <td mat-cell *matCellDef="let element">
+    <th mat-header-cell *matHeaderCellDef>{{variantOptionsControl.value[0].name}}</th>
+    <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
       <div>{{element.variantOptionValue1}}</div>
     </td>
   </ng-container>
 
   <ng-container matColumnDef="option2">
-    <th mat-header-cell *matHeaderCellDef>{{variantOptions[1].name}}</th>
-    <td mat-cell *matCellDef="let element">
+    <th mat-header-cell *matHeaderCellDef>{{variantOptionsControl.value[1].name}}</th>
+    <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
       <div>{{element.variantOptionValue2}}</div>
     </td>
   </ng-container>
 
   <ng-container matColumnDef="option3">
-    <th mat-header-cell *matHeaderCellDef>{{variantOptions[2].name}}</th>
-    <td mat-cell *matCellDef="let element">
+    <th mat-header-cell *matHeaderCellDef>{{variantOptionsControl.value[2].name}}</th>
+    <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
       <div>{{element.variantOptionValue3}}</div>
     </td>
   </ng-container>
 
   <ng-container matColumnDef="supplyPrice">
     <th mat-header-cell *matHeaderCellDef>공급가</th>
-    <td mat-cell *matCellDef="let element">
-      <input type="number" [(ngModel)]="element.supplyPrice" placeholder="공급가 입력" *ngIf="!readonly">
+    <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
+      <input type="number" formControlName="supplyPrice" placeholder="공급가 입력" *ngIf="!readonly">
       <div *ngIf="readonly">{{element.supplyPrice || "-"}}</div>
     </td>
   </ng-container>
 
   <ng-container matColumnDef="retailPrice">
     <th mat-header-cell *matHeaderCellDef>판매가</th>
-    <td mat-cell *matCellDef="let element">
-      <input type="number" min="0" [(ngModel)]="element.retailPrice" placeholder="판매가 입력" *ngIf="!readonly">
+    <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index" class="inline-edit-cell">
+      <input type="number" min="0" formControlName="retailPrice" placeholder="판매가 입력" *ngIf="!readonly"
+             [ngClass]="{'inline-input' : isFormSubmitted}">
       <div *ngIf="readonly">{{element.retailPrice}}</div>
+      <span *ngIf="variantsControl.controls[index].controls.retailPrice.invalid && isFormSubmitted"
+            class="inline-input-error">판매가는
+        필수입니다.</span>
     </td>
   </ng-container>
 
   <ng-container matColumnDef="count">
     <th mat-header-cell *matHeaderCellDef>재고량</th>
-    <td mat-cell *matCellDef="let element">
-      <input type="number" [(ngModel)]="element.count" placeholder="재고량 입력" *ngIf="!readonly">
+    <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
+      <input type="number" formControlName="count" placeholder="재고량 입력" *ngIf="!readonly">
       <div *ngIf="readonly">{{element.count || "-"}}</div>
     </td>
   </ng-container>
 
   <ng-container matColumnDef="reOrderPoint">
     <th mat-header-cell *matHeaderCellDef>적정재고</th>
-    <td mat-cell *matCellDef="let element">
-      <input type="number" [(ngModel)]="element.reOrderPoint" placeholder="적정재고 입력" *ngIf="!readonly">
+    <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
+      <input type="number" formControlName="reOrderPoint" placeholder="적정재고 입력" *ngIf="!readonly">
       <div *ngIf="readonly">{{element.reOrderPoint || "-"}}</div>
     </td>
   </ng-container>

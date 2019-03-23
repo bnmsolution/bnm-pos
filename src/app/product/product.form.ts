@@ -1,13 +1,14 @@
-import { Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
 import * as uuid from 'uuid/v1';
 
 import { ProductValidator } from 'src/app/shared/validators/product.validator';
 import { ProductService } from 'src/app/core';
+import { Product } from 'pos-models';
 
-export const getProductFrom = (productService: ProductService, readOnly = false) => {
+export const getProductFrom = (fb: FormBuilder, productService: ProductService, product: Product, readOnly = false) => {
 
-  const skuValidators = readOnly ? [] : [ProductValidator.isUniqueSKU(productService)];
-  const barcodeValidators = readOnly ? [] : [ProductValidator.isUniqueBarcode(productService)];
+  const skuValidators = readOnly ? [] : [ProductValidator.isUniqueSKU(productService, product ? product.id : null)];
+  const barcodeValidators = readOnly ? [] : [ProductValidator.isUniqueBarcode(productService, product ? product.id : null)];
 
   return {
     id: [uuid()],
@@ -31,9 +32,58 @@ export const getProductFrom = (productService: ProductService, readOnly = false)
     reOrderPoint: [{ value: null, disabled: true }],
     reOrderCount: [{ value: null, disabled: true }],
 
-    variantOptions: [[]],
-    variants: [[]],
-    addons: [[]]
+    variantOptions: fb.array([]),
+    variants: fb.array([]),
+    addons: fb.array([])
   };
+};
+
+/**
+ * Creates sub form groups for variant options, variants and addons form arrays.
+ * @param fb
+ * @param productForm
+ * @param product
+ */
+export const updateProductFromArrays = (fb: FormBuilder, productForm: FormGroup, product: Product) => {
+  const variantOptionControls = productForm.controls.variantOptions as FormArray;
+  const addonControls = productForm.controls.addons as FormArray;
+  const variantControls = productForm.controls.variants as FormArray;
+
+  product.variantOptions.forEach(vo => {
+    const variantOptionForm = fb.group({
+      name: null,
+      values: null
+    });
+    variantOptionForm.patchValue(vo);
+    variantOptionControls.push(variantOptionForm);
+  });
+
+  product.variants.forEach(v => {
+    const variantForm = getProductVariantForm(fb);
+    variantForm.patchValue(v);
+    variantControls.push(variantForm);
+  });
+
+  product.addons.forEach(ao => {
+    const addonForm = fb.group({
+      name: null,
+      price: null
+    });
+    addonForm.patchValue(ao);
+    addonControls.push(addonForm);
+  });
+};
+
+export const getProductVariantForm = (fb: FormBuilder) => {
+  return fb.group({
+    id: null,
+    sku: null,
+    barcode: null,
+    variantOptionValue1: null,
+    variantOptionValue2: null,
+    variantOptionValue3: null,
+    supplyPrice: null,
+    retailPrice: [null, Validators.required],
+  });
 };
 

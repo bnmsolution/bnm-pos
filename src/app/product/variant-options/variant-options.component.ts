@@ -1,39 +1,46 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { MatChipInputEvent, MatTableDataSource } from '@angular/material';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
-import { Product, ProductVariant, ProductVariantOption } from 'pos-models';
+import { ProductVariant, ProductVariantOption } from 'pos-models';
+
 import { cloneDeep } from 'src/app/shared/utils/lang';
 import { ProductService } from 'src/app/core';
+import { ProductValidator } from 'src/app/shared/validators/product.validator';
 
 
 @Component({
   selector: 'app-variant-options',
   templateUrl: './variant-options.component.html',
-  styleUrls: ['./variant-options.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./variant-options.component.scss']
 })
 export class VariantOptionsComponent implements OnInit {
-  @Input() product: Product;
+  @Input() productForm: FormGroup;
   @Input() readonly: boolean;
+  @Input() isFormSubmitted: boolean;
 
-  variantOptions: ProductVariantOption[];
-  variants: ProductVariant[];
-
+  // Mat table
   displayedColumns: string[] = ['name', 'values', 'actions'];
   variantDisplayedColumns: string[] = [];
-
   dataSource: MatTableDataSource<ProductVariantOption>;
   variantsDataSource: MatTableDataSource<any>;
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
 
+  // Mat chip
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   selectable = true;
   removable = true;
 
-  constructor(private productService: ProductService) { }
+  get variantOptionsControl(): FormArray {
+    return this.productForm.controls.variantOptions as FormArray;
+  }
+
+  get variantsControl(): FormArray {
+    return this.productForm.controls.variants as FormArray;
+  }
+
+  constructor(private productService: ProductService, private fb: FormBuilder) { }
 
   ngOnInit() {
-    this.variantOptions = cloneDeep(this.product.variantOptions);
-    this.variants = cloneDeep(this.product.variants);
     this.dataSource = new MatTableDataSource();
     this.variantsDataSource = new MatTableDataSource();
     this.generateProductVariants();
@@ -43,59 +50,77 @@ export class VariantOptionsComponent implements OnInit {
   }
 
   addNewVariantOption() {
-    if (this.variantOptions.length < 3) {
-      this.variantOptions.push({ name: '', values: [] });
-      this.updateVariantOptionTable();
-    }
+    this.variantOptionsControl.push(
+      this.fb.group({
+        name: [''],
+        values: [[]]
+      })
+    );
+    this.updateVariantOptionTable();
   }
 
   removeVariantOption(index) {
-    this.variantOptions = this.variantOptions.filter((vo, i) => i !== index);
+    this.variantOptionsControl.removeAt(index);
     this.generateProductVariants();
     this.updateVariantOptionTable();
   }
 
+  /**
+   * An event handler for mat-chip inputTokenEnd event.
+   * It will add a new value of varaint option.
+   * @param index index of variant option
+   * @param event mat-chip change event
+   */
   addVariantOptionValue(index: number, event: MatChipInputEvent): void {
     const input = event.input;
     const value = event.value.trim();
-    const variantOption = this.variantOptions[index];
+    const variantOptionValues = this.variantOptionsControl.value[index].values;
 
-    if (value.length > 0 && variantOption.values.indexOf(value) === -1) {
-      variantOption.values.push(value);
+    if (value.length > 0 && variantOptionValues.indexOf(value) === -1) {
+      variantOptionValues.push(value);
     }
 
     if (input) {
       input.value = '';
     }
+
     this.generateProductVariants();
   }
 
+  /**
+   * An event handler for mat-chip remove event.
+   * It will remove matched variant option value.
+   * @param variantOption variant option reference
+   * @param value variant option value
+   */
   removeVariantOptionValue(variantOption: ProductVariantOption, value: string) {
     variantOption.values = variantOption.values.filter(v => v !== value);
     this.generateProductVariants();
   }
 
+  /** Updating the list of displaying fields and data for variant option table. */
   private updateVariantOptionTable() {
     const fields = ['supplyPrice', 'retailPrice', 'barcode', 'sku'];
-    if (this.product.trackInventory) {
+    if (this.productForm.value.trackInventory) {
       fields.push('count', 'reOrderPoint');
     }
+
     this.variantDisplayedColumns = [
-      ...this.variantOptions.map((v, i) => `option${i + 1}`),
+      ...this.variantOptionsControl.value.map((v, i) => `option${i + 1}`),
       ...fields
     ];
-    this.dataSource.data = this.variantOptions;
+    this.dataSource.data = this.variantOptionsControl.value;
   }
 
   /** Generates product variants **/
   private generateProductVariants() {
-    const originalVariants = cloneDeep(this.variants);
-    const variantOptionsWithValues = this.variantOptions.filter(vo => vo.values.length);
+    const originalVariants = cloneDeep(this.variantsControl.value);
+    const allPossibleVariants = this.allPossibleCases(this.variantOptionsControl.value.filter(vo => vo.values.length).map(v => v.values));
+    let newVariants = [];
 
-    if (variantOptionsWithValues.length) {
-      const allPossibleVariants = this.allPossibleCases(this.variantOptions.filter(vo => vo.values.length).map(v => v.values));
-      const newVariants = allPossibleVariants.map(options => {
-        const id = `${this.product.id}_${options}`;
+    if (allPossibleVariants.length) {
+      newVariants = allPossibleVariants.map(options => {
+        const id = `${this.productForm.value.id}_${options}`;
         const originalVariant = originalVariants.find(v => v.id === id);
         const optionValues = options.split('|');
 
@@ -110,20 +135,37 @@ export class VariantOptionsComponent implements OnInit {
           });
 
           // assining master product's price and supply price
-          newVariant.retailPrice = this.product.retailPrice;
-          newVariant.supplyPrice = this.product.supplyPrice;
+          newVariant.retailPrice = this.productForm.value.retailPrice;
+          newVariant.supplyPrice = this.productForm.value.supplyPrice;
 
           return newVariant;
         }
       });
-      this.variants = newVariants as ProductVariant[];
-    } else {
-      this.variants = [];
     }
 
-    this.variantsDataSource.data = this.variants;
-  }
 
+    const skuValidators = this.readonly ? [] : [ProductValidator.isUniqueSKU(this.productService)];
+    const barcodeValidators = this.readonly ? [] : [ProductValidator.isUniqueBarcode(this.productService)];
+
+    const variantsFormGroups = this.fb.array(
+      newVariants.map(v => {
+        return this.fb.group({
+          id: [v.id],
+          sku: ['', [], skuValidators],
+          barcode: ['', [], barcodeValidators],
+          variantOptionValue1: [v.variantOptionValue1],
+          variantOptionValue2: [v.variantOptionValue2],
+          variantOptionValue3: [v.variantOptionValue3],
+          supplyPrice: [v.supplyPrice],
+          retailPrice: [v.retailPrice, Validators.required]
+        });
+      }));
+
+    this.productForm.setControl('variants', variantsFormGroups);
+
+    this.variantsDataSource.data = newVariants as ProductVariant[];
+    // this.variantsDataSource.data = this.productForm.value.variants;
+  }
 
   /**
   * Returns all possible combinations of variants.
@@ -144,7 +186,10 @@ export class VariantOptionsComponent implements OnInit {
         }
       }
       return result;
+    } else {
+      return [];
     }
   }
+
 
 }

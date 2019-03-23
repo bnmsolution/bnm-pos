@@ -1,16 +1,16 @@
-<table mat-table [dataSource]="dataSource" class="variant-option-table">
+<table mat-table [dataSource]="dataSource" class="variant-option-table" [formGroup]="addonsControl">
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef>에드온명</th>
-    <td mat-cell *matCellDef="let element">
-      <input type="text" [(ngModel)]="element.name" placeholder="에드온명" *ngIf="!readonly">
+    <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
+      <input type="text" formControlName="name" placeholder="에드온명" *ngIf="!readonly">
       <div *ngIf="readonly">{{element.name || "-"}}</div>
     </td>
   </ng-container>
 
   <ng-container matColumnDef="price">
     <th mat-header-cell *matHeaderCellDef>추가금액</th>
-    <td mat-cell *matCellDef="let element">
-      <input type="number" [(ngModel)]="element.price" placeholder="추가금액" *ngIf="!readonly">
+    <td mat-cell *matCellDef="let element; let index = index" [formGroupName]="index">
+      <input type="number" formControlName="price" placeholder="추가금액" *ngIf="!readonly">
       <div *ngIf="readonly">{{element.price || "-"}}</div>
     </td>
   </ng-container>

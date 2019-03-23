@@ -6,7 +6,7 @@ import { ProductService } from 'src/app/core';
 
 export class ProductValidator {
 
-  static isUniqueBarcode(productService: ProductService) {
+  static isUniqueBarcode(productService: ProductService, productId?: string) {
     return (control: AbstractControl) => {
       return timer(500).pipe(
         switchMap(() => {
@@ -17,7 +17,7 @@ export class ProductValidator {
           return productService.getProductByBarcode(control.value)
             .pipe(
               map(product => {
-                return product ? { 'takenBarcode': true } : null;
+                return product && product.id !== productId ? { 'takenBarcode': true } : null;
               })
             );
         })
@@ -25,7 +25,7 @@ export class ProductValidator {
     };
   }
 
-  static isUniqueSKU(productService: ProductService) {
+  static isUniqueSKU(productService: ProductService, productId?: string) {
     return (control: AbstractControl) => {
       return timer(500).pipe(
         switchMap(() => {
@@ -36,7 +36,7 @@ export class ProductValidator {
           return productService.getProductBySKU(control.value)
             .pipe(
               map(product => {
-                return product ? { 'takenSKU': true } : null;
+                return product && product.id !== productId ? { 'takenSKU': true } : null;
               })
             );
         })

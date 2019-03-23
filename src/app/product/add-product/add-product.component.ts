@@ -9,10 +9,9 @@ import {
   Product, Category, Vendor, Tax, PosStore,
   getProductPriceFromRetailPrice, getProductPriceFromMarkup, getMarkup, ProductVariant
 } from 'pos-models';
-import * as uuid from 'uuid/v1';
 
 import { AppState, ProductService } from '../../core';
-import { getProductFrom } from '../product.form';
+import { getProductFrom, updateProductFromArrays } from '../product.form';
 import * as actions from '../../stores/actions/product.actions';
 import { ProductEffects } from 'src/app/stores/effects/product.effects';
 import { VariantOptionsComponent } from '../variant-options/variant-options.component';
@@ -38,6 +37,7 @@ export class AddProductComponent implements OnInit {
   formType = 'add';
   formErrorMessages: string[] = [];
   variantErrorMessages: string[] = [];
+  isFormSubmitted = false;
 
   // references
   categories: Category[] = [];
@@ -54,13 +54,11 @@ export class AddProductComponent implements OnInit {
     private productEffects: ProductEffects,
     private productService: ProductService,
     private appState: AppState) {
-    this.createForm();
   }
 
   get title(): string {
     return this.isNewProduct ? '상품 추가' : '상품 수정';
   }
-
 
   ngOnInit() {
     this.route.data
@@ -70,29 +68,33 @@ export class AddProductComponent implements OnInit {
         this.taxes = data.taxes;
         this.settings = data.settings[0];
 
-        this.productForm.patchValue({ taxId: this.settings.defaultTaxId });
-
         if (data.editProduct) {
+          this.createForm(data.editProduct);
           this.setProductForEdit(data.editProduct);
+        } else {
+          this.createForm();
+          this.productForm.patchValue({ taxId: this.settings.defaultTaxId });
         }
       });
   }
 
-  createForm() {
-    this.productForm = this.fb.group(getProductFrom(this.productService));
-    this.productForm.controls.retailPrice.valueChanges.subscribe(() => this.onPriceChange('retailPrice'));
-    this.productForm.controls.supplyPrice.valueChanges.subscribe(() => this.onPriceChange('supplyPrice'));
-    this.productForm.controls.markup.valueChanges.subscribe(() => this.onPriceChange('markup'));
+  createForm(product?: Product) {
+    this.productForm = this.fb.group(getProductFrom(this.fb, this.productService, product));
 
-    this.productForm.controls.trackInventory.valueChanges.subscribe(trackInventory => {
+    const controls = this.productForm.controls;
+    controls.retailPrice.valueChanges.subscribe(() => this.onPriceChange('retailPrice'));
+    controls.supplyPrice.valueChanges.subscribe(() => this.onPriceChange('supplyPrice'));
+    controls.markup.valueChanges.subscribe(() => this.onPriceChange('markup'));
+
+    controls.trackInventory.valueChanges.subscribe(trackInventory => {
       if (trackInventory) {
-        this.productForm.controls.count.enable();
-        this.productForm.controls.reOrderPoint.enable();
-        this.productForm.controls.reOrderCount.enable();
+        controls.count.enable();
+        controls.reOrderPoint.enable();
+        controls.reOrderCount.enable();
       } else {
-        this.productForm.controls.count.disable();
-        this.productForm.controls.reOrderPoint.disable();
-        this.productForm.controls.reOrderCount.disable();
+        controls.count.disable();
+        controls.reOrderPoint.disable();
+        controls.reOrderCount.disable();
       }
     });
   }
@@ -157,9 +159,10 @@ export class AddProductComponent implements OnInit {
     this.productForm.patchValue(product);
   }
 
-  private setProductForEdit(product) {
+  private setProductForEdit(product: Product) {
     this.isNewProduct = false;
     this.productForm.patchValue(product);
+    updateProductFromArrays(this.fb, this.productForm, product);
     this.formType = 'edit';
   }
 
@@ -172,13 +175,11 @@ export class AddProductComponent implements OnInit {
   }
 
 
-
   onSubmit(): void {
     const product = cloneDeep(this.productForm.value);
 
-    this.updateProductVariantsAndAddons(product);
-    this.setVariantErrorMessages(product);
-    this.setFormErrorMessages();
+    // this.setVariantErrorMessages(product);
+    // this.setFormErrorMessages();
 
     if (this.productForm.valid && this.variantErrorMessages.length === 0) {
       merge(this.productEffects.addProduct$, this.productEffects.updateProduct$)
@@ -200,13 +201,8 @@ export class AddProductComponent implements OnInit {
         this.store.dispatch(new actions.UpdateProduct(product));
       }
     }
-  }
 
-  /** Assigning data **/
-  private updateProductVariantsAndAddons(product: Product) {
-    product.variantOptions = this.variantOptionComponent.variantOptions;
-    product.variants = this.variantOptionComponent.variants;
-    product.addons = this.addonComponent.addons;
+    this.isFormSubmitted = true;
   }
 
 

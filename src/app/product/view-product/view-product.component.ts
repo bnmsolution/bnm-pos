@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Category, Product, Tax, Vendor } from 'pos-models';
 
-import { getProductFrom } from '../product.form';
+import { getProductFrom, updateProductFromArrays } from '../product.form';
 import { ProductService } from 'src/app/core';
 
 @Component({
@@ -22,6 +22,7 @@ export class ViewProductComponent implements OnInit {
   formType = 'view';
   formErrorMessages: string[] = [];
   variantErrorMessages: string[] = [];
+  isFormSubmitted = false;
 
   constructor(
     private fb: FormBuilder,
@@ -38,11 +39,12 @@ export class ViewProductComponent implements OnInit {
         this.vendors = data.vendors;
         this.taxes = data.taxes;
         this.productForm.patchValue(this.product);
+        updateProductFromArrays(this.fb, this.productForm, this.product);
       });
   }
 
   createForm() {
-    this.productForm = this.fb.group(getProductFrom(this.productService, true));
+    this.productForm = this.fb.group(getProductFrom(this.fb, this.productService, this.product, true));
   }
 
   onSubmit() {

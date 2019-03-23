@@ -114,3 +114,22 @@
     margin-bottom: 4px;
   }
 }
+
+.inline-edit-cell {
+  position: relative;
+}
+
+.inline-input.ng-invalid {
+  color: #f44336;
+  &::placeholder {
+    color: #f44336;
+  }
+}
+
+.inline-input-error {
+  color: #f44336;
+  font-size: 11px;
+  position: absolute;
+  left: 1px;
+  bottom: -2px;
+}

@@ -1,17 +1,18 @@
 <form class="app-form" [formGroup]="productForm" (ngSubmit)="onSubmit()" (keydown.enter)="$event.preventDefault()"
-      novalidate>
+      *ngIf="productForm" novalidate>
 
   <app-create-content-header [title]="title" addButtonLabel="추가하기" [type]="formType" returnUrl="/product">
   </app-create-content-header>
 
-  <div *ngIf="variantErrorMessages.length || formErrorMessages.length" class="form-errors">
+  <!-- todo: Should we display error meesage at the top?  -->
+  <!-- <div *ngIf="variantErrorMessages.length || formErrorMessages.length" class="form-errors">
     <div *ngFor="let error of formErrorMessages">
       {{error}}
     </div>
     <div *ngFor="let error of variantErrorMessages">
       {{error}}
     </div>
-  </div>
+  </div> -->
 
   <section class="accordion">
     <mat-accordion multi="true">
@@ -184,8 +185,8 @@
           옵션
         </mat-expansion-panel-header>
         <div fxFlex>
-          <app-variant-options id="variantOptionsField" [product]="productForm.value" [readonly]="readonly"
-                               *ngIf="productForm"></app-variant-options>
+          <app-variant-options id="variantOptionsField" [productForm]="productForm" [isFormSubmitted]="isFormSubmitted"
+                               [readonly]="readonly" *ngIf="productForm"></app-variant-options>
         </div>
       </mat-expansion-panel>
 
@@ -195,7 +196,8 @@
         </mat-expansion-panel-header>
         <div class="cardWidthDescription">
           <div fxFlex>
-            <app-product-addons [product]="product" [readonly]="readonly"></app-product-addons>
+            <app-product-addons [productForm]="productForm" [readonly]="readonly" *ngIf="productForm">
+            </app-product-addons>
           </div>
           <div fxFlex>
             <div>에드온을 사용하여 상품을 커스터마이징 할 수 있습니다. 예)</div>
@@ -229,5 +231,4 @@
 
     </mat-accordion>
   </section>
-  <pre>{{productForm.value | json}}</pre>
 </form>
