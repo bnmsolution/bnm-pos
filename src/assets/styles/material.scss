@@ -7,7 +7,7 @@
 // Define a custom typography config that overrides the font-family as well as the
 // `headlines` and `body-1` levels.
 $custom-typography: mat-typography-config(
-  $font-family: "Nanum Gothic, sans-serif"
+  $font-family: "Gothic A1, Nanum Gothic, sans-serif"
 );
 
 @include mat-core($custom-typography);
@@ -163,4 +163,17 @@ mat-form-field.dense {
 // using Korean font, icon rendered slightly lower than center
 .mat-mini-fab {
   font-family: sans-serif;
+}
+
+
+
+// Mat dialogs doesn't follow Material design
+.mat-dialog-actions {
+  margin-right: -24px;
+  padding-right: 8px !important;
+  justify-content: flex-end;
+}
+
+.mat-dialog-content {
+  padding-bottom: 24px !important;
 }

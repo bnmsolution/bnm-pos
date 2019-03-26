@@ -65,7 +65,8 @@ export class CategoryListComponent implements OnInit, OnDestroy {
   deleteCategory(categoryId: string): void {
     this.dialog
       .open(DeleteCategoryDialogComponent, {
-        data: { categoryId }
+        data: { categoryId },
+        autoFocus: false
       })
       .afterClosed()
       .pipe(
@@ -77,7 +78,7 @@ export class CategoryListComponent implements OnInit, OnDestroy {
 
   openAddCategoryDialog() {
     this.dialog
-      .open(AddCategoryDialogComponent)
+      .open(AddCategoryDialogComponent, { autoFocus: false })
       .afterClosed()
       .pipe(
         filter(added => added),
@@ -89,7 +90,8 @@ export class CategoryListComponent implements OnInit, OnDestroy {
   openEditCategoryDialog(item: Category) {
     this.dialog
       .open(AddCategoryDialogComponent, {
-        data: { category: Object.assign({}, item) }
+        data: { category: Object.assign({}, item) },
+        autoFocus: false
       })
       .afterClosed()
       .pipe(
