@@ -24,6 +24,7 @@ import { reducers, metaReducers, getInitialState } from './stores/reducers';
 import { effects } from './stores/effects';
 import { SyncComponent } from './sync/sync.component';
 import { SyncGuardService } from './sync/sync-guard.service';
+import { ReportModule } from './report/report.module';
 
 
 // export const CustomCurrencyMaskConfig: CurrencyMaskConfig = {
@@ -55,6 +56,7 @@ import { SyncGuardService } from './sync/sync-guard.service';
     // CurrencyMaskModule,
     AuthModule,
     WidgetsModule,
+    ReportModule,
     // CloudinaryModule.forRoot({ Cloudinary }, { cloud_name: environment.cloudinary.cloud_name } as CloudinaryConfiguration)
     StoreModule.forRoot(reducers, { metaReducers, initialState: getInitialState }),
     EffectsModule.forRoot(effects),

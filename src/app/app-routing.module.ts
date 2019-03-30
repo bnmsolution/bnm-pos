@@ -42,6 +42,7 @@ import { SyncGuardService } from './sync/sync-guard.service';
           { path: 'employee', loadChildren: 'src/app/employee/employee.module#EmployeeModule' },
           { path: 'vendor', loadChildren: 'src/app/vendor/vendor.module#VendorModule' },
           { path: 'inventory', loadChildren: 'src/app/inventory/inventory.module#InventoryModule' },
+          { path: 'report', loadChildren: 'src/app/report/report.module#ReportModule' },
           {
             path: 'settings',
             component: StoreComponent,
