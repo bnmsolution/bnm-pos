@@ -39,7 +39,7 @@ export class MenuService {
     },
     {
       name: '리포트',
-      icon: 'outline-history-24px',
+      icon: 'outline-assessment-24px',
       type: 'link',
       url: '/report'
     },

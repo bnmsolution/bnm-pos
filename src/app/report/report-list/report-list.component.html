@@ -1,3 +1,39 @@
-<p>
-  report-list works!
-</p>
+<mat-card>
+  <mat-card-title>판매 리포트</mat-card-title>
+  <mat-card-content>
+    <section *ngIf="products && sales">
+      <mat-list role="list">
+        <mat-list-item role="listitem">
+          <div routerLink="/report/salesByTime">기간별 리포트</div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item role="listitem">
+          <div routerLink="/report/salesByProduct">상품별 판매 리포트</div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item role="listitem">
+          <div routerLink="/report/salesByCategory">카테고리별 판매 리포트</div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item role="listitem">
+          <div routerLink="/report/salesByVendor">거래처별 판매 리포트</div>
+        </mat-list-item>
+      </mat-list>
+    </section>
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
+  <mat-card-title>고객 리포트</mat-card-title>
+  <mat-card-content>
+    <mat-list role="list">
+      <mat-list-item role="listitem">
+        <div routerLink="/report/customersByTime">기간별 고객 리포트</div>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item role="listitem">
+        <div routerLink="/report/customerSalesByTime">기간별 고객 판매 리포트</div>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>

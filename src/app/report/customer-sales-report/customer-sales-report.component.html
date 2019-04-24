@@ -1,0 +1,79 @@
+<section fxLayout="column">
+
+  <div class="list-header">
+    <div>기간별 고객 현황</div>
+    <span fxFlex></span>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon svgIcon="moreVert"></mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <mat-icon svgIcon="download"></mat-icon>
+        <span>리포트 내려받기</span>
+      </button>
+    </mat-menu>
+  </div>
+
+  <mat-card>
+    <section class="table-filter-container">
+      <app-period-select [period]="0" (periodChange)="periodChange($event)"></app-period-select>
+      <app-group-by-select [groupValue]="groupValue" (groupChange)="groupChange($event)"></app-group-by-select>
+    </section>
+    <section class="table-container">
+      <mat-progress-bar mode="indeterminate" *ngIf="!tableInitiated"></mat-progress-bar>
+      <table mat-table #table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>날짜</th>
+          <td mat-cell *matCellDef="let row">
+            <span *ngIf="groupValue === 2">{{getDate(row.label) | appDate: 'YYYY-MM-DD'}}</span>
+            <span *ngIf="groupValue !== 2">{{row.label}}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>고객유형</th>
+          <td mat-cell *matCellDef="let row"> {{row.type}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="count">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>판매건수</th>
+          <td mat-cell *matCellDef="let row"> {{row.count | number}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>총매출</th>
+          <td mat-cell *matCellDef="let row"> {{row.total | appCurrency}}</td>
+        </ng-container>
+
+
+        <!-- TOTAL HEADER -->
+        <ng-container matColumnDef="1">
+          <th mat-header-cell *matHeaderCellDef>합계</th>
+        </ng-container>
+
+        <ng-container matColumnDef="2">
+          <th mat-header-cell *matHeaderCellDef></th>
+        </ng-container>
+
+        <ng-container matColumnDef="3">
+          <th mat-header-cell *matHeaderCellDef>{{totals.count | number}}</th>
+        </ng-container>
+
+        <ng-container matColumnDef="4">
+          <th mat-header-cell *matHeaderCellDef>{{totals.total | appCurrency}}</th>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="['1', '2', '3', '4']"></tr>
+
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+        </tr>
+      </table>
+
+      <mat-paginator #paginator [pageSize]="20" [pageSizeOptions]="[5, 10, 20]">
+      </mat-paginator>
+    </section>
+  </mat-card>
+
+</section>

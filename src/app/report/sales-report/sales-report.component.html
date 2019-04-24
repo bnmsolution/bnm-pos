@@ -1,0 +1,119 @@
+<section fxLayout="column">
+
+  <div class="list-header">
+    <div>상품별 판매 현황</div>
+    <span fxFlex></span>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon svgIcon="moreVert"></mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <mat-icon svgIcon="download"></mat-icon>
+        <span>리포트 내려받기</span>
+      </button>
+    </mat-menu>
+  </div>
+
+  <mat-card>
+    <section class="table-filter-container">
+      <app-period-select [period]="0" (periodChange)="periodChange($event)"></app-period-select>
+    </section>
+    <section class="table-container">
+      <mat-progress-bar mode="indeterminate" *ngIf="!tableInitiated"></mat-progress-bar>
+      <table mat-table #table [dataSource]="dataSource" matSort matSortActive="grossSales" matSortDirection="desc">
+        <ng-container matColumnDef="productName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>상품명</th>
+          <td mat-cell *matCellDef="let row"> {{row.productName}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="categoryName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>카테고리</th>
+          <td mat-cell *matCellDef="let row"> {{row.categoryName || '-'}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="vendorName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>거래처</th>
+          <td mat-cell *matCellDef="let row"> {{row.vendorName || '-'}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalQuantity">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>수량</th>
+          <td mat-cell *matCellDef="let row"> {{row.totalQuantity | number}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="grossSales">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>매출액</th>
+          <td mat-cell *matCellDef="let row"> {{row.grossSales | appCurrency}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalDiscount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>할인</th>
+          <td mat-cell *matCellDef="let row"> {{row.totalDiscount | appCurrency}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalReturns">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>환불</th>
+          <td mat-cell *matCellDef="let row"> {{row.totalReturns | appCurrency}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="netSales">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>순매출액</th>
+          <td mat-cell *matCellDef="let row"> {{row.netSales | appCurrency}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalTax">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>세금</th>
+          <td mat-cell *matCellDef="let row"> {{row.totalTax | appCurrency}}</td>
+        </ng-container>
+
+        <!-- TOTAL HEADER -->
+        <ng-container matColumnDef="1">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>합계</th>
+        </ng-container>
+
+        <ng-container matColumnDef="2">
+          <th mat-header-cell *matHeaderCellDef></th>
+        </ng-container>
+
+        <ng-container matColumnDef="3">
+          <th mat-header-cell *matHeaderCellDef></th>
+        </ng-container>
+
+        <ng-container matColumnDef="4">
+          <th mat-header-cell *matHeaderCellDef>{{totals.totalQuantity | number}}</th>
+        </ng-container>
+
+        <ng-container matColumnDef="5">
+          <th mat-header-cell *matHeaderCellDef>{{totals.grossSales | appCurrency}}</th>
+        </ng-container>
+
+        <ng-container matColumnDef="6">
+          <th mat-header-cell *matHeaderCellDef>{{totals.totalDiscount | appCurrency}}</th>
+        </ng-container>
+
+        <ng-container matColumnDef="7">
+          <th mat-header-cell *matHeaderCellDef>{{totals.totalReturns | appCurrency}}</th>
+        </ng-container>
+
+        <ng-container matColumnDef="8">
+          <th mat-header-cell *matHeaderCellDef>{{totals.netSales | appCurrency}}</th>
+        </ng-container>
+
+        <ng-container matColumnDef="9">
+          <th mat-header-cell *matHeaderCellDef>{{totals.totalTax | appCurrency}}</th>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsForTotals"></tr>
+
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+        </tr>
+      </table>
+
+      <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
+      </mat-paginator>
+    </section>
+  </mat-card>
+
+</section>

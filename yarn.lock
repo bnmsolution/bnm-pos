@@ -4806,16 +4806,16 @@ portfinder@^1.0.9:
     debug "^2.2.0"
     mkdirp "0.5.x"
 
-pos-models@../pos-models/pos-models-0.0.27.tgz:
-  version "0.0.27"
-  resolved "../pos-models/pos-models-0.0.27.tgz#7ed323b29f1df9596a7c7ba9ff177ce464cedef7"
+pos-models@../pos-models/pos-models-0.0.32.tgz:
+  version "0.0.32"
+  resolved "../pos-models/pos-models-0.0.32.tgz#66fdadf1e319d79706a30decee4401802c2e7e64"
   dependencies:
     papaparse "^4.6.1"
     uuid "^3.2.1"
 
-pos-models@../pos-models/pos-models-0.0.28.tgz:
-  version "0.0.28"
-  resolved "../pos-models/pos-models-0.0.28.tgz#916d263868914192c53ae8c4ab0656af7a738a7f"
+pos-models@../pos-models/pos-models-0.0.33.tgz:
+  version "0.0.33"
+  resolved "../pos-models/pos-models-0.0.33.tgz#be1ae581f93b812a2c41e042aa3df38e43b4a868"
   dependencies:
     papaparse "^4.6.1"
     uuid "^3.2.1"

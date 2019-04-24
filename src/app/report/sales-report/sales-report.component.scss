@@ -1,0 +1,6 @@
+@import '../../shared/common-style';
+
+:host {
+  @extend .gridViewContainer;
+}
+

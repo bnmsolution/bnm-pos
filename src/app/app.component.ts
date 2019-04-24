@@ -52,7 +52,6 @@ const svgIconList = [
   ['basket', 'outline-shopping_basket-24px'],
   ['payment', 'outline-payment-24px'],
   ['download', 'outline-cloud_download-24px'],
-  ['upload', 'outline-cloud_upload-24px'],
   ['addCircle', 'outline-add_circle_outline-24px'],
   ['warning', 'outline-warning-24px'],
   ['check', 'outline-check-24px'],
@@ -68,6 +67,7 @@ const svgIconList = [
   ['copy', 'outline-file_copy-24px'],
   ['download', 'outline-cloud_download-24px'],
   ['upload', 'outline-cloud_upload-24px'],
+  ['report', 'outline-assessment-24px'],
 ];
 
 @Component({

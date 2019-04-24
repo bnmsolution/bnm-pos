@@ -1,0 +1,105 @@
+<section fxLayout="column">
+
+  <div class="list-header">
+    <div>시간/기간별 판매 현황</div>
+    <span fxFlex></span>
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon svgIcon="moreVert"></mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <mat-icon svgIcon="download"></mat-icon>
+        <span>리포트 내려받기</span>
+      </button>
+    </mat-menu>
+  </div>
+
+  <mat-card>
+    <section class="table-filter-container">
+      <app-period-select [period]="0" (periodChange)="periodChange($event)"></app-period-select>
+      <app-group-by-select [groupValue]="groupValue" (groupChange)="groupChange($event)"></app-group-by-select>
+    </section>
+    <section class="table-container">
+      <mat-progress-bar mode="indeterminate" *ngIf="!tableInitiated"></mat-progress-bar>
+      <table mat-table #table [dataSource]="dataSource" matSort>
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>날짜</th>
+          <td mat-cell *matCellDef="let row">
+            <span *ngIf="groupValue === 2">{{getDate(row.label) | appDate: 'YYYY-MM-DD'}}</span>
+            <span *ngIf="groupValue !== 2">{{row.label}}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="salesCount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>판매</th>
+          <td mat-cell *matCellDef="let row"> {{row.salesCount | appCurrency}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="grossSales">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>매출액</th>
+          <td mat-cell *matCellDef="let row"> {{row.grossSales | appCurrency}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalDiscount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>할인</th>
+          <td mat-cell *matCellDef="let row"> {{row.totalDiscount | appCurrency}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalReturns">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>환불</th>
+          <td mat-cell *matCellDef="let row"> {{row.totalReturns | appCurrency}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="netSales">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>순매출액</th>
+          <td mat-cell *matCellDef="let row"> {{row.netSales | appCurrency}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalTax">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>세금</th>
+          <td mat-cell *matCellDef="let row"> {{row.totalTax | appCurrency}}</td>
+        </ng-container>
+
+        <!-- TOTAL HEADER -->
+        <ng-container matColumnDef="1">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>합계</th>
+        </ng-container>
+
+        <ng-container matColumnDef="2">
+          <th mat-header-cell *matHeaderCellDef>{{totals.salesCount | number}}</th>
+        </ng-container>
+
+        <ng-container matColumnDef="3">
+          <th mat-header-cell *matHeaderCellDef>{{totals.grossSales | appCurrency}}</th>
+        </ng-container>
+
+        <ng-container matColumnDef="4">
+          <th mat-header-cell *matHeaderCellDef>{{totals.totalDiscount | appCurrency}}</th>
+        </ng-container>
+
+        <ng-container matColumnDef="5">
+          <th mat-header-cell *matHeaderCellDef>{{totals.totalReturns | appCurrency}}</th>
+        </ng-container>
+
+        <ng-container matColumnDef="6">
+          <th mat-header-cell *matHeaderCellDef>{{totals.netSales | appCurrency}}</th>
+        </ng-container>
+
+        <ng-container matColumnDef="7">
+          <th mat-header-cell *matHeaderCellDef>{{totals.totalTax | appCurrency}}</th>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="['1', '2', '3', '4', '5', '6', '7']"></tr>
+
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+        </tr>
+      </table>
+
+      <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
+      </mat-paginator>
+    </section>
+  </mat-card>
+
+</section>

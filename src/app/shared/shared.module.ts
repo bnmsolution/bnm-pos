@@ -28,6 +28,8 @@ import { RecentSalesComponent } from './components/recent-sales/recent-sales.com
 import { ValidatePhoneNumberDirective } from './directives/validators/validate-phone-number.directive';
 import { NumericPadComponent } from './components/numeric-pad/numeric-pad.component';
 import { ProductValidator } from './validators/product.validator';
+import { PeriodSelectComponent } from './components/period-select/period-select.component';
+import { GroupBySelectComponent } from './components/group-by-select/group-by-select.component';
 
 @NgModule({
   imports: [
@@ -62,6 +64,8 @@ import { ProductValidator } from './validators/product.validator';
     ConfirmDialogComponent,
     RecentSalesComponent,
     NumericPadComponent,
+    PeriodSelectComponent,
+    GroupBySelectComponent,
 
     // Directives
     ToggleSectionDirective,
@@ -90,6 +94,8 @@ import { ProductValidator } from './validators/product.validator';
     RecentSalesComponent,
     NumericPadComponent,
     NumericPadComponent,
+    PeriodSelectComponent,
+    GroupBySelectComponent,
 
     // Directives
     ToggleSectionDirective,
@@ -104,7 +110,6 @@ import { ProductValidator } from './validators/product.validator';
     // Pipes
     AppCurrencyPipe,
     AppDatePipe,
-
   ],
   providers: [
     ProductValidator

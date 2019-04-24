@@ -7,8 +7,10 @@ import {
   startOfMonth,
   startOfWeek,
   startOfYear,
+  subDays,
   subMonths,
-  subWeeks, subYears
+  subWeeks,
+  subYears
 } from 'date-fns';
 
 export interface Period {
@@ -17,7 +19,7 @@ export interface Period {
 }
 
 export enum FilterPeriod {
-  All, Today, ThisWeek, ThisMonth, ThisYear, OneWeek, OneMonth, OneYear, Custom
+  All, Today, Yesterday, ThisWeek, LastWeek, ThisMonth, LastMonth, ThisYear, LastYear, OneWeek, OneMonth, OneYear, Custom
 }
 
 export const getPeriodDates = (period: FilterPeriod): Period => {
@@ -29,9 +31,21 @@ export const getPeriodDates = (period: FilterPeriod): Period => {
       endDate = endOfDay(today);
       break;
     }
-    case  FilterPeriod.ThisWeek: {
+    case FilterPeriod.Yesterday: {
+      const yesterday = subDays(today, 1);
+      startDate = startOfDay(yesterday);
+      endDate = endOfDay(subDays(today, 1));
+      break;
+    }
+    case FilterPeriod.ThisWeek: {
       startDate = startOfWeek(today);
       endDate = endOfWeek(today);
+      break;
+    }
+    case FilterPeriod.LastWeek: {
+      const lastWeek = subWeeks(today, 1);
+      startDate = startOfWeek(lastWeek);
+      endDate = endOfWeek(lastWeek);
       break;
     }
     case FilterPeriod.ThisMonth: {
@@ -39,14 +53,26 @@ export const getPeriodDates = (period: FilterPeriod): Period => {
       endDate = endOfMonth(today);
       break;
     }
+    case FilterPeriod.LastMonth: {
+      const lastMonth = subMonths(today, 1);
+      startDate = startOfMonth(lastMonth);
+      endDate = endOfMonth(lastMonth);
+      break;
+    }
     case FilterPeriod.ThisYear: {
       startDate = startOfYear(today);
       endDate = endOfYear(today);
       break;
     }
+    case FilterPeriod.LastYear: {
+      const lastYear = subYears(today, 1);
+      startDate = startOfYear(lastYear);
+      endDate = endOfYear(lastYear);
+      break;
+    }
     case FilterPeriod.OneWeek: {
       endDate = endOfDay(today);
-      startDate = subWeeks(endDate, 1);
+      startDate = startOfDay(subDays(today, 6));
       break;
     }
     case FilterPeriod.OneMonth: {

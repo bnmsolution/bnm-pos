@@ -1,0 +1,11 @@
+<mat-form-field appearance="outline" floatLabel="always">
+  <mat-label>{{placeholder}}</mat-label>
+  <mat-select [value]="groupValue" (selectionChange)="onGroupChange($event.value)">
+    <mat-option [value]="0">시간별</mat-option>
+    <mat-option [value]="1">요일별</mat-option>
+    <mat-option [value]="2">일자별</mat-option>
+    <mat-option [value]="3">월별</mat-option>
+    <mat-option [value]="4">분기별</mat-option>
+    <mat-option [value]="5">연별</mat-option>
+  </mat-select>
+</mat-form-field>

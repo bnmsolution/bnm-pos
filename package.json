@@ -36,7 +36,7 @@
     "ngrx-store-freeze": "^0.2.4",
     "ngrx-store-logger": "^0.2.1",
     "papaparse": "4.6.2",
-    "pos-models": "../pos-models/pos-models-0.0.28.tgz",
+    "pos-models": "../pos-models/pos-models-0.0.33.tgz",
     "pouchdb": "^7.0.0",
     "pouchdb-browser": "^7.0.0",
     "pouchdb-find": "^7.0.0",
