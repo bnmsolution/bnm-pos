@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { startOfDay, endOfDay } from 'date-fns';
 
 
-import { FilterPeriod, getPeriodDates, Period } from 'src/app/shared/utils/filter-period';
+import { FilterPeriod, getPeriodDates, Period, FilterPeriodChage } from 'src/app/shared/utils/filter-period';
 
 @Component({
   selector: 'app-period-select',
@@ -11,17 +11,23 @@ import { FilterPeriod, getPeriodDates, Period } from 'src/app/shared/utils/filte
 })
 export class PeriodSelectComponent implements OnInit {
 
-  @Input() period: FilterPeriod;
+  @Input() filterPeriod: FilterPeriod;
   @Input() placeholder = '기간';
+  @Input() exclude: number[] = [];
 
-  @Output() periodChange = new EventEmitter();
+  @Output() periodChange = new EventEmitter<FilterPeriodChage>();
 
+  displayOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  optionLabels = ['전체', '오늘', '어제', '이번주', '저번주', '이번달', '저번달',
+    this.currentYear + '년', this.currentYear - 1 + '년', '7일', '30일', '1년', '직접선택'];
   periodDates: Period;
 
   constructor() { }
 
   ngOnInit() {
-    this.periodDates = getPeriodDates(this.period);
+    this.periodDates = getPeriodDates(this.filterPeriod);
+    this.displayOptions = this.displayOptions.filter(o => this.exclude.indexOf(o) === -1);
+    console.log(this.displayOptions);
   }
 
   get currentYear(): number {
@@ -34,10 +40,10 @@ export class PeriodSelectComponent implements OnInit {
 
   onPeriodChange(period: FilterPeriod) {
     this.periodDates = getPeriodDates(period);
-    this.period = period;
+    this.filterPeriod = period;
 
     if (period !== FilterPeriod.Custom) {
-      this.periodChange.emit(this.periodDates);
+      this.periodChange.emit({ period: this.periodDates, filterPeriod: this.filterPeriod });
     }
   }
 
@@ -47,6 +53,10 @@ export class PeriodSelectComponent implements OnInit {
       startDate: startOfDay(begin),
       endDate: endOfDay(end)
     };
-    this.periodChange.emit(this.periodDates);
+    this.periodChange.emit({ period: this.periodDates, filterPeriod: this.filterPeriod });
+  }
+
+  trackByFnction(index: number) {
+    return index;
   }
 }

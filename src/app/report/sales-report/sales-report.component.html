@@ -16,7 +16,7 @@
 
   <mat-card>
     <section class="table-filter-container">
-      <app-period-select [period]="0" (periodChange)="periodChange($event)"></app-period-select>
+      <app-period-select [filterPeriod]="0" (periodChange)="periodChange($event)"></app-period-select>
     </section>
     <section class="table-container">
       <mat-progress-bar mode="indeterminate" *ngIf="!tableInitiated"></mat-progress-bar>

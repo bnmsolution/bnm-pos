@@ -2,6 +2,7 @@ import { getHours, getDay, getYear, getMonth, isWithinInterval, getQuarter } fro
 import { RegisterSale } from 'pos-models';
 
 import { DateTimeGroup } from 'src/app/shared/enums/date-time-groups';
+import { FilterPeriod } from '../shared/utils/filter-period';
 
 const dayInMilliseconds = 86400000;
 
@@ -10,8 +11,8 @@ export interface ReportLine {
   label: string;
 }
 
-export function generateSalesGroupData(groupValue: DateTimeGroup, sales: RegisterSale[], getDefaultLine: () => ReportLine,
-  accumulateFn: (reportLine: ReportLine, sale: RegisterSale) => void) {
+export const generateSalesGroupData = (groupValue: DateTimeGroup, sales: RegisterSale[], getDefaultLine: () => ReportLine,
+  accumulateFn: (reportLine: ReportLine, sale: RegisterSale) => void) => {
   switch (groupValue) {
     case DateTimeGroup.ByHour: {
       return generateGroupData(groupValue, sales, getDefaultLine, (sale) => {
@@ -60,7 +61,7 @@ export function generateSalesGroupData(groupValue: DateTimeGroup, sales: Registe
       }, accumulateFn);
     }
   }
-}
+};
 
 export function generateGroupData<T>(groupValue: DateTimeGroup, items: T[], getDefaultLine: () => ReportLine,
   keyAndLabelFn: (item: T) => { key: any, label?: any },
@@ -129,3 +130,28 @@ export function generateGroupData<T>(groupValue: DateTimeGroup, items: T[], getD
     }
   }
 }
+
+export const filterPeriodToGroup = (period: FilterPeriod): DateTimeGroup => {
+  switch (period) {
+    case FilterPeriod.Today:
+    case FilterPeriod.Yesterday: {
+      return DateTimeGroup.ByHour;
+    }
+    case FilterPeriod.ThisWeek:
+    case FilterPeriod.LastWeek:
+    case FilterPeriod.OneWeek: {
+      return DateTimeGroup.ByDay;
+    }
+    case FilterPeriod.ThisMonth:
+    case FilterPeriod.LastMonth:
+    case FilterPeriod.ThrityDays: {
+      return DateTimeGroup.ByDate;
+    }
+    case FilterPeriod.ThisYear:
+    case FilterPeriod.LastYear:
+    case FilterPeriod.OneYear: {
+      return DateTimeGroup.ByMonth;
+    }
+  }
+};
+

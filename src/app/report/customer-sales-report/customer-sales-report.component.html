@@ -16,7 +16,7 @@
 
   <mat-card>
     <section class="table-filter-container">
-      <app-period-select [period]="0" (periodChange)="periodChange($event)"></app-period-select>
+      <app-period-select [filterPeriod]="0" (periodChange)="periodChange($event)"></app-period-select>
       <app-group-by-select [groupValue]="groupValue" (groupChange)="groupChange($event)"></app-group-by-select>
     </section>
     <section class="table-container">

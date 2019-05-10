@@ -1,4 +1,4 @@
-<section *ngIf="summary">
+<!-- <section *ngIf="summary">
   <div class="header">
     <div class="headerLabel">대시보드<span class="date">{{formatDate(summary.dates.startDate, 'PPPP')}}</span>
     </div>
@@ -9,55 +9,65 @@
     </mat-button-toggle-group>
   </div>
 
-</section>
+</section> -->
 
+<app-period-select [filterPeriod]="filterPeriod" [exclude]="[0, 12]" (periodChange)="periodChange($event)"></app-period-select>
+
+<!-- <pre>{{dashboardData | json}}</pre> -->
 <!--<section class="overview">-->
-  <!--<canvas #chart width="500" height="300"></canvas>-->
-  <!--<div class="performance" *ngIf="summary">-->
-    <!--<div class="period">{{performanceLabel[0]}}</div>-->
-    <!--<div class="total">{{summary.current.salesAmount | appCurrency}}</div>-->
-    <!--<div class="compare" *ngIf="salesDiff.totalSalesAmountDiff !== 0">{{performanceLabel[1]}} 보다-->
-      <!--<span [ngClass]="salesDiff.totalSalesAmountDiff > 0 ? 'increase' : 'decrease'">{{salesDiff.totalSalesAmountDiff | appCurrency}} {{salesDiff.totalSalesAmountDiff > 0 ? '증가' : '감소'}}</span>-->
-      <!--하였습니다.-->
-    <!--</div>-->
-    <!--<div class="compare" *ngIf="salesDiff.totalSalesAmountDiff === 0">{{performanceLabel[1]}} 매출과 같습니다.-->
-    <!--</div>-->
-    <!--<div class="averageLabel">평균 매출액</div>-->
-    <!--<div class="average">{{summary.current.avgPerSaleAmount | appCurrency}}</div>-->
-    <!--<div class="compare" *ngIf="salesDiff.averageSaleAmountDiff !== 0">{{performanceLabel[1]}} 보다-->
-      <!--<span [ngClass]="salesDiff.averageSaleAmountDiff > 0 ? 'increase' : 'decrease'">{{salesDiff.averageSaleAmountDiff | appCurrency}} {{salesDiff.averageSaleAmountDiff > 0 ? '증가' : '감소'}}</span>-->
-      <!--하였습니다.-->
-    <!--</div>-->
-    <!--<div class="compare" *ngIf="salesDiff.averageSaleAmountDiff === 0">{{performanceLabel[1]}} 매출과 같습니다.-->
-    <!--</div>-->
-  <!--</div>-->
+<!--<canvas #chart width="500" height="300"></canvas>-->
+<!--<div class="performance" *ngIf="summary">-->
+<!--<div class="period">{{performanceLabel[0]}}</div>-->
+<!--<div class="total">{{summary.current.salesAmount | appCurrency}}</div>-->
+<!--<div class="compare" *ngIf="salesDiff.totalSalesAmountDiff !== 0">{{performanceLabel[1]}} 보다-->
+<!--<span [ngClass]="salesDiff.totalSalesAmountDiff > 0 ? 'increase' : 'decrease'">{{salesDiff.totalSalesAmountDiff | appCurrency}} {{salesDiff.totalSalesAmountDiff > 0 ? '증가' : '감소'}}</span>-->
+<!--하였습니다.-->
+<!--</div>-->
+<!--<div class="compare" *ngIf="salesDiff.totalSalesAmountDiff === 0">{{performanceLabel[1]}} 매출과 같습니다.-->
+<!--</div>-->
+<!--<div class="averageLabel">평균 매출액</div>-->
+<!--<div class="average">{{summary.current.avgPerSaleAmount | appCurrency}}</div>-->
+<!--<div class="compare" *ngIf="salesDiff.averageSaleAmountDiff !== 0">{{performanceLabel[1]}} 보다-->
+<!--<span [ngClass]="salesDiff.averageSaleAmountDiff > 0 ? 'increase' : 'decrease'">{{salesDiff.averageSaleAmountDiff | appCurrency}} {{salesDiff.averageSaleAmountDiff > 0 ? '증가' : '감소'}}</span>-->
+<!--하였습니다.-->
+<!--</div>-->
+<!--<div class="compare" *ngIf="salesDiff.averageSaleAmountDiff === 0">{{performanceLabel[1]}} 매출과 같습니다.-->
+<!--</div>-->
+<!--</div>-->
 <!--</section>-->
 
 
-<div class="container" *ngIf="summary">
+<div class="container" *ngIf="dashboardData">
   <div class="row">
     <div class="col-md-6 col-lg-4">
       <mat-card>
-        <mat-card-title>{{legendLabel[0]}} 매출</mat-card-title>
-        <app-sales-widget [period]="period" [summary]="summary" [chartType]="0"></app-sales-widget>
+        <mat-card-title>총매출</mat-card-title>
+        <app-sales-widget [period]="period" [filterPeriod]="filterPeriod" [dashboardData]="dashboardData" [chartType]="0" [height]="250"></app-sales-widget>
       </mat-card>
     </div>
 
     <div class="col-md-6 col-lg-4">
       <mat-card>
-        <mat-card-title>{{legendLabel[0]}} 판매건당 매출 평균</mat-card-title>
-        <app-sales-widget [period]="period" [summary]="summary" [chartType]="1"></app-sales-widget>
+        <mat-card-title>평균매출</mat-card-title>
+        <app-sales-widget [period]="period" [filterPeriod]="filterPeriod" [dashboardData]="dashboardData" [chartType]="1"></app-sales-widget>
       </mat-card>
     </div>
 
     <div class="col-md-6 col-lg-4">
       <mat-card>
-        <mat-card-title>{{legendLabel[0]}} 판매 건수</mat-card-title>
-        <app-sales-widget [period]="period" [summary]="summary" [chartType]="2"></app-sales-widget>
+        <mat-card-title>매출건</mat-card-title>
+        <app-sales-widget [period]="period" [filterPeriod]="filterPeriod" [dashboardData]="dashboardData" [chartType]="2"></app-sales-widget>
       </mat-card>
     </div>
 
     <div class="col-md-6 col-lg-4">
+        <mat-card>
+          <mat-card-title>매출건</mat-card-title>
+          <app-sales-widget [period]="period" [filterPeriod]="filterPeriod" [dashboardData]="dashboardData" [chartType]="3"></app-sales-widget>
+        </mat-card>
+      </div>
+
+    <!-- <div class="col-md-6 col-lg-4">
       <mat-card>
         <mat-card-title>최근 판매목록</mat-card-title>
         <app-recent-sales [sales]="recentSales"></app-recent-sales>
@@ -100,7 +110,7 @@
         <mat-card-title>기존고객 판매건</mat-card-title>
         <app-customer-sale-count-widget [period]="period" [summary]="summary"></app-customer-sale-count-widget>
       </mat-card>
-    </div>
+    </div> -->
   </div>
 </div>
 

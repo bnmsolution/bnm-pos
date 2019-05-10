@@ -16,82 +16,92 @@ import {
 export interface Period {
   startDate: Date;
   endDate: Date;
+  prevStartDate?: Date;
+  prevEndDate?: Date;
 }
 
 export enum FilterPeriod {
-  All, Today, Yesterday, ThisWeek, LastWeek, ThisMonth, LastMonth, ThisYear, LastYear, OneWeek, OneMonth, OneYear, Custom
+  All, Today, Yesterday, ThisWeek, LastWeek, ThisMonth, LastMonth, ThisYear, LastYear, OneWeek, ThrityDays, OneYear, Custom
+}
+
+export interface FilterPeriodChage {
+  period: Period;
+  filterPeriod: FilterPeriod;
 }
 
 export const getPeriodDates = (period: FilterPeriod): Period => {
   const today = new Date();
-  let startDate, endDate;
+  let startDate, endDate, prevStartDate, prevEndDate;
   switch (period) {
-    case FilterPeriod.Today: {
-      startDate = startOfDay(today);
-      endDate = endOfDay(today);
-      break;
-    }
+    case FilterPeriod.Today:
     case FilterPeriod.Yesterday: {
-      const yesterday = subDays(today, 1);
-      startDate = startOfDay(yesterday);
-      endDate = endOfDay(subDays(today, 1));
+      const baseDate = period === FilterPeriod.Today ? today : subDays(today, 1);
+      startDate = startOfDay(baseDate);
+      endDate = endOfDay(baseDate);
+      prevStartDate = subDays(startDate, 1);
+      prevEndDate = subDays(endDate, 1);
       break;
     }
-    case FilterPeriod.ThisWeek: {
-      startDate = startOfWeek(today);
-      endDate = endOfWeek(today);
-      break;
-    }
+    case FilterPeriod.ThisWeek:
     case FilterPeriod.LastWeek: {
-      const lastWeek = subWeeks(today, 1);
-      startDate = startOfWeek(lastWeek);
-      endDate = endOfWeek(lastWeek);
+      const baseDate = period === FilterPeriod.ThisWeek ? today : subWeeks(today, 1);
+      startDate = startOfWeek(baseDate);
+      endDate = endOfWeek(baseDate);
+      prevStartDate = subWeeks(startDate, 1);
+      prevEndDate = subWeeks(endDate, 1);
       break;
     }
-    case FilterPeriod.ThisMonth: {
-      startDate = startOfMonth(today);
-      endDate = endOfMonth(today);
-      break;
-    }
+    case FilterPeriod.ThisMonth:
     case FilterPeriod.LastMonth: {
-      const lastMonth = subMonths(today, 1);
-      startDate = startOfMonth(lastMonth);
-      endDate = endOfMonth(lastMonth);
+      const baseDate = period === FilterPeriod.ThisMonth ? today : subMonths(today, 1);
+      startDate = startOfMonth(baseDate);
+      endDate = endOfMonth(baseDate);
+      prevStartDate = subMonths(startDate, 1);
+      prevEndDate = endOfMonth(subMonths(endDate, 1));
       break;
     }
-    case FilterPeriod.ThisYear: {
-      startDate = startOfYear(today);
-      endDate = endOfYear(today);
-      break;
-    }
+    case FilterPeriod.ThisYear:
     case FilterPeriod.LastYear: {
-      const lastYear = subYears(today, 1);
-      startDate = startOfYear(lastYear);
-      endDate = endOfYear(lastYear);
+      const baseDate = period === FilterPeriod.ThisYear ? today : subYears(today, 1);
+      startDate = startOfYear(baseDate);
+      endDate = endOfYear(baseDate);
+      prevStartDate = subYears(startDate, 1);
+      prevEndDate = subYears(endDate, 1);
       break;
     }
+
     case FilterPeriod.OneWeek: {
       endDate = endOfDay(today);
       startDate = startOfDay(subDays(today, 6));
+      prevStartDate = subWeeks(startDate, 1);
+      prevEndDate = subWeeks(endDate, 1);
       break;
     }
-    case FilterPeriod.OneMonth: {
+    case FilterPeriod.ThrityDays: {
       endDate = endOfDay(today);
-      startDate = subMonths(endDate, 1);
+      startDate = startOfDay(subDays(endDate, 29));
+      prevEndDate = endOfDay(subDays(startDate, 1));
+      prevStartDate = startOfDay(subDays(prevEndDate, 29));
       break;
     }
     case FilterPeriod.OneYear: {
       endDate = endOfDay(today);
-      startDate = subYears(endDate, 1);
+      startDate = startOfDay(subDays(endDate, 364));
+      prevEndDate = endOfDay(subDays(startDate, 1));
+      prevStartDate = startOfDay(subDays(prevEndDate, 364));
       break;
     }
     default: {
       startDate = null;
       endDate = null;
+      prevStartDate = null;
+      prevEndDate = null;
     }
   }
   return {
     startDate,
-    endDate
+    endDate,
+    prevStartDate,
+    prevEndDate
   };
 };

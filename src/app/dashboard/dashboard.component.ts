@@ -4,18 +4,21 @@ import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import {
   RegisterSale,
-  sortSales,
-  DashboardPeriods,
-  generateDashboard,
-  generateTopSaleProducts,
-  TopSaleProducts
+  TopSaleProducts,
+  RegisterSaleStatus
 } from 'pos-models';
-import Chart from 'chart.js';
 import format from '../shared/utils/format';
 
 import { AppState } from '../core';
 import * as actions from '../stores/actions/sales.actions';
 import { cloneDeep } from '../shared/utils/lang';
+import { Period, getPeriodDates, FilterPeriod, FilterPeriodChage } from '../shared/utils/filter-period';
+import { _filterSalesByPeriod } from '../shared/operators/filter-sales-by-period';
+import { generateDashboardData, DashboardData } from './dashboard-data-generator';
+import { DateTimeGroup } from '../shared/enums/date-time-groups';
+
+
+
 
 @Component({
   selector: 'app-dashboard',
@@ -25,7 +28,10 @@ import { cloneDeep } from '../shared/utils/lang';
 export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('chart') chartElement: ElementRef;
 
-  period: DashboardPeriods = DashboardPeriods.Today;
+  filterPeriod: FilterPeriod = FilterPeriod.ThisMonth;
+  period: Period = getPeriodDates(this.filterPeriod);
+  groupValue: DateTimeGroup;
+
   chartInstance: any = null;
   sales: RegisterSale[] = [];
   recentSales: RegisterSale[] = [];
@@ -33,6 +39,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   summary: any;
   unsubscribe$ = new Subject();
   formatDate = format;
+  dashboardData: DashboardData;
 
   constructor(private cdr: ChangeDetectorRef,
     private appState: AppState, private store: Store<any>) {
@@ -41,7 +48,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.store.select('sales')
       .pipe(
-        takeUntil(this.unsubscribe$)
+        takeUntil(this.unsubscribe$),
       )
       .subscribe(sales => {
         if (sales) {
@@ -49,7 +56,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.recentSales = this.sales.sort((a, b) =>
             new Date(b.salesDate).getTime() - new Date(a.salesDate).getTime()
           ).slice(0, 5);
-          this.initDashboard();
+          // this.initDashboard();
+          this.dashboardData = generateDashboardData(this.period, this.filterPeriod, sales);
           this.cdr.detectChanges();
         } else {
           this.store.dispatch(new actions.LoadSales());
@@ -71,19 +79,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
-  get legendLabel() {
-    switch (this.period) {
-      case DashboardPeriods.Today: {
-        return ['오늘', format(this.summary.dates.startDate, '지난주 iiii')];
-      }
-      case DashboardPeriods.ThisWeek: {
-        return ['이번주', '지난주'];
-      }
-      case DashboardPeriods.ThisMonth: {
-        return ['이번달', '지난달'];
-      }
-    }
-  }
+  // get legendLabel() {
+  //   switch (this.period) {
+  //     case DashboardPeriods.Today: {
+  //       return ['오늘', format(this.summary.dates.startDate, '지난주 iiii')];
+  //     }
+  //     case DashboardPeriods.ThisWeek: {
+  //       return ['이번주', '지난주'];
+  //     }
+  //     case DashboardPeriods.ThisMonth: {
+  //       return ['이번달', '지난달'];
+  //     }
+  //   }
+  // }
 
 
   get salesDiff() {
@@ -96,18 +104,59 @@ export class DashboardComponent implements OnInit, OnDestroy {
     };
   }
 
-  periodChange(period: DashboardPeriods) {
-    this.period = period;
-    this.initDashboard();
+  periodChange(change: FilterPeriodChage) {
+    if (change.filterPeriod === FilterPeriod.All) {
+      this.period.endDate = this.sales[0].salesDate;
+      this.period.startDate = this.sales[this.sales.length - 1].salesDate;
+    } else {
+      this.period = change.period;
+    }
+
+    this.filterPeriod = change.filterPeriod;
+    this.dashboardData = generateDashboardData(this.period, this.filterPeriod, this.sales);
   }
 
-  initDashboard() {
-    if (this.sales.length > 0) {
-      const summary: any = sortSales(this.sales, this.period, format);
-      summary.current = generateDashboard(summary.salesInCurrentPeriod);
-      summary.previous = generateDashboard(summary.salesInPreviousPeriod);
-      this.topSaleProducts = generateTopSaleProducts(summary.current.products, summary.previous.products);
-      this.summary = summary;
+  // initDashboard() {
+  //   if (this.sales.length > 0) {
+  //     const summary: any = sortSales(this.sales, this.period, format);
+  //     summary.current = generateDashboard(summary.salesInCurrentPeriod);
+  //     summary.previous = generateDashboard(summary.salesInPreviousPeriod);
+  //     this.topSaleProducts = generateTopSaleProducts(summary.current.products, summary.previous.products);
+  //     this.summary = summary;
+  //   }
+  // }
+
+  periodStr() {
+    return {
+      start: new Date(this.period.startDate).toString(),
+      end: new Date(this.period.endDate).toString(),
+      prevStart: new Date(this.period.prevStartDate).toString(),
+      prevEnd: new Date(this.period.prevEndDate).toString()
+    };
+  }
+
+  accumulateSales(data: any, sale: RegisterSale) {
+    if (sale.status === RegisterSaleStatus.Completed) {
+      data.count++;
+      data.total += sale.totalPrice;
     }
   }
+
+  groupChange(groupValue: DateTimeGroup) {
+    this.groupValue = groupValue;
+  }
+
+  getEmptySalesData(): any {
+    return {
+      label: '',
+      index: 0,
+      count: 0,
+      total: 0,
+      avg: 0
+    };
+  }
+
+
+
 }
+
