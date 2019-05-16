@@ -61,8 +61,8 @@ export class PrinterService {
       data.push([divider, ...normalStyle]);
       data.push(['마이 포인트 내역', ...headerStyle]);
       data.push([`${this.format('금 회 적 립 포인트', 31, false)} ${this.format(this.formatNumber(sale.pointsEarned), 10)}`, ...normalStyle]);
-      data.push([`${this.format('잔  여  포  인  트', 31, false)} ${this.format(this.formatNumber(sale.customer.currentStorePoint), 10)}`, ...normalStyle]);
-      data.push([`${this.format('사 용 가 능 포인트', 31, false)} ${this.format(this.formatNumber(sale.customer.currentStorePoint), 10)}`, ...normalStyle]);
+      data.push([`${this.format('잔  여  포  인  트', 31, false)} ${this.format(this.formatNumber(sale.totalCustomerPoint), 10)}`, ...normalStyle]);
+      data.push([`${this.format('사 용 가 능 포인트', 31, false)} ${this.format(this.formatNumber(sale.totalCustomerPoint), 10)}`, ...normalStyle]);
     }
 
     this.http.post('http://localhost:53016/api/values', { data }).subscribe();
