@@ -66,18 +66,19 @@ export class SalesWidgetComponent implements OnInit, OnChanges {
   }
 
   get legendLabel() {
-    // switch (this.period) {
-    //   case DashboardPeriods.Today: {
-    //     return ['오늘', format(this.summary.dates.startDate, '지난주 iiii')];
-    //   }
-    //   case DashboardPeriods.ThisWeek: {
-    //     return ['이번주', '지난주'];
-    //   }
-    //   case DashboardPeriods.ThisMonth: {
-    //     return ['이번달', '지난달'];
-    //   }
-    // }
-    return 'test';
+    switch (this.filterPeriod) {
+      case FilterPeriod.Today: return ['어제', '오늘'];
+      case FilterPeriod.Yesterday: return ['그제', '어제'];
+      case FilterPeriod.ThisWeek: return ['지난주', '이번주'];
+      case FilterPeriod.LastWeek: return ['지지난주', '지난주'];
+      case FilterPeriod.OneWeek: return ['그제', '일주일'];
+      case FilterPeriod.ThisMonth: return ['지난달', '이번달'];
+      case FilterPeriod.LastMonth: return ['지지난달', '지난달'];
+      case FilterPeriod.ThrityDays: return ['그제', '어제'];
+      case FilterPeriod.ThisYear: return ['그제', '어제'];
+      case FilterPeriod.LastYear: return ['그제', '어제'];
+      case FilterPeriod.OneYear: return ['그제', '어제'];
+    }
   }
 
 

@@ -1,5 +1,5 @@
 <form class="app-form" [formGroup]="storeForm" (ngSubmit)="onSubmit()" novalidate>
-  <app-create-content-header title="설정" returnUrl="/"></app-create-content-header>
+  <app-create-content-header title="설정" returnUrl="/" type="edit"></app-create-content-header>
   <mat-tab-group (selectedTabChange)="tabChange($event)">
     <mat-tab label="스토어 설정">
       <section class="accordion" *ngIf="selectedTabIndex === 0">
@@ -80,6 +80,31 @@
             </mat-expansion-panel-header>
             <section fxLayout="column">
 
+            </section>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </section>
+    </mat-tab>
+    <mat-tab label="영수증 프린터">
+      <section class="accordion" *ngIf="selectedTabIndex === 2">
+        <mat-accordion multi="true">
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+              기본 설정
+            </mat-expansion-panel-header>
+            <section fxLayout="column">
+              <mat-form-field>
+                <input matInput formControlName="phoneNumber" placeholder="전화번호">
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput formControlName="address" placeholder="주소">
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput formControlName="representative" placeholder="대표자명">
+              </mat-form-field>
+              <mat-form-field>
+                <input matInput formControlName="businessNumber" placeholder="사업자등록번호">
+              </mat-form-field>
             </section>
           </mat-expansion-panel>
         </mat-accordion>

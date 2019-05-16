@@ -56,7 +56,12 @@ export class StoreComponent implements OnInit {
       rewardRateForCash: null,
       rewardRateForCredit: null,
       minimumPointsToUse: null,
-      bonusPointUponRegistration: null
+      bonusPointUponRegistration: null,
+
+      address: '',
+      phoneNumber: '',
+      businessNumber: '',
+      representative: ''
     });
 
     this.storeForm.controls.useReward.valueChanges

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { forkJoin, Observable } from 'rxjs';
 import { RegisterSale } from 'pos-models';
+import * as stringWidth from 'string-width';
 
 
 import { CrudService } from './crudService';

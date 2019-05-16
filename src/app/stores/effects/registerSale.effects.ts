@@ -9,6 +9,7 @@ import { RegisterSaleService } from '../../services/register-sale.service';
 import * as customerActions from '../actions/customer.actions';
 import { cloneDeep } from '../../shared/utils/lang';
 import { MessageService } from 'src/app/services/message.service';
+import { PrinterService } from 'src/app/services/printer.service';
 
 @Injectable()
 export class RegisterSaleEffects {
@@ -40,6 +41,7 @@ export class RegisterSaleEffects {
         const saleCopy = cloneDeep(sale);
         this.removeReferences(saleCopy);
         this.messageService.sendMessage(saleCopy);
+        this.printerService.sendPrintRequest(saleCopy);
         return this.registerSaleService.closeSale(saleCopy);
       }),
       map(sale => new registerSaleActions.CloseSaleSuccess()),
@@ -69,6 +71,7 @@ export class RegisterSaleEffects {
     private actions$: Actions,
     private store: Store<any>,
     private registerSaleService: RegisterSaleService,
+    private printerService: PrinterService,
     private messageService: MessageService
   ) {
   }

@@ -19,6 +19,7 @@ import { TaxResolverService } from 'src/app/services/tax-resolver.service';
 import { VendorResolverService } from 'src/app/services/vendor-resolver.service';
 import { ImportService } from '../services/import.service';
 import { MessageService } from '../services/message.service';
+import { PrinterService } from '../services/printer.service';
 
 @NgModule({
   providers: [
@@ -40,7 +41,8 @@ import { MessageService } from '../services/message.service';
     TaxResolverService,
     VendorResolverService,
     ImportService,
-    MessageService
+    MessageService,
+    PrinterService
   ]
 })
 export class CoreModule { }
