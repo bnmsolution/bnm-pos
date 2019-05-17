@@ -13,10 +13,10 @@ export const environment = {
     audience: 'https://api.bnmpos.com',
     namespace: 'https://bnm.com/'
   },
-  posApiUrl: 'http://localhost:3000/api',
-  posMessagingUrl: 'http://localhost:3000',
-  // posApiUrl: 'https://api.bnmpos.com/api',
-  // posMessagingUrl: 'https://api.bnmpos.com'
+  // posApiUrl: 'http://localhost:3000/api',
+  // posMessagingUrl: 'http://localhost:3000',
+  posApiUrl: 'https://api.bnmpos.com/api',
+  posMessagingUrl: 'https://api.bnmpos.com'
 };
 
 /*
