@@ -68,7 +68,7 @@ export class PrinterService {
 
 
     // Customer
-    if (sale.customer) {
+    if (sale.customerId) {
       data.push([divider, ...normalStyle]);
       data.push(['마이 포인트 내역', ...headerStyle]);
       data.push([`${this.format('적립 포인트', 31, false)} ${this.format(this.formatNumber(sale.pointsEarned), 10)}`, ...normalStyle]);

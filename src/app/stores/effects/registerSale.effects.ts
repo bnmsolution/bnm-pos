@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { withLatestFrom, mergeMap, map, share, filter } from 'rxjs/operators';
+import { withLatestFrom, mergeMap, map, share, filter, tap } from 'rxjs/operators';
 
 import * as registerSaleActions from '../actions/register-sale.actions';
 import * as salesActions from '../actions/sales.actions';
@@ -41,9 +41,9 @@ export class RegisterSaleEffects {
         const saleCopy = cloneDeep(sale);
         this.removeReferences(saleCopy);
         this.messageService.sendMessage(saleCopy);
-        this.printerService.sendPrintRequest(saleCopy);
         return this.registerSaleService.closeSale(saleCopy);
       }),
+      tap(sale => this.printerService.sendPrintRequest(sale)),
       map(sale => new registerSaleActions.CloseSaleSuccess()),
       share()
     );
