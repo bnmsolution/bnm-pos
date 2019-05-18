@@ -1,4 +1,4 @@
-import { getHours, getDay, getYear, getMonth, isWithinInterval, getQuarter } from 'date-fns';
+import { getHours, getDay, getYear, getMonth, getQuarter, format } from 'date-fns';
 import { RegisterSale } from 'pos-models';
 
 import { DateTimeGroup } from 'src/app/shared/enums/date-time-groups';
@@ -12,60 +12,62 @@ export interface ReportLine {
 }
 
 export const generateSalesGroupData = (groupValue: DateTimeGroup, sales: RegisterSale[], getDefaultLine: () => ReportLine,
-  accumulateFn: (reportLine: ReportLine, sale: RegisterSale) => void) => {
+  accumulateFn: (reportLine: ReportLine, sale: RegisterSale) => void, isdescending = false) => {
   switch (groupValue) {
     case DateTimeGroup.ByHour: {
       return generateGroupData(groupValue, sales, getDefaultLine, (sale) => {
         const salesDate = new Date(sale.salesDate);
         return { key: getHours(salesDate) };
-      }, accumulateFn);
+      }, accumulateFn, isdescending);
     }
 
     case DateTimeGroup.ByDay: {
       return generateGroupData(groupValue, sales, getDefaultLine, (sale) => {
         const salesDate = new Date(sale.salesDate);
         return { key: getDay(salesDate) };
-      }, accumulateFn);
+      }, accumulateFn, isdescending);
     }
 
     case DateTimeGroup.ByDate: {
       return generateGroupData(groupValue, sales, getDefaultLine, (sale) => {
         const salesTimestamp = new Date(sale.salesDate).getTime();
-        return { key: Math.round(salesTimestamp / dayInMilliseconds), label: salesTimestamp };
-      }, accumulateFn);
+        return { key: format(new Date(sale.salesDate), 'yyyy-M-dd'), label: salesTimestamp, index: salesTimestamp };
+      }, accumulateFn, isdescending);
     }
 
     case DateTimeGroup.ByMonth: {
       return generateGroupData(groupValue, sales, getDefaultLine, (sale) => {
+        const salesTimestamp = new Date(sale.salesDate).getTime();
         const salesDate = new Date(sale.salesDate);
         const salesYear = getYear(salesDate);
         const salesMonth = getMonth(salesDate);
-        return { key: parseFloat(`${salesYear}.${salesMonth}`), label: `${salesYear}년 ${salesMonth + 1}월` };
-      }, accumulateFn);
+        return { key: parseFloat(`${salesYear}.${salesMonth}`), label: `${salesYear}년 ${salesMonth + 1}월`, index: salesTimestamp };
+      }, accumulateFn, isdescending);
     }
 
     case DateTimeGroup.ByQuarter: {
       return generateGroupData(groupValue, sales, getDefaultLine, (sale) => {
+        const salesTimestamp = new Date(sale.salesDate).getTime();
         const salesDate = new Date(sale.salesDate);
         const salesYear = getYear(salesDate);
         const salesQuarter = getQuarter(salesDate);
-        return { key: parseFloat(`${salesYear}.${salesQuarter}`), label: `${salesYear}년 ${salesQuarter}분기` };
-      }, accumulateFn);
+        return { key: parseFloat(`${salesYear}.${salesQuarter}`), label: `${salesYear}년 ${salesQuarter}분기`, index: salesTimestamp };
+      }, accumulateFn, isdescending);
     }
 
     case DateTimeGroup.ByYear: {
       return generateGroupData(groupValue, sales, getDefaultLine, (sale) => {
         const salesDate = new Date(sale.salesDate);
         const salesYear = getYear(salesDate);
-        return { key: salesYear, label: `${salesYear}년` };
-      }, accumulateFn);
+        return { key: salesYear, label: `${salesYear}년`, index: salesYear };
+      }, accumulateFn, isdescending);
     }
   }
 };
 
 export function generateGroupData<T>(groupValue: DateTimeGroup, items: T[], getDefaultLine: () => ReportLine,
-  keyAndLabelFn: (item: T) => { key: any, label?: any },
-  accumulateFn: (reportLine: ReportLine, item: T) => void) {
+  keyAndLabelFn: (item: T) => { key: any, label?: any, index?: any },
+  accumulateFn: (reportLine: ReportLine, item: T) => void, isdescending: boolean) {
 
   switch (groupValue) {
     case DateTimeGroup.ByHour: {
@@ -113,20 +115,20 @@ export function generateGroupData<T>(groupValue: DateTimeGroup, items: T[], getD
       const groups = {};
 
       items.forEach(item => {
-        const groupItemKey = keyAndLabelFn(item).key;
-        let reportLine = groups[groupItemKey];
-        if (groups[groupItemKey]) {
-          reportLine = groups[groupItemKey];
+        const { key, label, index } = keyAndLabelFn(item);
+        let reportLine = groups[key];
+        if (groups[key]) {
+          reportLine = groups[key];
         } else {
           reportLine = getDefaultLine();
-          reportLine.index = groupItemKey;
-          reportLine.label = keyAndLabelFn(item).label;
-          groups[groupItemKey] = reportLine;
+          reportLine.index = index;
+          reportLine.label = label;
+          groups[key] = reportLine;
         }
         accumulateFn(reportLine, item);
       });
 
-      return Object.values(groups).sort((a: any, b: any) => a.index - b.index);
+      return Object.values(groups).sort((a: any, b: any) => isdescending ? b.index - a.index : a.index - b.index);
     }
   }
 }

@@ -7,7 +7,7 @@ import { RegisterSale, Product, RegisterSaleStatus } from 'pos-models';
 import { isWithinInterval } from 'date-fns';
 
 import * as salesListActions from 'src/app/stores/actions/sales.actions';
-import { Period } from 'src/app/shared/utils/filter-period';
+import { Period, FilterPeriodChage } from 'src/app/shared/utils/filter-period';
 import { DateTimeGroup } from 'src/app/shared/enums/date-time-groups';
 import { ReportLine, generateSalesGroupData } from '../group-data-generator';
 
@@ -80,8 +80,8 @@ export class CustomerSalesReportComponent implements OnInit {
     this.initTable();
   }
 
-  periodChange(periodDates: Period) {
-    this.periodDates = periodDates;
+  periodChange(change: FilterPeriodChage) {
+    this.periodDates = change.period;
     this.generateReports();
   }
 

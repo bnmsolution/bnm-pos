@@ -7,7 +7,7 @@
       <mat-icon svgIcon="moreVert"></mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item>
+      <button mat-menu-item (click)="printReport()">
         <mat-icon svgIcon="download"></mat-icon>
         <span>리포트 내려받기</span>
       </button>
