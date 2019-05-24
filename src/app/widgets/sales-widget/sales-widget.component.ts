@@ -6,6 +6,7 @@ import { AppState } from '../../core';
 import { DashboardData } from 'src/app/dashboard/dashboard-data-generator';
 import { FilterPeriod, Period } from 'src/app/shared/utils/filter-period';
 import { getChangeRateData } from 'pos-models';
+import { getDateTimeFormat, getDefaultOptions, getDefaultDataset, DatasetColors } from '../chart-common';
 
 export enum SalesChartTypes {
   Total, Average, Count
@@ -67,17 +68,17 @@ export class SalesWidgetComponent implements OnInit, OnChanges {
 
   get legendLabel() {
     switch (this.filterPeriod) {
-      case FilterPeriod.Today: return ['어제', '오늘'];
-      case FilterPeriod.Yesterday: return ['그제', '어제'];
-      case FilterPeriod.ThisWeek: return ['지난주', '이번주'];
-      case FilterPeriod.LastWeek: return ['지지난주', '지난주'];
-      case FilterPeriod.OneWeek: return ['그제', '일주일'];
-      case FilterPeriod.ThisMonth: return ['지난달', '이번달'];
-      case FilterPeriod.LastMonth: return ['지지난달', '지난달'];
-      case FilterPeriod.ThrityDays: return ['그제', '어제'];
-      case FilterPeriod.ThisYear: return ['그제', '어제'];
-      case FilterPeriod.LastYear: return ['그제', '어제'];
-      case FilterPeriod.OneYear: return ['그제', '어제'];
+      case FilterPeriod.Today: return ['오늘', '어제'];
+      case FilterPeriod.Yesterday: return ['어제', '그제'];
+      case FilterPeriod.ThisWeek: return ['이번주', '지난주'];
+      case FilterPeriod.LastWeek: return ['지난주', '지지난주'];
+      case FilterPeriod.OneWeek: return ['일주일', '지난 일주일'];
+      case FilterPeriod.ThisMonth: return ['이번달', '지난달'];
+      case FilterPeriod.LastMonth: return ['지난달', '지지난달'];
+      case FilterPeriod.ThrityDays: return ['30일', '지난 30일'];
+      case FilterPeriod.ThisYear: return ['올해', '지난해'];
+      case FilterPeriod.LastYear: return ['지난해', '지지난해'];
+      case FilterPeriod.OneYear: return ['1년', '지난 1년'];
     }
   }
 
@@ -140,7 +141,7 @@ export class SalesWidgetComponent implements OnInit, OnChanges {
   }
 
   getLabels() {
-    return this.chartDataForCurrent.map((d: any) => format(new Date(d.timestamp), this.dateTimeFormat));
+    return this.chartDataForCurrent.map((d: any) => format(new Date(d.timestamp), getDateTimeFormat(this.filterPeriod)));
   }
 
   setCanvasHeight() {
@@ -159,37 +160,19 @@ export class SalesWidgetComponent implements OnInit, OnChanges {
         labels: this.getLabels(),
         datasets: [
           {
+            ...getDefaultDataset(DatasetColors.Current),
             label: this.legendLabel[0],
-            data: this.getData(this.chartDataForCurrent),
-            borderColor: '#3F51B5',
-            backgroundColor: '#3F51B5',
-            borderWidth: 2,
-            lineTension: 0,
-            fill: false,
-            pointRadius: 0,
-            pointHoverRadius: 3,
+            data: this.getData(this.chartDataForCurrent)
           },
           {
+            ...getDefaultDataset(DatasetColors.Previous),
             label: this.legendLabel[1],
-            data: this.getData(this.chartDataForPrevious),
-            borderColor: '#E0E0E0',
-            backgroundColor: '#E0E0E0',
-            borderWidth: 2,
-            lineTension: 0,
-            fill: false,
-            pointRadius: 0,
-            pointHoverRadius: 3,
+            data: this.getData(this.chartDataForPrevious)
           },
         ]
       },
       options: {
-        legend: {
-          display: true,
-          position: 'bottom',
-          labels: {
-            boxWidth: 20
-          }
-        },
+        ...getDefaultOptions(),
         scales: {
           yAxes: [
             {
@@ -217,9 +200,6 @@ export class SalesWidgetComponent implements OnInit, OnChanges {
             }
           ]
         },
-        hover: {
-          intersect: false
-        },
         tooltips: {
           mode: 'index',
           intersect: false,
@@ -235,11 +215,6 @@ export class SalesWidgetComponent implements OnInit, OnChanges {
             title: (tooltipItem, data) => {
               return '';
             }
-          }
-        },
-        plugins: {
-          datalabels: {
-            display: false
           }
         }
       }

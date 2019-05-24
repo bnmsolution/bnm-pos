@@ -4214,6 +4214,10 @@ neo-async@^2.5.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.0.tgz#b9d15e4d71c6762908654b5183ed38b753340835"
 
+ng2-currency-mask@^5.3.1:
+  version "5.3.1"
+  resolved "https://registry.yarnpkg.com/ng2-currency-mask/-/ng2-currency-mask-5.3.1.tgz#d73e27bf60ea423dfc0040106c8ea17316d07aab"
+
 ngrx-store-freeze@^0.2.4:
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/ngrx-store-freeze/-/ngrx-store-freeze-0.2.4.tgz#146687cdf7e21244eb9003c7e883f2125847076c"
@@ -4223,6 +4227,10 @@ ngrx-store-freeze@^0.2.4:
 ngrx-store-logger@^0.2.1:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/ngrx-store-logger/-/ngrx-store-logger-0.2.2.tgz#c1ed4d5f30710bdb4583ddbe488b96fa44b03bda"
+
+ngx-currency-mask@^4.3.2:
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/ngx-currency-mask/-/ngx-currency-mask-4.3.2.tgz#139b422fbcae6bf0236599b9f15ebac841326105"
 
 nice-try@^1.0.4:
   version "1.0.5"
@@ -4818,9 +4826,9 @@ portfinder@^1.0.9:
     debug "^2.2.0"
     mkdirp "0.5.x"
 
-pos-models@../pos-models/pos-models-0.0.33.tgz:
-  version "0.0.33"
-  resolved "../pos-models/pos-models-0.0.33.tgz#be1ae581f93b812a2c41e042aa3df38e43b4a868"
+pos-models@../pos-models/pos-models-0.0.34.tgz:
+  version "0.0.34"
+  resolved "../pos-models/pos-models-0.0.34.tgz#62f3d25bf2f62f8bc69d511a70dc70615a753527"
   dependencies:
     papaparse "^4.6.1"
     uuid "^3.2.1"

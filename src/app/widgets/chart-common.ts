@@ -2,12 +2,17 @@ import { FilterPeriod } from '../shared/utils/filter-period';
 
 const datasetColors = ['#3F51B5', '#E0E0E0'];
 
-export const getDefaultDataset = (datasetIndex: number) => {
+export enum DatasetColors {
+  Current = '#3F51B5',
+  Previous = '#E0E0E0'
+}
+
+export const getDefaultDataset = (color: string) => {
   return {
     label: '',
     data: [],
-    borderColor: datasetColors[datasetIndex],
-    backgroundColor: datasetColors[datasetIndex],
+    borderColor: color,
+    backgroundColor: color,
     borderWidth: 2,
     lineTension: 0,
     fill: false,

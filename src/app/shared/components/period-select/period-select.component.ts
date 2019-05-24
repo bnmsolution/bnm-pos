@@ -18,7 +18,7 @@ export class PeriodSelectComponent implements OnInit {
   @Output() periodChange = new EventEmitter<FilterPeriodChage>();
 
   displayOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-  optionLabels = ['전체', '오늘', '어제', '이번주', '저번주', '이번달', '저번달',
+  optionLabels = ['전체', '오늘', '어제', '이번주', '지난주', '이번달', '지난달',
     this.currentYear + '년', this.currentYear - 1 + '년', '7일', '30일', '1년', '직접선택'];
   periodDates: Period;
 

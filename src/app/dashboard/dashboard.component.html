@@ -11,7 +11,8 @@
 
 </section> -->
 
-<app-period-select [filterPeriod]="filterPeriod" [exclude]="[0, 12]" (periodChange)="periodChange($event)"></app-period-select>
+<app-period-select [filterPeriod]="filterPeriod" [exclude]="[0, 12]" (periodChange)="periodChange($event)">
+</app-period-select>
 
 <!-- <pre>{{dashboardData | json}}</pre> -->
 <!--<section class="overview">-->
@@ -37,37 +38,63 @@
 <!--</section>-->
 
 
-<div class="container" *ngIf="dashboardData">
+
+<div class="container-fluid" *ngIf="dashboardData">
   <div class="row">
     <div class="col-md-6 col-lg-4">
       <mat-card>
         <mat-card-title>총매출</mat-card-title>
-        <app-sales-widget [period]="period" [filterPeriod]="filterPeriod" [dashboardData]="dashboardData" [chartType]="0" [height]="250"></app-sales-widget>
+        <app-sales-widget [period]="period" [filterPeriod]="filterPeriod" [dashboardData]="dashboardData"
+                          [chartType]="0"></app-sales-widget>
       </mat-card>
     </div>
 
     <div class="col-md-6 col-lg-4">
       <mat-card>
         <mat-card-title>평균매출</mat-card-title>
-        <app-sales-widget [period]="period" [filterPeriod]="filterPeriod" [dashboardData]="dashboardData" [chartType]="1"></app-sales-widget>
+        <app-sales-widget [period]="period" [filterPeriod]="filterPeriod" [dashboardData]="dashboardData"
+                          [chartType]="1"></app-sales-widget>
       </mat-card>
     </div>
 
     <div class="col-md-6 col-lg-4">
       <mat-card>
         <mat-card-title>매출건</mat-card-title>
-        <app-sales-widget [period]="period" [filterPeriod]="filterPeriod" [dashboardData]="dashboardData" [chartType]="2"></app-sales-widget>
+        <app-sales-widget [period]="period" [filterPeriod]="filterPeriod" [dashboardData]="dashboardData"
+                          [chartType]="2"></app-sales-widget>
       </mat-card>
     </div>
 
     <div class="col-md-6 col-lg-4">
-        <mat-card>
-          <mat-card-title>재방문 고객비</mat-card-title>
-          <app-customer-count [period]="period" [filterPeriod]="filterPeriod" [dashboardData]="dashboardData"></app-customer-count>
-        </mat-card>
-      </div>
+      <mat-card>
+        <mat-card-title>재방문 고객비</mat-card-title>
+        <app-customer-count [period]="period" [filterPeriod]="filterPeriod" [dashboardData]="dashboardData">
+        </app-customer-count>
+      </mat-card>
+    </div>
 
-    <!-- <div class="col-md-6 col-lg-4">
+    <div class="col-md-6 col-lg-4">
+      <mat-card>
+        <mat-card-title>최근 판매목록</mat-card-title>
+        <app-recent-sales [sales]="recentSales"></app-recent-sales>
+      </mat-card>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+      <mat-card>
+        <mat-card-title>상품 판매량 순위</mat-card-title>
+        <app-top-sale-products [productData]="dashboardData.products" mode="byCount"></app-top-sale-products>
+      </mat-card>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+      <mat-card>
+        <mat-card-title>상품 매출 순위</mat-card-title>
+        <!-- <app-top-sale-products [topSaleProducts]="topSaleProducts" mode="byAmount"></app-top-sale-products> -->
+      </mat-card>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
       <mat-card>
         <mat-card-title>최근 판매목록</mat-card-title>
         <app-recent-sales [sales]="recentSales"></app-recent-sales>
@@ -76,41 +103,40 @@
     <div class="col-md-6 col-lg-4">
       <mat-card>
         <mat-card-title>상품 판매량 순위</mat-card-title>
-        <app-top-sale-products [topSaleProducts]="topSaleProducts" mode="byCount"
-        ></app-top-sale-products>
+        <!-- <app-top-sale-products [topSaleProducts]="topSaleProducts" mode="byCount"></app-top-sale-products> -->
       </mat-card>
     </div>
     <div class="col-md-6 col-lg-4">
       <mat-card>
         <mat-card-title>상품 매출 순위</mat-card-title>
-        <app-top-sale-products [topSaleProducts]="topSaleProducts" mode="byAmount"></app-top-sale-products>
+        <!-- <app-top-sale-products [topSaleProducts]="topSaleProducts" mode="byAmount"></app-top-sale-products> -->
       </mat-card>
     </div>
     <div class="col-md-6 col-lg-4">
       <mat-card>
         <mat-card-title>고객/비고객 매출</mat-card-title>
-        <app-sales-by-customer [salesInCurrentPeriod]="summary.salesInCurrentPeriod"
-                               [salesInPreviousPeriod]="summary.salesInPreviousPeriod"></app-sales-by-customer>
+        <!-- <app-sales-by-customer [salesInCurrentPeriod]="summary.salesInCurrentPeriod"
+                               [salesInPreviousPeriod]="summary.salesInPreviousPeriod"></app-sales-by-customer> -->
       </mat-card>
     </div>
     <div class="col-md-6 col-lg-4">
       <mat-card>
         <mat-card-title>결제수단별 매출</mat-card-title>
-        <app-payment-types [paymentRates]="summary.current.paymentRates"></app-payment-types>
+        <!-- <app-payment-types [paymentRates]="summary.current.paymentRates"></app-payment-types> -->
       </mat-card>
     </div>
     <div class="col-md-3 col-lg-2">
       <mat-card>
         <mat-card-title>새고객</mat-card-title>
-        <app-customer-count [period]="period" [summary]="summary"></app-customer-count>
+        <!-- <app-customer-count [period]="period" [summary]="summary"></app-customer-count> -->
       </mat-card>
     </div>
     <div class="col-md-3 col-lg-2">
       <mat-card>
         <mat-card-title>기존고객 판매건</mat-card-title>
-        <app-customer-sale-count-widget [period]="period" [summary]="summary"></app-customer-sale-count-widget>
+        <!-- <app-customer-sale-count-widget [period]="period" [summary]="summary"></app-customer-sale-count-widget> -->
       </mat-card>
-    </div> -->
+    </div>
   </div>
 </div>
 
@@ -206,3 +232,75 @@
 
 
 <!--<div>{{performance | json}}</div>-->
+
+
+<!--
+
+<div class="masonry" appMasonry>
+  <div class="masonry-brick">
+    <div class="masonry-content">
+      <mat-card>
+        <mat-card-title>총매출</mat-card-title>
+        <app-sales-widget [period]="period" [filterPeriod]="filterPeriod" [dashboardData]="dashboardData"
+                          [chartType]="0"></app-sales-widget>
+      </mat-card>
+    </div>
+  </div>
+  <div class="masonry-brick">
+    <div class="masonry-content">
+      <mat-card>
+        <mat-card-title>평균매출</mat-card-title>
+        <app-sales-widget [period]="period" [filterPeriod]="filterPeriod" [dashboardData]="dashboardData"
+                          [chartType]="1"></app-sales-widget>
+      </mat-card>
+    </div>
+  </div>
+  <div class="masonry-brick">
+    <div class="masonry-content">
+      <mat-card>
+        <mat-card-title>매출건</mat-card-title>
+        <app-sales-widget [period]="period" [filterPeriod]="filterPeriod" [dashboardData]="dashboardData"
+                          [chartType]="2"></app-sales-widget>
+      </mat-card>
+    </div>
+  </div>
+  <div class="masonry-brick">
+    <div class="masonry-content">
+      <mat-card>
+        <mat-card-title>재방문 고객비</mat-card-title>
+        <app-customer-count [period]="period" [filterPeriod]="filterPeriod" [dashboardData]="dashboardData">
+        </app-customer-count>
+      </mat-card>
+    </div>
+  </div>
+  <div class="masonry-brick">
+    <div class="masonry-content">
+      <h3 class="masonry-title">Veritatis aut repellendus, quidem nesciunt consequatur nulla sed itaque</h3>
+      <p class="masonry-description">Expedita voluptate similique ad harum dolorem nam ipsa repellat quos, autem eius
+        magni minima, asperiores nobis repudiandae ut quibusdam atque! Delectus atque veniam labore suscipit ullam,
+        consequuntur dicta, tenetur est nulla, quod obcaecati similique?</p>
+    </div>
+  </div>
+  <div class="masonry-brick">
+    <div class="masonry-content">
+      <h3 class="masonry-title">Culpa quo animi ut temporibus, et distinctio facere perspiciatis saepe sunt unde</h3>
+      <p class="masonry-description">Iusto magni quasi recusandae autem ipsum asperiores consequatur explicabo, vero nam
+        iste quas sequi reiciendis quod, quos!</p>
+    </div>
+  </div>
+  <div class="masonry-brick">
+    <div class="masonry-content">
+      <h3 class="masonry-title">Molestiae quod consectetur enim modi unde expedita dicta placeat?</h3>
+      <p class="masonry-description">Aliquam laudantium mollitia quo sint maxime omnis repellendus beatae. Consequuntur
+        molestias odio sapiente. Officia minima, nisi! Tempora vero, architecto ducimus animi nostrum nobis aliquid
+        eligendi illo, facilis temporibus.</p>
+    </div>
+  </div>
+  <div class="masonry-brick" >
+    <div class="masonry-content">
+      <h3 class="masonry-title">Sit amet, consectetur adipisicing elit. Incidunt, commodi!</h3>
+      <p class="masonry-description">Accusamus culpa maxime harum minus ipsa ea qui, blanditiis sequi debitis.
+        Temporibus quisquam consequatur dolor, aliquid odio nulla dolorum animi quasi et! Reiciendis ipsum repellendus
+        quaerat explicabo, laboriosam amet, temporibus at sed voluptatibus, minima quia.</p>
+    </div>
+  </div> -->

@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule, NG_VALIDATORS } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
-// import { TextMaskModule } from 'angular2-text-mask';
+import { CurrencyMaskModule } from 'ng2-currency-mask';
 
 import { MenuComponent } from '../menu';
 import { MainToolbarComponent } from '../main-toolbar';
@@ -30,6 +30,7 @@ import { NumericPadComponent } from './components/numeric-pad/numeric-pad.compon
 import { ProductValidator } from './validators/product.validator';
 import { PeriodSelectComponent } from './components/period-select/period-select.component';
 import { GroupBySelectComponent } from './components/group-by-select/group-by-select.component';
+import { MasonryDirective } from './directives/masonry/masonry.directive';
 
 @NgModule({
   imports: [
@@ -40,7 +41,7 @@ import { GroupBySelectComponent } from './components/group-by-select/group-by-se
     ReactiveFormsModule,
     FlexLayoutModule,
     PosMaterialModule,
-    // TextMaskModule,
+    CurrencyMaskModule
   ],
   exports: [
     CommonModule,
@@ -50,8 +51,7 @@ import { GroupBySelectComponent } from './components/group-by-select/group-by-se
     ReactiveFormsModule,
     FlexLayoutModule,
     PosMaterialModule,
-    // TextMaskModule,
-
+    CurrencyMaskModule,
     // Components
     MenuComponent,
     MainToolbarComponent,
@@ -75,6 +75,7 @@ import { GroupBySelectComponent } from './components/group-by-select/group-by-se
     InputDescriptionDirective,
     ValidateCustomerPhoneNumberNotTakenDirective,
     CdkDetailRowDirective,
+    MasonryDirective,
 
     // Pipes
     AppCurrencyPipe,
@@ -106,6 +107,7 @@ import { GroupBySelectComponent } from './components/group-by-select/group-by-se
     ValidateCustomerPhoneNumberNotTakenDirective,
     CdkDetailRowDirective,
     ValidatePhoneNumberDirective,
+    MasonryDirective,
 
     // Pipes
     AppCurrencyPipe,

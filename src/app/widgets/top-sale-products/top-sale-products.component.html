@@ -1,17 +1,17 @@
 <mat-list dense *ngIf="mode === 'byCount'">
-  <mat-list-item *ngFor="let p of topSaleProducts.byCount;let i = index;">
+  <mat-list-item *ngFor="let p of topSalesProductsByCount;let i = index;">
     <div class="product">
       <span class="name text-ellipsis">{{p.name}}</span>
-      <span class="value">{{p.soldCount}}</span>
-      <div class="change">
+      <span class="value">{{p.count | number}}</span>
+      <!-- <div class="change">
         <mat-icon *ngIf="displayDataByCount[i].icon" [svgIcon]="displayDataByCount[i].icon" [class]="displayDataByCount[i].class"></mat-icon>
         <span>{{displayDataByCount[i].rateString}}</span>
-      </div>
+      </div> -->
     </div>
   </mat-list-item>
 </mat-list>
 
-<mat-list dense *ngIf="mode === 'byAmount'">
+<!-- <mat-list dense *ngIf="mode === 'byAmount'">
   <mat-list-item *ngFor="let p of topSaleProducts.byAmount; let i = index;">
     <div class="product">
       <span class="name text-ellipsis">{{p.name}}</span>
@@ -22,4 +22,4 @@
       </div>
     </div>
   </mat-list-item>
-</mat-list>
+</mat-list> -->

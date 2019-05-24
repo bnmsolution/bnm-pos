@@ -1,17 +1,17 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, ViewChild } from '@angular/core';
 import Chart from 'chart.js';
 import { format } from 'date-fns';
 
-import { AppState } from '../../core';
 import { DashboardData } from 'src/app/dashboard/dashboard-data-generator';
 import { FilterPeriod, Period } from 'src/app/shared/utils/filter-period';
 import { getChangeRateData } from 'pos-models';
-import { getDefaultDataset, getDefaultOptions, getDateTimeFormat } from '../chart-common';
+import { getDefaultDataset, getDefaultOptions, getDateTimeFormat, DatasetColors } from '../chart-common';
 
 @Component({
   selector: 'app-customer-count',
   templateUrl: './customer-count-widget.component.html',
-  styleUrls: ['./customer-count-widget.component.scss']
+  styleUrls: ['./customer-count-widget.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomerCountWidgetComponent implements OnChanges {
   @Input() period: Period;
@@ -66,21 +66,19 @@ export class CustomerCountWidgetComponent implements OnChanges {
         labels: this.getLabels(),
         datasets: [
           {
-            ...getDefaultDataset(0),
+            ...getDefaultDataset(DatasetColors.Current),
             label: '새고객',
             data: this.chartDataForCurrent.map(d => d.newCustomerCount),
             fill: true
           },
           {
-            ...getDefaultDataset(2),
+            ...getDefaultDataset('#00BCD4'),
             label: '재방문 고객',
             data: this.chartDataForCurrent.map(d => d.returningCustomerCount),
-            borderColor: '#00BCD4',
-            backgroundColor: '#00BCD4',
             fill: true
           },
           {
-            ...getDefaultDataset(1),
+            ...getDefaultDataset(DatasetColors.Previous),
             label: '비고객',
             data: this.chartDataForCurrent.map(d => d.nonCustomerCount),
             fill: true

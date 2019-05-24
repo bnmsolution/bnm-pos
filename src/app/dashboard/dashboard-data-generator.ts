@@ -1,4 +1,7 @@
-import { isWithinInterval, getHours, getDate, setHours, getYear, getMonth, differenceInCalendarMonths, addMonths, format } from 'date-fns';
+import {
+  isWithinInterval, getHours, getDate, setHours, getYear,
+  getMonth, differenceInCalendarMonths, addMonths, format, addDays
+} from 'date-fns';
 import { RegisterSaleStatus, RegisterSale, PaymentType } from 'pos-models';
 
 import { Period, getPeriodDates, FilterPeriod } from '../shared/utils/filter-period';
@@ -74,6 +77,14 @@ export interface DashboardData {
       nonCustomerSales: number
     }
   };
+  products: {
+    current: {
+      data: any;
+    },
+    previous: {
+      data: any;
+    }
+  };
 }
 
 
@@ -93,29 +104,26 @@ export const generateDashboardData = (period: Period, filterPeriod: FilterPeriod
       let salesData;
       let paymentsData;
       let customerData;
+      let productsData;
 
-      if (isInCurrentPeriod) {
-        salesData = dashboardData.sales.current;
-        paymentsData = dashboardData.payments.current;
-        customerData = dashboardData.customers.current;
+
+      const propertyName = isInCurrentPeriod ? 'current' : isInPreviousPeriod ? 'previous' : null;
+
+      if (propertyName) {
+        salesData = dashboardData.sales[propertyName];
+        paymentsData = dashboardData.payments[propertyName];
+        customerData = dashboardData.customers[propertyName];
+        productsData = dashboardData.products[propertyName];
       }
 
-      if (isInPreviousPeriod) {
-        salesData = dashboardData.sales.previous;
-        paymentsData = dashboardData.payments.previous;
-        customerData = dashboardData.customers.previous;
-      }
-
-      if (salesData) {
+      if (isInCurrentPeriod || isInPreviousPeriod) {
         salesData.data[dataKey].total += s.totalPrice;
         salesData.data[dataKey].count++;
         salesData.data[dataKey].avg = salesData.data[dataKey].total / salesData.data[dataKey].count;
         salesData.count++;
         salesData.total += s.totalPrice;
         salesData.avg = salesData.total / salesData.count;
-      }
 
-      if (paymentsData) {
         s.payments.forEach(p => {
           switch (p.paymentType) {
             case PaymentType.Cash: {
@@ -136,9 +144,7 @@ export const generateDashboardData = (period: Period, filterPeriod: FilterPeriod
             }
           }
         });
-      }
 
-      if (customerData) {
         if (s.isNewCustomer) {
           customerData.data[dataKey].newCustomerCount++;
           customerData.data[dataKey].newCustomerSales += s.totalPrice;
@@ -155,6 +161,22 @@ export const generateDashboardData = (period: Period, filterPeriod: FilterPeriod
           customerData.nonCustomerCount++;
           customerData.nonCustomerSales += s.totalPrice;
         }
+
+        s.lineItems.forEach(i => {
+          const product = productsData.data[i.productId];
+          const quantity = parseFloat(i.quantity + '');
+          if (!product) {
+            productsData.data[i.productId] = {
+              productId: i.productId,
+              name: i.name,
+              count: quantity,
+              sales: i.finalTotal
+            };
+          } else {
+            product.count += quantity;
+            product.sales += i.finalTotal;
+          }
+        });
       }
     }
   });
@@ -254,18 +276,24 @@ const getEmptyDashboardData = (): DashboardData => {
         returningCustomerSales: 0,
         nonCustomerSales: 0
       }
+    },
+    products: {
+      current: {
+        data: {}
+      },
+      previous: {
+        data: {}
+      }
     }
   };
 };
 
 const createEmptyDataMap = (filterPeriod: FilterPeriod, start: Date, end: Date, type: DataType) => {
   const dateTimeGroup = filterPeriodToGroup(filterPeriod);
-  const mintueInMilliseconds = 60000;
   const dayInMilliseconds = 86400000;
-  const timeZoneOffset = new Date().getTimezoneOffset() * mintueInMilliseconds;
   const dataMap = {};
-
-  let startIndex, endIndex;
+  start = new Date(start);
+  end = new Date(end);
 
   switch (dateTimeGroup) {
     case DateTimeGroup.ByHour: {
@@ -278,11 +306,9 @@ const createEmptyDataMap = (filterPeriod: FilterPeriod, start: Date, end: Date, 
 
     case DateTimeGroup.ByDay:
     case DateTimeGroup.ByDate: {
-      startIndex = Math.floor(new Date(start).getTime() / dayInMilliseconds);
-      endIndex = Math.floor(new Date(end).getTime() / dayInMilliseconds);
-
-      for (let i = startIndex; i < endIndex; i++) {
-        const timestamp = i * dayInMilliseconds + timeZoneOffset;
+      const numberOfDays = Math.ceil((end.getTime() - start.getTime()) / dayInMilliseconds);
+      for (let i = 0; i < numberOfDays; i++) {
+        const timestamp = addDays(start, i).getTime();
         const dataKey = generateDataKey(timestamp, filterPeriod);
         setEmptyData(type, dataMap, dataKey, timestamp);
       }

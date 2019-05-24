@@ -16,7 +16,7 @@ export class AppCurrencyPipe implements PipeTransform {
     this.THOUSANDS_SEPARATOR = ',';
   }
 
-  transform(value: number | string = '', fractionSize = 0): string {
+  transform(value: number | string = '', fractionSize = 0, displaySymbol = false): string {
     const val = typeof value === 'string' ? parseFloat(value) : value;
     // const isNegative = typeof value === 'number' ? value < 0 : parseFloat(value) < 0;
     // let [integer, fraction = ''] = value.toString()
@@ -28,7 +28,7 @@ export class AppCurrencyPipe implements PipeTransform {
 
     // integer = integer.replace(/\B(?=(\d{3})+(?!\d))/g, this.THOUSANDS_SEPARATOR);
 
-    if (this.appState.currentStore.displayCurrencySymbol) {
+    if (this.appState.currentStore.displayCurrencySymbol || displaySymbol) {
       return val.toLocaleString(this.appState.currentStore.locale,
         { style: 'currency', currency: this.appState.currentStore.currencyCode });
     } else {

@@ -46,7 +46,7 @@
 
             <mat-form-field appearance="outline" id="categoryField" *ngIf="readonly">
               <mat-label>카테고리</mat-label>
-              <input matInput [value]="product.category ? product.category.name : ''" readonly>
+              <input matInput [value]="viewProduct.category ? viewProduct.category.name : ''" readonly>
             </mat-form-field>
 
             <mat-form-field appearance="outline" id="vendorField" *ngIf="!readonly">
@@ -60,7 +60,7 @@
 
             <mat-form-field appearance="outline" id="vendorField" *ngIf="readonly">
               <mat-label>거래처</mat-label>
-              <input matInput [value]="product.vendor ? product.vendor.name : ''" readonly>
+              <input matInput [value]="viewProduct.vendor ? viewProduct.vendor.name : ''" readonly>
             </mat-form-field>
 
             <mat-form-field appearance="outline" #descriptionField>
@@ -96,33 +96,37 @@
 
             <mat-form-field appearance="outline" id="taxField" *ngIf="readonly">
               <mat-label>과세여부</mat-label>
-              <input matInput [value]="product.tax ? product.tax.name : ''" readonly>
+              <input matInput [value]="viewProduct.tax ? viewProduct.tax.name : ''" readonly>
             </mat-form-field>
 
             <mat-form-field appearance="outline" #supplyPriceField>
               <mat-label>공급가</mat-label>
-              <input type="number" matInput currencyMask formControlName="supplyPrice" [readonly]="readonly" min=0>
+              <input matInput currencyMask [options]="currencyMaskOptions()" formControlName="supplyPrice"
+                     [readonly]="readonly" min=0>
             </mat-form-field>
 
             <mat-form-field appearance="outline" #retailPriceField>
               <mat-label>판매가</mat-label>
-              <input type="number" matInput currencyMask formControlName="retailPrice" [readonly]="readonly" min=0>
+              <input matInput currencyMask [options]="currencyMaskOptions()" formControlName="retailPrice"
+                     [readonly]="readonly" min=0>
               <mat-error *ngIf="!getFormControlValidity('retailPrice', 'required')">판매가는 필수입니다.</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline" #markupField>
               <mat-label>마진율</mat-label>
-              <input type="number" matInput currencyMask formControlName="markup" [readonly]="readonly" min=0>
+              <input matInput formControlName="markup" [readonly]="readonly" min=0>
             </mat-form-field>
 
             <mat-form-field appearance="outline" #productPriceField>
               <mat-label>소비자가</mat-label>
-              <input type="number" matInput currencyMask formControlName="productPrice" [readonly]="readonly">
+              <input matInput currencyMask [options]="currencyMaskOptions()" formControlName="productPrice"
+                     [readonly]="readonly">
             </mat-form-field>
 
             <mat-form-field appearance="outline" #taxAmountField>
               <mat-label>과세</mat-label>
-              <input type="number" matInput currencyMask formControlName="taxAmount" [readonly]="readonly">
+              <input matInput currencyMask [options]="currencyMaskOptions()" formControlName="taxAmount"
+                     [readonly]="readonly">
             </mat-form-field>
 
           </div>
@@ -154,7 +158,7 @@
 
             <mat-form-field appearance="outline" id="trackInventoryField" *ngIf="readonly">
               <mat-label>재고관리</mat-label>
-              <input matInput [value]="product.trackInventory ? '자동 관리' : '관리 안함'" readonly>
+              <input matInput [value]="viewProduct.trackInventory ? '자동 관리' : '관리 안함'" readonly>
             </mat-form-field>
 
             <mat-form-field appearance="outline" #skuField>

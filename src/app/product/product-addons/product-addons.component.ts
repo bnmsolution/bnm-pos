@@ -2,6 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material';
 
+import { getOptions } from 'src/app/shared/config/currency-mask.config';
+
 @Component({
   selector: 'app-product-addons',
   templateUrl: './product-addons.component.html',
@@ -14,6 +16,8 @@ export class ProductAddonsComponent implements OnInit {
   // Mat table
   displayedColumns: string[] = ['name', 'price', 'actions'];
   dataSource: MatTableDataSource<any>;
+
+  currencyMaskOptions = getOptions;
 
   get addonsControl(): FormArray {
     return this.productForm.controls.addons as FormArray;
@@ -29,7 +33,7 @@ export class ProductAddonsComponent implements OnInit {
     this.addonsControl.push(
       this.fb.group({
         name: [''],
-        price: null
+        price: 0
       })
     );
     this.dataSource.data = this.addonsControl.value;

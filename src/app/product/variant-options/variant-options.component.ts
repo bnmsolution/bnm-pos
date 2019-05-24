@@ -7,7 +7,9 @@ import { ProductVariant, ProductVariantOption } from 'pos-models';
 import { cloneDeep } from 'src/app/shared/utils/lang';
 import { ProductService } from 'src/app/core';
 import { ProductValidator } from 'src/app/shared/validators/product.validator';
+import { getOptions } from 'src/app/shared/config/currency-mask.config';
 
+const MAX_VARIANT_OPTIONS = 3;
 
 @Component({
   selector: 'app-variant-options',
@@ -30,6 +32,8 @@ export class VariantOptionsComponent implements OnInit {
   selectable = true;
   removable = true;
 
+  currencyMaskOptions = getOptions;
+
   get variantOptionsControl(): FormArray {
     return this.productForm.controls.variantOptions as FormArray;
   }
@@ -50,13 +54,15 @@ export class VariantOptionsComponent implements OnInit {
   }
 
   addNewVariantOption() {
-    this.variantOptionsControl.push(
-      this.fb.group({
-        name: [''],
-        values: [[]]
-      })
-    );
-    this.updateVariantOptionTable();
+    if (this.variantOptionsControl.length < MAX_VARIANT_OPTIONS) {
+      this.variantOptionsControl.push(
+        this.fb.group({
+          name: [''],
+          values: [[]]
+        })
+      );
+      this.updateVariantOptionTable();
+    }
   }
 
   removeVariantOption(index) {
@@ -90,11 +96,13 @@ export class VariantOptionsComponent implements OnInit {
   /**
    * An event handler for mat-chip remove event.
    * It will remove matched variant option value.
-   * @param variantOption variant option reference
+   * @param index index of variant option
    * @param value variant option value
    */
-  removeVariantOptionValue(variantOption: ProductVariantOption, value: string) {
-    variantOption.values = variantOption.values.filter(v => v !== value);
+  removeVariantOptionValue(index: number, value: string) {
+    const valueCopy = cloneDeep(this.variantOptionsControl.value);
+    valueCopy[index].values = valueCopy[index].values.filter(v => v !== value);
+    this.variantOptionsControl.setValue(valueCopy);
     this.generateProductVariants();
   }
 
@@ -151,8 +159,8 @@ export class VariantOptionsComponent implements OnInit {
       newVariants.map(v => {
         return this.fb.group({
           id: [v.id],
-          sku: ['', [], skuValidators],
-          barcode: ['', [], barcodeValidators],
+          sku: [v.sku, [], skuValidators],
+          barcode: [v.barcode, [], barcodeValidators],
           variantOptionValue1: [v.variantOptionValue1],
           variantOptionValue2: [v.variantOptionValue2],
           variantOptionValue3: [v.variantOptionValue3],

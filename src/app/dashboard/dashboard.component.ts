@@ -18,8 +18,6 @@ import { generateDashboardData, DashboardData } from './dashboard-data-generator
 import { DateTimeGroup } from '../shared/enums/date-time-groups';
 
 
-
-
 @Component({
   selector: 'app-dashboard',
   styleUrls: ['./dashboard.component.scss'],
@@ -28,8 +26,8 @@ import { DateTimeGroup } from '../shared/enums/date-time-groups';
 export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('chart') chartElement: ElementRef;
 
-  filterPeriod: FilterPeriod = FilterPeriod.ThisMonth;
-  period: Period = getPeriodDates(this.filterPeriod);
+  filterPeriod: FilterPeriod;
+  period: Period;
   groupValue: DateTimeGroup;
 
   chartInstance: any = null;
@@ -43,6 +41,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   constructor(private cdr: ChangeDetectorRef,
     private appState: AppState, private store: Store<any>) {
+    const lastUsedFilterPeriod = parseInt(localStorage.getItem('dashboard-filterPeriod'), 10);
+    if (FilterPeriod[lastUsedFilterPeriod] !== undefined) {
+      this.filterPeriod = lastUsedFilterPeriod;
+    } else {
+      this.filterPeriod = FilterPeriod.ThisMonth;
+    }
+    this.period = getPeriodDates(this.filterPeriod);
   }
 
   ngOnInit() {
@@ -113,18 +118,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     this.filterPeriod = change.filterPeriod;
+    localStorage.setItem('dashboard-filterPeriod', this.filterPeriod + '');
     this.dashboardData = generateDashboardData(this.period, this.filterPeriod, this.sales);
   }
 
-  // initDashboard() {
-  //   if (this.sales.length > 0) {
-  //     const summary: any = sortSales(this.sales, this.period, format);
-  //     summary.current = generateDashboard(summary.salesInCurrentPeriod);
-  //     summary.previous = generateDashboard(summary.salesInPreviousPeriod);
-  //     this.topSaleProducts = generateTopSaleProducts(summary.current.products, summary.previous.products);
-  //     this.summary = summary;
-  //   }
-  // }
+  initDashboard() {
+    // if (this.sales.length > 0) {
+    //   const summary: any = sortSales(this.sales, this.period, format);
+    //   summary.current = generateDashboard(summary.salesInCurrentPeriod);
+    //   summary.previous = generateDashboard(summary.salesInPreviousPeriod);
+    //   this.topSaleProducts = generateTopSaleProducts(summary.current.products, summary.previous.products);
+    //   this.summary = summary;
+    // }
+  }
 
   periodStr() {
     return {

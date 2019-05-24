@@ -17,6 +17,8 @@ import { ProductEffects } from 'src/app/stores/effects/product.effects';
 import { VariantOptionsComponent } from '../variant-options/variant-options.component';
 import { cloneDeep } from 'src/app/shared/utils/lang';
 import { ProductAddonsComponent } from '../product-addons/product-addons.component';
+import { getOptions } from 'src/app/shared/config/currency-mask.config';
+
 
 @Component({
   selector: 'app-add-product',
@@ -38,6 +40,9 @@ export class AddProductComponent implements OnInit {
   formErrorMessages: string[] = [];
   variantErrorMessages: string[] = [];
   isFormSubmitted = false;
+  currencyMaskOptions = getOptions;
+
+  viewProduct: Product;
 
   // references
   categories: Category[] = [];
@@ -57,7 +62,12 @@ export class AddProductComponent implements OnInit {
   }
 
   get title(): string {
-    return this.isNewProduct ? '상품 추가' : '상품 수정';
+    const title = {
+      view: '상품 정보',
+      edit: '상품 수정',
+      add: '상품 추가'
+    };
+    return title[this.formType];
   }
 
   ngOnInit() {
@@ -68,18 +78,37 @@ export class AddProductComponent implements OnInit {
         this.taxes = data.taxes;
         this.settings = data.settings[0];
 
-        if (data.editProduct) {
-          this.createForm(data.editProduct);
-          this.setProductForEdit(data.editProduct);
+        if (data.viewProduct) {
+          this.initViewProduct(data.viewProduct);
+        } else if (data.editProduct) {
+          this.initEditProduct(data.editProduct);
         } else {
-          this.createForm();
-          this.productForm.patchValue({ taxId: this.settings.defaultTaxId });
+          this.initAddProduct();
         }
       });
   }
 
-  createForm(product?: Product) {
-    this.productForm = this.fb.group(getProductFrom(this.fb, this.productService, product));
+  initViewProduct(product: Product) {
+    this.readonly = true;
+    this.viewProduct = product;
+    this.createForm(product, true);
+    this.setProduc(product);
+    this.formType = 'view';
+  }
+
+  initEditProduct(product: Product) {
+    this.createForm(product);
+    this.setProduc(product);
+    this.formType = 'edit';
+  }
+
+  initAddProduct() {
+    this.createForm();
+    this.productForm.patchValue({ taxId: this.settings.defaultTaxId });
+  }
+
+  createForm(product?: Product, readOnly = false) {
+    this.productForm = this.fb.group(getProductFrom(this.fb, this.productService, product, readOnly));
 
     const controls = this.productForm.controls;
     controls.retailPrice.valueChanges.subscribe(() => this.onPriceChange('retailPrice'));
@@ -159,11 +188,11 @@ export class AddProductComponent implements OnInit {
     this.productForm.patchValue(product);
   }
 
-  private setProductForEdit(product: Product) {
+
+  private setProduc(product: Product) {
     this.isNewProduct = false;
     this.productForm.patchValue(product);
     updateProductFromArrays(this.fb, this.productForm, product);
-    this.formType = 'edit';
   }
 
   getFormControlValidity(controlName: string, validationName: string): boolean {

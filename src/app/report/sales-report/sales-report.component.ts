@@ -130,35 +130,28 @@ export class SalesReportComponent implements OnInit {
     const { startDate, endDate } = this.periodDates;
     const reportType = this.router.url.split('/report/')[1];
     const reportPeriod = startDate === null ? '전체' : `${format(new Date(startDate), 'yyyy-MM-dd HH:mm:ss')} ~ ${format(new Date(endDate), 'yyyy-MM-dd HH:mm:ss')}`;
-
-    const data = [];
-    switch (reportType) {
-      case 'salesByProduct': {
-        let totalCount = 0;
-        let totalSales = 0;
-        data.push(['상품별 판매현황', ...headerStyle]);
-        data.push([`기간: ${reportPeriod}`, ...normalStyle])
-        data.push([divider, ...normalStyle])
-        this.data.forEach(d => {
-          totalCount += d.totalQuantity;
-          totalSales += d.netSales;
-          data.push([`${formatString(d.productName, 24, false)} ${formatString(this.formatNumber(d.totalQuantity), 5)} ${formatString(this.formatNumber(d.netSales), 13)}`, ...normalStyle]);
-        });
-        data.push([divider, ...normalStyle])
-        data.push([`${formatString('합계', 24, false)} ${formatString(this.formatNumber(totalCount), 5)} ${formatString(this.formatNumber(totalSales), 13)}`, ...normalStyle]);
-
-        console.log(data);
-        this.printerService.print(data);
-        break;
-      }
-      case 'salesByCategory': {
-
-        break;
-      }
-      case 'salesByVendor': {
-        break;
-      }
+    const reportTitle = {
+      salesByProduct: '상품별 판매 현황',
+      salesByCategory: '카테고리별 판매 현황',
+      salesByVendor: '거래처별 판매 현황'
     }
+    const data = [];
+    let totalCount = 0;
+    let totalSales = 0;
+
+    data.push([reportTitle[reportType], ...headerStyle]);
+    data.push([`기간: ${reportPeriod}`, ...normalStyle])
+    data.push([divider, ...normalStyle])
+    this.data.forEach(d => {
+      totalCount += d.totalQuantity;
+      totalSales += d.netSales;
+      data.push([`${formatString(d.productName, 24, false)} ${formatString(this.formatNumber(d.totalQuantity), 5)} ${formatString(this.formatNumber(d.netSales), 13)}`, ...normalStyle]);
+    });
+    data.push([divider, ...normalStyle])
+    data.push([`${formatString('합계', 24, false)} ${formatString(this.formatNumber(totalCount), 5)} ${formatString(this.formatNumber(totalSales), 13)}`, ...normalStyle]);
+
+    console.log(data);
+    this.printerService.print(data);
   }
 
   formatNumber(value: number | string = ''): string {

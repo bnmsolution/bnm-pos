@@ -1,9 +1,10 @@
 import { FormBuilder, Validators, FormGroup, FormArray } from '@angular/forms';
+import { Product } from 'pos-models';
 import * as uuid from 'uuid/v1';
+
 
 import { ProductValidator } from 'src/app/shared/validators/product.validator';
 import { ProductService } from 'src/app/core';
-import { Product } from 'pos-models';
 
 export const getProductFrom = (fb: FormBuilder, productService: ProductService, product: Product, readOnly = false) => {
 
@@ -11,6 +12,8 @@ export const getProductFrom = (fb: FormBuilder, productService: ProductService, 
   const barcodeValidators = readOnly ? [] : [ProductValidator.isUniqueBarcode(productService, product ? product.id : null)];
 
   return {
+    _id: null,
+    _rev: null,
     id: [uuid()],
     name: ['', Validators.required],
     sku: ['', [], skuValidators],
@@ -21,7 +24,7 @@ export const getProductFrom = (fb: FormBuilder, productService: ProductService, 
     categoryId: '',
     vendorId: '',
 
-    supplyPrice: null,
+    supplyPrice: [{ value: null }],
     markup: null,
     retailPrice: [null, Validators.required],
     taxAmount: [{ value: null, disabled: true }],
