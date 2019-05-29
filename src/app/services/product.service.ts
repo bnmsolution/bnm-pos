@@ -39,7 +39,8 @@ export class ProductService extends CrudService {
             if (p.taxId) {
               p.tax = taxes.find(t => t.id === p.taxId);
             }
-            p.inventory = inventories.find(i => i.productId === p.id);
+            p.inventory = inventories.filter(i => i.productId === p.id);
+            p.count = p.inventory.map(i => i.count).reduce((a, b) => a + b, 0);
             return p;
           });
         })

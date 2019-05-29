@@ -28,6 +28,5 @@ export class VariantListComponent implements OnInit {
 
   private setDisplayColumns() {
     this.product.variantOptions.forEach((vo, i) => this.displayedColumns.unshift('option' + i));
-    console.log(this.displayedColumns);
   }
 }

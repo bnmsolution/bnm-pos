@@ -1,5 +1,5 @@
-import {Component, EventEmitter, OnInit, Input, Output} from '@angular/core';
-import {RegisterTab, RegisterQuickProduct} from 'pos-models';
+import { Component, EventEmitter, OnInit, Input, Output } from '@angular/core';
+import { RegisterTab, RegisterQuickProduct } from 'pos-models';
 
 @Component({
   selector: 'app-quick-products',
@@ -7,11 +7,9 @@ import {RegisterTab, RegisterQuickProduct} from 'pos-models';
   styleUrls: ['./quick-products.component.scss']
 })
 export class QuickProductsComponent implements OnInit {
-  json: any = JSON;
-
+  @Input() selectedTabIndex = 0;
   @Input() selectedPosition = -1;
-  @Input() registerTabs: RegisterTab [] = [];
-  @Input() focusOnClick = true;
+  @Input() registerTabs: RegisterTab[] = [];
   @Input() showEmpty = true;
   @Output() clicked = new EventEmitter<RegisterQuickProduct>();
   @Output() dropped = new EventEmitter<any>();
@@ -25,19 +23,17 @@ export class QuickProductsComponent implements OnInit {
   }
 
   handleQuickProductClick(quickProduct: RegisterQuickProduct): void {
-    if (this.focusOnClick) {
-      this.selectedPosition = quickProduct.position;
-      this.selectedPositionChange.emit(quickProduct.position);
-    }
+    this.selectedPosition = quickProduct.position;
+    this.selectedPositionChange.emit(quickProduct.position);
 
     if (this.clicked) {
       this.clicked.emit(quickProduct);
     }
   }
 
-  handleQuickProductDrop({srcQuickProduct, targetQuickProduct}): void {
+  handleQuickProductDrop({ srcQuickProduct, targetQuickProduct }): void {
     if (this.dropped) {
-      this.dropped.emit({srcQuickProduct, targetQuickProduct});
+      this.dropped.emit({ srcQuickProduct, targetQuickProduct });
     }
   }
 

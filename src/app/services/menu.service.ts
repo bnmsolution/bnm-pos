@@ -18,7 +18,7 @@ export class MenuService {
   menuMode$: BehaviorSubject<any>;
 
   constructor(private router: Router) {
-    this.menuMode$ = new BehaviorSubject(MenuMode.Mini);
+    this.menuMode$ = new BehaviorSubject(MenuMode.Full);
     this.sections = [{
       name: '대시보드',
       icon: 'outline-dashboard-24px',

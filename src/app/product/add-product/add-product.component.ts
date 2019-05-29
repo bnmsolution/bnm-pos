@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
 import { Store } from '@ngrx/store';
 import { merge } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
@@ -18,6 +18,7 @@ import { VariantOptionsComponent } from '../variant-options/variant-options.comp
 import { cloneDeep } from 'src/app/shared/utils/lang';
 import { ProductAddonsComponent } from '../product-addons/product-addons.component';
 import { getOptions } from 'src/app/shared/config/currency-mask.config';
+import { AddCategoryDialogComponent } from 'src/app/category/add-category-dialog/add-category-dialog.component';
 
 
 @Component({
@@ -42,6 +43,7 @@ export class AddProductComponent implements OnInit {
   isFormSubmitted = false;
   currencyMaskOptions = getOptions;
 
+  editProduct: Product;
   viewProduct: Product;
 
   // references
@@ -55,6 +57,7 @@ export class AddProductComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private snackBar: MatSnackBar,
+    private dialog: MatDialog,
     private store: Store<any>,
     private productEffects: ProductEffects,
     private productService: ProductService,
@@ -97,6 +100,7 @@ export class AddProductComponent implements OnInit {
   }
 
   initEditProduct(product: Product) {
+    this.editProduct = product;
     this.createForm(product);
     this.setProduc(product);
     this.formType = 'edit';
@@ -205,10 +209,10 @@ export class AddProductComponent implements OnInit {
 
 
   onSubmit(): void {
-    const product = cloneDeep(this.productForm.value);
-
     // this.setVariantErrorMessages(product);
     // this.setFormErrorMessages();
+
+    this.scrollToError();
 
     if (this.productForm.valid && this.variantErrorMessages.length === 0) {
       merge(this.productEffects.addProduct$, this.productEffects.updateProduct$)
@@ -223,11 +227,13 @@ export class AddProductComponent implements OnInit {
         });
 
       if (this.isNewProduct) {
+        const newProduct = cloneDeep(this.productForm.value);
         // todo: Currently only supporting a single store
-        product.storeId = this.appState.currentStore.id;
-        this.store.dispatch(new actions.AddProduct(product));
+        newProduct.storeId = this.appState.currentStore.id;
+        this.store.dispatch(new actions.AddProduct(newProduct));
       } else {
-        this.store.dispatch(new actions.UpdateProduct(product));
+        const updateProduct = { ...this.editProduct, ...this.productForm.value };
+        this.store.dispatch(new actions.UpdateProduct(updateProduct));
       }
     }
 
@@ -321,4 +327,25 @@ export class AddProductComponent implements OnInit {
     }
     return true;
   }
+
+  addCategory() {
+    this.dialog
+      .open(AddCategoryDialogComponent)
+      .afterClosed()
+      .subscribe(category => {
+        if (category) {
+          this.categories = [...this.categories, category];
+          this.productForm.controls.categoryId.setValue(category.id);
+        }
+      });
+  }
+
+
+  scrollToError(): void {
+    const firstElementWithError = document.querySelector('.ng-invalid');
+    if (firstElementWithError) {
+      firstElementWithError.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
 }

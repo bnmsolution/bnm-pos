@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatSnackBar } from '@angular/material';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { startWith, map, takeUntil, debounceTime } from 'rxjs/operators';
@@ -32,6 +32,7 @@ export class RegisterConfigComponent implements OnInit, OnDestroy {
   currentQuickProductGroup: RegisterQuickProduct;
 
   constructor(private dialog: MatDialog,
+    private snackBar: MatSnackBar,
     private registerService: RegisterService,
     private productService: ProductService,
     private store: Store<any>) {
@@ -93,7 +94,7 @@ export class RegisterConfigComponent implements OnInit, OnDestroy {
    * It will add quick product into the selected position.
    * @param {Product} product
    */
-  onOptionClick(product: Product): void {
+  handleOptionSelected(product: Product): void {
     const { id, masterProductId, name } = product;
     if (masterProductId) {
       // variant
@@ -180,6 +181,7 @@ export class RegisterConfigComponent implements OnInit, OnDestroy {
         } else if (action === 'delete') {
           currentTab.removeQuickProduct(quickProductCopy, this.currentQuickProductGroup);
         }
+        this.selectNextEmptyItem();
       });
   }
 
@@ -202,11 +204,11 @@ export class RegisterConfigComponent implements OnInit, OnDestroy {
           this.getCurrentRegisterTab().removeQuickProduct(dialogConfig.data.quickProduct);
           this.currentQuickProductGroup = undefined;
         }
+        this.selectNextEmptyItem();
       });
   }
 
   openTabEditDialog(): void {
-    const dialogConfig = new MatDialogConfig();
     const registerCopy = cloneDeep(this.register);
     this.dialog
       .open(TabEditDialogComponent, { data: { tabs: registerCopy.tabs } })

@@ -22,7 +22,7 @@
     <app-product-filter [filter$]="filter$"></app-product-filter>
     <section class="table-container">
       <mat-progress-bar mode="indeterminate" *ngIf="!tableInitiated"></mat-progress-bar>
-      <table mat-table [dataSource]="dataSource" matSort multiTemplateDataRows>
+      <table mat-table [dataSource]="dataSource" matSort [matSortActive]="tableSettings.sortActive" [matSortDirection]="tableSettings.sortDirection" multiTemplateDataRows>
 
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>상품명</th>
@@ -58,10 +58,8 @@
 
         <ng-container matColumnDef="count">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>재고</th>
-          <td mat-cell *matCellDef="let row" [routerLink]="'/inventory/' + row.id"> {{row.inventory ?
-            row.inventory.count
-            :
-            "-"}}
+          <td mat-cell *matCellDef="let row" [routerLink]="'/inventory/' + row.id"> {{row.inventory.length ?
+            row.count : "-"}}
           </td>
         </ng-container>
 
@@ -101,7 +99,7 @@
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
 
       </table>
-      <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20, 50]">
+      <mat-paginator #paginator [pageSize]="tableSettings.pageSize" [pageSizeOptions]="[5, 10, 20, 50, 100]">
       </mat-paginator>
     </section>
 

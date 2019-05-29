@@ -23,7 +23,7 @@ import { LineChartWidgetComponent } from './line-chart-widget/line-chart-widget.
     CustomerCountWidgetComponent,
     SalesWidgetComponent,
     CustomerSaleCountWidgetComponent,
-    LineChartWidgetComponent
+    LineChartWidgetComponent,
   ],
   declarations: [
     TopSaleProductsComponent,

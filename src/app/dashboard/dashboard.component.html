@@ -44,8 +44,11 @@
     <div class="col-md-6 col-lg-4">
       <mat-card>
         <mat-card-title>총매출</mat-card-title>
-        <app-sales-widget [period]="period" [filterPeriod]="filterPeriod" [dashboardData]="dashboardData"
-                          [chartType]="0"></app-sales-widget>
+        <mat-card-content>
+              <app-sales-widget [period]="period" [filterPeriod]="filterPeriod" [dashboardData]="dashboardData"
+                            [chartType]="0"></app-sales-widget>
+        </mat-card-content>
+
       </mat-card>
     </div>
 
@@ -72,6 +75,24 @@
         </app-customer-count>
       </mat-card>
     </div>
+
+    <div class="col-md-6 col-lg-4">
+      <mat-card>
+        <mat-card-title>결제수단별 매출</mat-card-title>
+        <mat-card-content>
+          <app-payment-types [paymentData]="dashboardData.payments"></app-payment-types>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+
+    <div class="col-md-6 col-lg-4">
+      <mat-card>
+        <mat-card-title>상품 매출 순위</mat-card-title>
+        <!-- <app-top-sale-products [topSaleProducts]="topSaleProducts" mode="byAmount"></app-top-sale-products> -->
+      </mat-card>
+    </div>
+
 
     <div class="col-md-6 col-lg-4">
       <mat-card>
@@ -119,12 +140,7 @@
                                [salesInPreviousPeriod]="summary.salesInPreviousPeriod"></app-sales-by-customer> -->
       </mat-card>
     </div>
-    <div class="col-md-6 col-lg-4">
-      <mat-card>
-        <mat-card-title>결제수단별 매출</mat-card-title>
-        <!-- <app-payment-types [paymentRates]="summary.current.paymentRates"></app-payment-types> -->
-      </mat-card>
-    </div>
+
     <div class="col-md-3 col-lg-2">
       <mat-card>
         <mat-card-title>새고객</mat-card-title>

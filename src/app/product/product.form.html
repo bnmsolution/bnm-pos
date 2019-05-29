@@ -25,19 +25,22 @@
 
             <mat-form-field appearance="outline" #nameField>
               <mat-label>상품명</mat-label>
-              <input matInput formControlName="name" [readonly]="readonly">
+              <input matInput formControlName="name" [readonly]="readonly" tabindex=1>
               <mat-error *ngIf="!getFormControlValidity('name', 'required')">상품명은 필수입니다.</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline" #barcodeField>
               <mat-label>바코드</mat-label>
-              <input matInput formControlName="barcode" [readonly]="readonly">
+              <input matInput formControlName="barcode" [readonly]="readonly" tabindex=2>
               <mat-error *ngIf="!getFormControlValidity('barcode', 'takenBarcode')">이미 사용중인 바코드 입니다.</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline" id="categoryField" *ngIf="!readonly">
               <mat-label>카테고리</mat-label>
-              <mat-select class="readonly-block" formControlName="categoryId">
+              <mat-select class="readonly-block" formControlName="categoryId" tabindex=3>
+                <mat-option (click)="addCategory()">
+                  <mat-icon svgIcon="add"></mat-icon>카테고리 추가
+                </mat-option>
                 <mat-option *ngFor="let category of categories" [value]="category.id">
                   {{category.name}}
                 </mat-option>
@@ -51,7 +54,7 @@
 
             <mat-form-field appearance="outline" id="vendorField" *ngIf="!readonly">
               <mat-label>거래처</mat-label>
-              <mat-select formControlName="vendorId" name="vendorId">
+              <mat-select formControlName="vendorId" name="vendorId" tabindex=4>
                 <mat-option *ngFor="let vendor of vendors" [value]="vendor.id">
                   {{vendor.name}}
                 </mat-option>
@@ -65,7 +68,8 @@
 
             <mat-form-field appearance="outline" #descriptionField>
               <mat-label>상품설명</mat-label>
-              <textarea matInput formControlName="description" maxlength="1000" [readonly]="readonly"></textarea>
+              <textarea matInput formControlName="description" maxlength="1000" [readonly]="readonly"
+                        tabindex=5></textarea>
             </mat-form-field>
           </div>
           <div fxFlex>
@@ -87,7 +91,7 @@
 
             <mat-form-field appearance="outline" id="taxField" *ngIf="!readonly">
               <mat-label>과세여부</mat-label>
-              <mat-select formControlName="taxId" placeholder="">
+              <mat-select formControlName="taxId" placeholder="" tabindex=6>
                 <mat-option *ngFor="let tax of taxes" [value]="tax.id">
                   {{tax.name}}
                 </mat-option>
@@ -102,19 +106,19 @@
             <mat-form-field appearance="outline" #supplyPriceField>
               <mat-label>공급가</mat-label>
               <input matInput currencyMask [options]="currencyMaskOptions()" formControlName="supplyPrice"
-                     [readonly]="readonly" min=0>
+                     [readonly]="readonly" tabindex=7>
             </mat-form-field>
 
             <mat-form-field appearance="outline" #retailPriceField>
               <mat-label>판매가</mat-label>
               <input matInput currencyMask [options]="currencyMaskOptions()" formControlName="retailPrice"
-                     [readonly]="readonly" min=0>
+                     [readonly]="readonly" tabindex=8>
               <mat-error *ngIf="!getFormControlValidity('retailPrice', 'required')">판매가는 필수입니다.</mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline" #markupField>
               <mat-label>마진율</mat-label>
-              <input matInput formControlName="markup" [readonly]="readonly" min=0>
+              <input matInput formControlName="markup" [readonly]="readonly" min=0 tabindex=9>
             </mat-form-field>
 
             <mat-form-field appearance="outline" #productPriceField>
@@ -150,7 +154,7 @@
 
             <mat-form-field appearance="outline" id="trackInventoryField" *ngIf="!readonly">
               <mat-label>재고관리</mat-label>
-              <mat-select formControlName="trackInventory" placeholder="">
+              <mat-select formControlName="trackInventory" tabindex=10>
                 <mat-option [value]="true">자동 관리</mat-option>
                 <mat-option [value]="false">관리 안함</mat-option>
               </mat-select>
@@ -235,4 +239,7 @@
 
     </mat-accordion>
   </section>
+
+  <app-create-content-footer addButtonLabel="추가하기" [type]="formType" returnUrl="/product">
+  </app-create-content-footer>
 </form>

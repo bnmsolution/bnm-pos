@@ -12,6 +12,10 @@
   border-bottom: $border;
 }
 
+mat-form-field  {
+  max-width: 500px;
+}
+
 .label {
   width: 140px;
 }
@@ -35,24 +39,29 @@ mat-input-container {
 
 .group-quick-products-wrapper {
   @extend .quick-products-wrapper;
-  margin: 0 auto;
+  // margin: 0 auto;
   border-radius: 4px;
   padding: 0;
 }
 
 .group-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  // display: flex;
+  // align-items: center;
+  // justify-content: space-between;
+  text-align: center;
   height: 48px;
   width: 100%;
   color: $text-color-white-primary;
-  padding: 0 10px;
+  margin: 0 10px;
   border-radius: 3px 3px 0 0;
 
   mat-icon {
     cursor: pointer;
   }
+}
+
+.group-actions {
+  float: right;
 }
 
 .quick-products {

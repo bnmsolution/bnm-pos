@@ -1,0 +1,7 @@
+@import '../../../shared/common-style';
+:host {
+  display: flex;
+  justify-content: flex-end;
+  background-color:$main-content-background-color;
+  padding: 0px 24px 24px 24px;
+}

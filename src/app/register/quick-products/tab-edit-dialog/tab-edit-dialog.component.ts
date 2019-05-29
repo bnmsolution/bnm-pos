@@ -17,7 +17,7 @@ export class TabEditDialogComponent {
   addTab() {
     // todo: adding maximum tab constant
     if (this.tabs.length < 5) {
-      this.tabs.push(new RegisterTab());
+      this.tabs.push(new RegisterTab('새탭'));
     }
   }
 

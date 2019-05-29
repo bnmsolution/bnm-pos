@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatPaginator, MatSort, MatTableDataSource, PageEvent } from '@angular/material';
 import { Store } from '@ngrx/store';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, merge } from 'rxjs';
+import { takeUntil, mergeAll, mergeMap } from 'rxjs/operators';
 import { Product } from 'pos-models';
 
 import { detailExpand } from '../../shared/utils/animation';
 import * as actions from '../../stores/actions/product.actions';
 import { ImportProductDialogComponent } from '../import-product-dialog/import-product-dialog.component';
+import { TableSettings, SortChange } from 'src/app/shared/interfaces/table';
 
 export interface ProductFilter {
   search: string;
@@ -31,6 +32,12 @@ export class ProductListComponent implements OnInit, OnDestroy {
   tableInitiated = false;
   expandedElement;
 
+  tableSettings: TableSettings = {
+    pageSize: 10,
+    sortActive: 'name',
+    sortDirection: 'asc'
+  };
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
@@ -38,6 +45,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private store: Store<any>) {
     this.filter$ = new Subject();
+    this.loadSettings();
   }
 
   ngOnInit() {
@@ -56,6 +64,17 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.unsubscribe$.complete();
   }
 
+  loadSettings() {
+    const tableSettings = localStorage.getItem('ProductListComponent.tableSettings');
+    if (tableSettings) {
+      this.tableSettings = JSON.parse(tableSettings);
+    }
+  }
+
+  storeSettings() {
+    localStorage.setItem('ProductListComponent.tableSettings', JSON.stringify(this.tableSettings));
+  }
+
   openDialog() {
     this.dialog.open(ImportProductDialogComponent, { width: '700px' });
   }
@@ -64,10 +83,22 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.dataSource.filterPredicate = this.productFilterFunction;
+    this.dataSource.sortData = this.sortFunction;
     this.dataSource.data = data;
     this.tableInitiated = true;
     this.filter$.subscribe(filter => {
       this.dataSource.filter = JSON.stringify(filter);
+    });
+
+    this.paginator.page.subscribe((pageEvent: PageEvent) => {
+      this.tableSettings.pageSize = pageEvent.pageSize;
+      this.storeSettings();
+    });
+
+    this.sort.sortChange.subscribe((sortChange: SortChange) => {
+      this.tableSettings.sortActive = sortChange.active;
+      this.tableSettings.sortDirection = sortChange.direction;
+      this.storeSettings();
     });
   }
 
@@ -91,4 +122,46 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
     return str.contains(filterObject.search);
   }
+
+  private sortFunction(data: Product[], sort: MatSort): Product[] {
+    const compare = (a, b) => a.trim().localeCompare(b.trim());
+    switch (sort.active) {
+      case 'name': {
+        return sort.direction === 'asc' ? data.sort((a, b) => compare(a.name, b.name)) :
+          data.sort((a, b) => compare(b.name, a.name));
+      }
+      case 'created': {
+        return sort.direction === 'asc' ? data.sort((a, b) => compare(a.created, b.created)) :
+          data.sort((a, b) => compare(b.created, a.created));
+      }
+      case 'category': {
+        return data.sort((a, b) => {
+          const aVal = a.category ? a.category.name : '';
+          const bVal = b.category ? b.category.name : '';
+          return sort.direction === 'asc' ? compare(aVal, bVal) : compare(bVal, aVal);
+        });
+      }
+      case 'vendor': {
+        return data.sort((a, b) => {
+          const aVal = a.vendor ? a.vendor.name : '';
+          const bVal = b.vendor ? b.vendor.name : '';
+          return sort.direction === 'asc' ? compare(aVal, bVal) : compare(bVal, aVal);
+        });
+      }
+      case 'retailPrice': {
+        return sort.direction === 'asc' ? data.sort((a, b) => a.retailPrice - b.retailPrice) :
+          data.sort((a, b) => b.retailPrice - a.retailPrice);
+      }
+      case 'count': {
+        return sort.direction === 'asc' ? data.sort((a, b) => a.count - b.count) :
+          data.sort((a, b) => b.count - a.count);
+      }
+      case 'options': {
+        return sort.direction === 'asc' ? data.sort((a, b) => a.variants.length - b.variants.length) :
+          data.sort((a, b) => b.variants.length - a.variants.length);
+      }
+      default: return data;
+    }
+  }
+
 }

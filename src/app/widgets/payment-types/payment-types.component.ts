@@ -4,11 +4,10 @@ import Chart from 'chart.js';
 @Component({
   selector: 'app-payment-types',
   templateUrl: './payment-types.component.html',
-  styleUrls: ['./payment-types.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PaymentTypesComponent implements OnInit, OnChanges {
-  @Input() paymentRates;
+  @Input() paymentData;
   @ViewChild('chart') chartElement: ElementRef;
   chartInstance;
 
@@ -16,10 +15,14 @@ export class PaymentTypesComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    const { cash, credit, other } = this.paymentRates;
+    const { cash, creditCard, points } = this.paymentData.current;
+    const total = cash + creditCard + points;
+    const cashRate = Math.round(cash / total * 100);
+    const creditRate = Math.round(creditCard / total * 100);
+    const pointsRate = 100 - cashRate - creditRate;
     const chartData = {
       datasets: [{
-        data: [cash, credit, other],
+        data: [cashRate, creditRate, pointsRate],
         backgroundColor: [
           'rgb(54, 162, 235)',
           'rgb(201, 203, 207)'
@@ -28,7 +31,7 @@ export class PaymentTypesComponent implements OnInit, OnChanges {
       labels: [
         '현금',
         '신용카드',
-        '기타'
+        '포인트'
       ],
     };
     this.renderChart(chartData);
@@ -42,7 +45,7 @@ export class PaymentTypesComponent implements OnInit, OnChanges {
       type: 'doughnut',
       data: chartData,
       options: {
-        maintainAspectRatio: false,
+        aspectRatio: 1.4,
         legend: {
           display: true,
           position: 'bottom',

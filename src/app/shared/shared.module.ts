@@ -30,7 +30,7 @@ import { NumericPadComponent } from './components/numeric-pad/numeric-pad.compon
 import { ProductValidator } from './validators/product.validator';
 import { PeriodSelectComponent } from './components/period-select/period-select.component';
 import { GroupBySelectComponent } from './components/group-by-select/group-by-select.component';
-import { MasonryDirective } from './directives/masonry/masonry.directive';
+import { CreateContentFooterComponent } from './components/create-content-footer/create-content-footer.component';
 
 @NgModule({
   imports: [
@@ -58,6 +58,7 @@ import { MasonryDirective } from './directives/masonry/masonry.directive';
     ToggleSectionComponent,
     LinkMenuComponent,
     CreateContentHeaderComponent,
+    CreateContentFooterComponent,
     CommonPageHeaderComponent,
     EmailWithOptionsComponent,
     LayoutComponent,
@@ -75,7 +76,6 @@ import { MasonryDirective } from './directives/masonry/masonry.directive';
     InputDescriptionDirective,
     ValidateCustomerPhoneNumberNotTakenDirective,
     CdkDetailRowDirective,
-    MasonryDirective,
 
     // Pipes
     AppCurrencyPipe,
@@ -88,6 +88,7 @@ import { MasonryDirective } from './directives/masonry/masonry.directive';
     ToggleSectionComponent,
     LinkMenuComponent,
     CreateContentHeaderComponent,
+    CreateContentFooterComponent,
     CommonPageHeaderComponent,
     EmailWithOptionsComponent,
     LayoutComponent,
@@ -107,7 +108,6 @@ import { MasonryDirective } from './directives/masonry/masonry.directive';
     ValidateCustomerPhoneNumberNotTakenDirective,
     CdkDetailRowDirective,
     ValidatePhoneNumberDirective,
-    MasonryDirective,
 
     // Pipes
     AppCurrencyPipe,

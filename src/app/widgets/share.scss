@@ -1,3 +1,5 @@
+@import '../../assets/styles/_variables';
+
 .change {
   display: flex;
   justify-content: flex-end;
@@ -20,3 +22,4 @@
   @extend .icon;
   fill: $red-500;
 }
+

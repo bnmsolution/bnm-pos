@@ -6,8 +6,8 @@ export function getOptions(options = {}) {
     allowNegative: false,
     decimal: '.',
     precision: 0,
-    prefix: '₩',
-    suffix: '',
+    prefix: '',
+    suffix: ' 원',
     thousands: ','
   };
 

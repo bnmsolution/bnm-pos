@@ -39,7 +39,7 @@ export class AddCategoryDialogComponent {
         .pipe(
           filter(ac => ac.type === actions.ADD_CATEGORY_SUCCESS || ac.type === actions.UPDATE_CATEGORY_SUCCESS)
         )
-        .subscribe(() => this.dialogRef.close(true));
+        .subscribe(() => this.dialogRef.close(this.category));
 
       const action = this.isNewCategory ?
         new actions.AddCategory(this.category) : new actions.UpdateCategory(this.category);

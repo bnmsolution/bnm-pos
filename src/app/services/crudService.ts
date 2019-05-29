@@ -28,6 +28,7 @@ export abstract class CrudService {
     const docCopy = cloneDeep(doc);
     docCopy.created = new Date().toISOString();
     docCopy._id = this.generateDocId(docCopy.id);
+    delete docCopy._rev;  // new document must not have _rev property
     return this._httpService.post(this.documentName, docCopy)
       .pipe(
         map((response: any) => {

@@ -24,7 +24,7 @@ export const getProductFrom = (fb: FormBuilder, productService: ProductService, 
     categoryId: '',
     vendorId: '',
 
-    supplyPrice: [{ value: null }],
+    supplyPrice: null,
     markup: null,
     retailPrice: [null, Validators.required],
     taxAmount: [{ value: null, disabled: true }],

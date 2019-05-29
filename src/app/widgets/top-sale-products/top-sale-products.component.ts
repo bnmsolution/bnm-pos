@@ -31,7 +31,7 @@ export class TopSaleProductsComponent implements OnInit, OnChanges {
         p.changeRate =  getChangeRateData(p.count, dataToCompare.count);
       }
     });
-    this.topSalesProductsByCount = topSalesProducts.slice(0, 10);
+    this.topSalesProductsByCount = topSalesProducts.slice(0, 5);
     console.log(topSalesProducts);
   }
 }

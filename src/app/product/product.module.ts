@@ -11,11 +11,14 @@ import { ProductResolverService } from './product-resolver.service';
 import { ImportProductDialogComponent } from './import-product-dialog/import-product-dialog.component';
 import { ProductAddonsComponent } from './product-addons/product-addons.component';
 import { VariantListComponent } from './variant-list/variant-list.component';
+import { CategoryModule } from '../category/category.module';
+import { AddCategoryDialogComponent } from '../category/add-category-dialog/add-category-dialog.component';
 
 @NgModule({
   imports: [
     SharedModule,
-    ProductRoutingModule
+    ProductRoutingModule,
+    CategoryModule
   ],
   declarations: [
     AddProductComponent,
@@ -31,7 +34,8 @@ import { VariantListComponent } from './variant-list/variant-list.component';
     ProductResolverService
   ],
   entryComponents: [
-    ImportProductDialogComponent
+    ImportProductDialogComponent,
+    AddCategoryDialogComponent
   ]
 })
 export class ProductModule {

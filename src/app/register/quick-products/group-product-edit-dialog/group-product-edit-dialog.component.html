@@ -6,7 +6,7 @@
   <div>
     <div>단축그룹 색상</div>
     <div class="colors">
-      <span class="color" *ngFor="let color of colors" 
+      <span class="color" *ngFor="let color of colors"
         (click)="onColorClick(color)"
         [style.border-color]="quickProduct.background === color ? color : 'transparent'">
         <span [style.background-color]="color"></span>
@@ -15,6 +15,6 @@
   </div>
 </div>
 <div class="actions" mat-dialog-actions>
-  <button mat-button (click)="dialogRef.close('delete')">삭제</button>
+  <button mat-button (click)="dialogRef.close('delete')">그룹삭제</button>
   <button mat-button (click)="dialogRef.close('update')">저장</button>
 </div>

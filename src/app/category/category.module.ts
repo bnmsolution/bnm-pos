@@ -18,6 +18,9 @@ import { CategoryFilterComponent } from './category-filter/category-filter.compo
     DeleteCategoryDialogComponent,
     CategoryFilterComponent
   ],
+  exports: [
+    AddCategoryDialogComponent
+  ],
   entryComponents: [
     AddCategoryDialogComponent,
     DeleteCategoryDialogComponent

@@ -1,22 +1,26 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import {
   RegisterSale,
   TopSaleProducts,
-  RegisterSaleStatus
+  RegisterSaleStatus,
+  Product
 } from 'pos-models';
 import format from '../shared/utils/format';
 
 import { AppState } from '../core';
-import * as actions from '../stores/actions/sales.actions';
+
 import { cloneDeep } from '../shared/utils/lang';
 import { Period, getPeriodDates, FilterPeriod, FilterPeriodChage } from '../shared/utils/filter-period';
 import { _filterSalesByPeriod } from '../shared/operators/filter-sales-by-period';
 import { generateDashboardData, DashboardData } from './dashboard-data-generator';
 import { DateTimeGroup } from '../shared/enums/date-time-groups';
 
+import * as actions from '../stores/actions/sales.actions';
+import * as productActions from '../stores/actions/product.actions';
 
 @Component({
   selector: 'app-dashboard',
@@ -39,15 +43,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   formatDate = format;
   dashboardData: DashboardData;
 
-  constructor(private cdr: ChangeDetectorRef,
-    private appState: AppState, private store: Store<any>) {
-    const lastUsedFilterPeriod = parseInt(localStorage.getItem('dashboard-filterPeriod'), 10);
-    if (FilterPeriod[lastUsedFilterPeriod] !== undefined) {
-      this.filterPeriod = lastUsedFilterPeriod;
-    } else {
-      this.filterPeriod = FilterPeriod.ThisMonth;
-    }
-    this.period = getPeriodDates(this.filterPeriod);
+  products: Product[];
+
+  constructor(private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef,
+    private appState: AppState,
+    private store: Store<any>) {
+    this.loadDashboardSettings();
   }
 
   ngOnInit() {
@@ -60,7 +62,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.sales = cloneDeep(sales);
           this.recentSales = this.sales.sort((a, b) =>
             new Date(b.salesDate).getTime() - new Date(a.salesDate).getTime()
-          ).slice(0, 5);
+          ).slice(0, 10);
           // this.initDashboard();
           this.dashboardData = generateDashboardData(this.period, this.filterPeriod, sales);
           this.cdr.detectChanges();
@@ -77,11 +79,29 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe(customers => {
 
       });
+
+    this.store.select('products')
+      .pipe(
+        takeUntil(this.unsubscribe$)
+      )
+      .subscribe(products => {
+        products ? this.products = products : this.store.dispatch(new productActions.LoadProducts());
+      });
   }
 
   ngOnDestroy() {
     this.unsubscribe$.next();
     this.unsubscribe$.complete();
+  }
+
+  loadDashboardSettings() {
+    const lastUsedFilterPeriod = parseInt(localStorage.getItem('dashboard-filterPeriod'), 10);
+    if (FilterPeriod[lastUsedFilterPeriod] !== undefined) {
+      this.filterPeriod = lastUsedFilterPeriod;
+    } else {
+      this.filterPeriod = FilterPeriod.ThisMonth;
+    }
+    this.period = getPeriodDates(this.filterPeriod);
   }
 
   // get legendLabel() {
