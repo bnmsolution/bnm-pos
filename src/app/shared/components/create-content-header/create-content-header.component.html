@@ -1,4 +1,4 @@
-<button mat-icon-button [routerLink]="returnUrl" matTooltip="돌아가기">
+<button mat-icon-button type="button" [routerLink]="returnUrl" matTooltip="돌아가기">
   <mat-icon svgIcon="back"></mat-icon>
 </button>
 
@@ -20,7 +20,7 @@
 </section>
 
 <section *ngIf="type === 'view'">
-  <button mat-stroked-button color="primary">
+  <button mat-stroked-button type="button" color="primary">
     <mat-icon svgIcon="copy"></mat-icon>
     <span>복사</span>
   </button>

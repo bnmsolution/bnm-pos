@@ -1,12 +1,11 @@
 @import "../../../shared/common-style";
 :host {
   display: flex;
-  flex: 1;
   flex-direction: column;
-  min-width: 400px;
-  max-width: 500px;
-  position: relative;
-  min-height: 700px;
+  flex: 0 0 450px;
+  // position: relative;
+  // min-height: 700px;
+  // height: 1000px;
 }
 
 .actions {
@@ -26,6 +25,7 @@ mat-card-content {
   display: flex;
   flex-direction: column;
   margin-bottom: 0;
+  overflow: hidden;
 }
 
 ul {
@@ -91,7 +91,17 @@ mat-card-actions {
   }
 }
 
+.lineItems-wrapper {
+  flex: 1;
+  position: relative;
+}
+
 .lineItems {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   overflow-y: auto;
 }
 

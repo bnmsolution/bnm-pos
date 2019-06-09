@@ -2,12 +2,10 @@ import { ChangeDetectionStrategy, Component, ElementRef, Input, OnDestroy, OnIni
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, forkJoin, Subscription, fromEvent } from 'rxjs';
-import { debounceTime, distinctUntilChanged, take } from 'rxjs/operators';
 import { RegisterSaleStatus } from 'pos-models';
 
 import { SalesFilter, defaultFilter } from '../sales.component';
-import { startOfDay, endOfDay, startOfWeek, endOfWeek, startOfMonth, endOfMonth, subWeeks, subMonths, subYears } from 'date-fns';
-import { FilterPeriod, getPeriodDates } from '../../shared/utils/filter-period';
+import { FilterPeriod, getPeriodDates, FilterPeriodChage, Period } from '../../shared/utils/filter-period';
 
 @Component({
   selector: 'app-sales-filter',
@@ -20,6 +18,8 @@ export class SalesFilterComponent implements OnInit {
 
   salesStatus: any = RegisterSaleStatus;
   filterForm: FormGroup;
+
+  filterPeriod: FilterPeriod = FilterPeriod.Today;
 
   constructor(
     private route: ActivatedRoute,
@@ -53,9 +53,9 @@ export class SalesFilterComponent implements OnInit {
     return { begin: this.filterForm.value.startDate, end: this.filterForm.value.endDate };
   }
 
-  get period(): any {
-    return this.filterForm.value.period;
-  }
+  // get period(): any {
+  //   return this.filterForm.value.period;
+  // }
 
   get currentYear(): number {
     return new Date().getFullYear();
@@ -80,18 +80,15 @@ export class SalesFilterComponent implements OnInit {
     //   (this.filter.searchValue.trim().length === 0 && this.filter.categoryId === '' && this.filter.vendorId === '');
   }
 
-  periodChange(value: FilterPeriod) {
-    const { startDate, endDate } = getPeriodDates(value);
-    this.filterForm.patchValue({
-      startDate,
-      endDate
-    });
-  }
-
-  changeDate({ begin, end }) {
-    this.filterForm.patchValue({
-      startDate: begin,
-      endDate: end
-    });
+  periodChange(change: FilterPeriodChage) {
+    if (change.filterPeriod === FilterPeriod.All) {
+      // this.period.endDate = this.sales[0].salesDate;
+      // this.period.startDate = this.sales[this.sales.length - 1].salesDate;
+    } else {
+      this.filterForm.patchValue({
+        startDate: change.period.startDate,
+        endDate: change.period.endDate
+      });
+    }
   }
 }

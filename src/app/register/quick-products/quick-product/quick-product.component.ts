@@ -10,7 +10,7 @@ export class QuickProductComponent implements OnInit {
   @Input() quickProduct: RegisterQuickProduct;
   @Input() isSelected = false;
   @Input() showEmpty = true;
-  @Input() draggable =  true;
+  @Input() draggable = true;
   @Output() quickProductClick = new EventEmitter<RegisterQuickProduct>();
   @Output() quickProductDrop = new EventEmitter<any>();
 

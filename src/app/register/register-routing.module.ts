@@ -1,8 +1,9 @@
-import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
 
-import {RegisterSaleComponent} from './sale/register-sale.component';
-import {RegisterConfigComponent} from './register-config/register-config.component';
+import { RegisterSaleComponent } from './sale/register-sale.component';
+import { RegisterConfigComponent } from './register-config/register-config.component';
+import { CanDeactivateGuard } from '../shared/can-deactivate.guard';
 
 const routes: Routes = [
   {
@@ -20,7 +21,8 @@ const routes: Routes = [
   {
     path: 'configuration',
     component: RegisterConfigComponent,
-    // canActivate: [RegisterConfigGuardService]
+    // canActivate: [RegisterConfigGuardService],
+    canDeactivate: [CanDeactivateGuard]
   }
 ];
 

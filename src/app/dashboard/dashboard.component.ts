@@ -5,7 +5,6 @@ import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import {
   RegisterSale,
-  TopSaleProducts,
   RegisterSaleStatus,
   Product
 } from 'pos-models';
@@ -37,7 +36,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   chartInstance: any = null;
   sales: RegisterSale[] = [];
   recentSales: RegisterSale[] = [];
-  topSaleProducts: TopSaleProducts;
+  // topSaleProducts: TopSaleProducts;
   summary: any;
   unsubscribe$ = new Subject();
   formatDate = format;

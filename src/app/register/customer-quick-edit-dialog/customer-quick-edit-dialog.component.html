@@ -8,7 +8,7 @@
 
     <mat-form-field appearance="fill" class="dense">
       <mat-label>생일</mat-label>
-      <input matInput [matDatepicker]="picker" [(ngModel)]="customer.dateOfBirth">
+      <input matInput [matDatepicker]="picker" [(ngModel)]="customer.birthDay">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker touchUi #picker></mat-datepicker>
     </mat-form-field>
@@ -19,12 +19,15 @@
     </mat-form-field>
 
     <div class="button-group">
-      <button mat-stroked-button [ngClass]="customer.gender === 'male' ? 'mat-flat-button mat-primary' : ''" (click)="customer.gender = 'male'">남자</button>
-      <button mat-stroked-button [ngClass]="customer.gender === 'female' ? 'mat-flat-button mat-primary' : ''" (click)="customer.gender = 'female'">여자</button>
+      <button mat-stroked-button [ngClass]="customer.gender === 'male' ? 'mat-flat-button mat-primary' : ''"
+              (click)="customer.gender = 'male'">남자</button>
+      <button mat-stroked-button [ngClass]="customer.gender === 'female' ? 'mat-flat-button mat-primary' : ''"
+              (click)="customer.gender = 'female'">여자</button>
     </div>
 
     <div class="button-group">
-      <button mat-stroked-button *ngFor="let group of ageGroups" [ngClass]="customer.ageGroup === group ? 'mat-flat-button mat-primary' : ''"
+      <button mat-stroked-button *ngFor="let group of ageGroups"
+              [ngClass]="customer.ageGroup === group ? 'mat-flat-button mat-primary' : ''"
               (click)="customer.ageGroup = group">{{group
         === 60 ? '60 대+' : group
         + ' 대'}}</button>
@@ -63,7 +66,8 @@
     </div>
     <div fxLayout>
       <app-line-chart-widget [chartData]="lineChartData" [chartOptions]="lineChartOptions"></app-line-chart-widget>
-      <app-line-chart-widget [chartData]="salesByDayChartData" [chartOptions]="lineChartOptions"></app-line-chart-widget>
+      <app-line-chart-widget [chartData]="salesByDayChartData" [chartOptions]="lineChartOptions">
+      </app-line-chart-widget>
     </div>
   </section>
 </div>

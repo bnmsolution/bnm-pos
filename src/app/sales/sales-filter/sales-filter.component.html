@@ -1,46 +1,34 @@
 <section class="table-filter-container">
   <form [formGroup]="filterForm" fxLayout fxFlex>
     <div class="filters">
-      <mat-form-field class="search">
+      <!-- <mat-form-field class="search" appearance="outline" floatLabel="always">
+        <mat-label>상품명, 재고 관리코드, 바코드 검색</mat-label>
         <mat-icon matPrefix svgIcon="searchIcon"></mat-icon>
         <input matInput formControlName="search" #searchInput>
-        <mat-hint align="start">상품명, 재고 관리코드, 바코드 검색</mat-hint>
         <button mat-button type="button" *ngIf="filterForm.value.search" matSuffix mat-icon-button aria-label="Clear"
                 (click)="removeSearchText()">
           <mat-icon svgIcon="closeIcon"></mat-icon>
         </button>
-      </mat-form-field>
+      </mat-form-field> -->
 
-      <mat-form-field>
-        <mat-select formControlName="status" name="categoryId" placeholder="판매상태">
-          <mat-option value="">모든 카테고리</mat-option>
+      <app-period-select [filterPeriod]="filterPeriod" (periodChange)="periodChange($event)">
+      </app-period-select>
+
+      <mat-form-field appearance="outline">
+        <mat-label>판매상태</mat-label>
+        <mat-select formControlName="status" name="categoryId">
+          <mat-option value="">전체</mat-option>
           <mat-option [value]="salesStatus.Completed">판매완료</mat-option>
           <mat-option [value]="salesStatus.Hold">판매보류</mat-option>
           <mat-option [value]="salesStatus.ReturnCompleted">환불완료</mat-option>
           <mat-option [value]="salesStatus.ReturnHold">환불보류</mat-option>
         </mat-select>
       </mat-form-field>
-      <mat-form-field>
-        <mat-select formControlName="period" placeholder="판매 기간">
-          <mat-option [value]="1">오늘</mat-option>
-          <mat-option [value]="2">이번주</mat-option>
-          <mat-option [value]="3">이번달</mat-option>
-          <mat-option [value]="4">{{currentYear + '년'}}</mat-option>
-          <mat-option [value]="5">일주일</mat-option>
-          <mat-option [value]="6">한달</mat-option>
-          <mat-option [value]="7">일년</mat-option>
-          <mat-option [value]="8">직접선택</mat-option>
-        </mat-select>
-      </mat-form-field>
+
+
+
     </div>
-    <div *ngIf="period === 8">
-      <mat-form-field>
-        <input matInput placeholder="기간선택" [satDatepicker]="picker" (dateChange)="changeDate($event.value)" [value]="dateRange">
-        <sat-datepicker #picker [rangeMode]="true">
-        </sat-datepicker>
-        <sat-datepicker-toggle matSuffix [for]="picker"></sat-datepicker-toggle>
-      </mat-form-field>
-    </div>
+
   </form>
   <button mat-button [disabled]="isFilterEmpty()" (click)="clearFilter()">필터제거</button>
 </section>

@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
 <mat-dialog-content>{{data.message}}</mat-dialog-content>
 <mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="false" tabindex="-1">{{data.cancelLabel || '취소'}}</button>
-    <button mat-button [mat-dialog-close]="true" tabindex="-1">{{data.confirmLabel || '확인'}}</button>
+    <button mat-button type="button" [mat-dialog-close]="false" tabindex="-1">{{data.cancelLabel || '취소'}}</button>
+    <button mat-button type="button" [mat-dialog-close]="true" tabindex="-1">{{data.confirmLabel || '확인'}}</button>
 </mat-dialog-actions>

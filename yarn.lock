@@ -4132,7 +4132,7 @@ mkdirp@0.5.x, "mkdirp@>=0.5 0", mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.0:
   dependencies:
     minimist "0.0.8"
 
-moment@^2.10.2, moment@^2.22.2:
+moment@^2.10.2, moment@^2.22.2, moment@^2.24.0:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
 
@@ -4227,10 +4227,6 @@ ngrx-store-freeze@^0.2.4:
 ngrx-store-logger@^0.2.1:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/ngrx-store-logger/-/ngrx-store-logger-0.2.2.tgz#c1ed4d5f30710bdb4583ddbe488b96fa44b03bda"
-
-ngx-currency-mask@^4.3.2:
-  version "4.3.2"
-  resolved "https://registry.yarnpkg.com/ngx-currency-mask/-/ngx-currency-mask-4.3.2.tgz#139b422fbcae6bf0236599b9f15ebac841326105"
 
 nice-try@^1.0.4:
   version "1.0.5"
@@ -4826,10 +4822,11 @@ portfinder@^1.0.9:
     debug "^2.2.0"
     mkdirp "0.5.x"
 
-pos-models@../pos-models/pos-models-0.0.34.tgz:
-  version "0.0.34"
-  resolved "../pos-models/pos-models-0.0.34.tgz#62f3d25bf2f62f8bc69d511a70dc70615a753527"
+pos-models@../pos-models/pos-models-0.0.36.tgz:
+  version "0.0.36"
+  resolved "../pos-models/pos-models-0.0.36.tgz#d242504bab5e34ef82ae6682029e7947691d6ede"
   dependencies:
+    moment "^2.24.0"
     papaparse "^4.6.1"
     uuid "^3.2.1"
 

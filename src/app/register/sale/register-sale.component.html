@@ -9,17 +9,13 @@
   <div class="main-content">
     <!-- Autocomplte  -->
     <div class="search-products">
-      <app-register-search (productSelect)="addLineItem($event)"
-                           (customerSelect)="addCustomer($event)"></app-register-search>
+      <app-register-search (productSelect)="addLineItem($event)" (customerSelect)="addCustomer($event)">
+      </app-register-search>
       <app-product-tabs [register]="register | async" (productSelect)="addLineItem($event)"></app-product-tabs>
     </div>
 
-    <app-checkout [sale]="sale | async"
-                  (pay)="openPaymentSidenav()"
-                  (hold)="holdSale()"
-                  (void)="voidSale()"
-                  (removeLineItem)="removeLineItem($event)"
-                  (removeCustomer)="removeCustomer()"
+    <app-checkout [sale]="sale | async" (pay)="openPaymentSidenav()" (hold)="holdSale()" (void)="voidSale()"
+                  (removeLineItem)="removeLineItem($event)" (removeCustomer)="removeCustomer()"
                   (addCustomer)="addCustomer($event)"></app-checkout>
   </div>
 </mat-sidenav-container>

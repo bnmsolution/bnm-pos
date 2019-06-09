@@ -27,10 +27,10 @@ export class ProductTabsComponent {
 
     if (quickProduct.isSingle()) {
       this.productSelect.emit({ productId, variantId });
+      // close group view
+      this.quickProductGroup = null;
     }
 
-    // close group view
-    this.quickProductGroup = null;
   }
 }
 

@@ -9,7 +9,9 @@
 }
 
 .group-products-wrapper {
-  @extend .quick-products-wrapper;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   flex-direction: column;
   border: $border;
 }
@@ -18,9 +20,9 @@
   position: relative;
   display: flex;
   color: white;
-  margin: -5px;
-  height: 35px;
+  height: 48px;
   align-items: center;
+  margin: 0 -1px;
   justify-content: center;
   mat-icon {
     position: absolute;

@@ -1,6 +1,6 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
-import {NavigationEnd, Router} from '@angular/router';
-import {MenuMode, MenuService} from '../services/menu.service';
+import { Component } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { MenuMode, MenuService } from '../services/menu.service';
 
 @Component({
   selector: 'app-menu',

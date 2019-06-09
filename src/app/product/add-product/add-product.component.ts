@@ -19,6 +19,7 @@ import { cloneDeep } from 'src/app/shared/utils/lang';
 import { ProductAddonsComponent } from '../product-addons/product-addons.component';
 import { getOptions } from 'src/app/shared/config/currency-mask.config';
 import { AddCategoryDialogComponent } from 'src/app/category/add-category-dialog/add-category-dialog.component';
+import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
 
 
 @Component({
@@ -272,7 +273,6 @@ export class AddProductComponent implements OnInit {
 
   /** Generates variant error meesages **/
   setVariantErrorMessages(product: Product) {
-
     this.productService.getAllProducts(false)
       .subscribe(products => {
         const errors = [];
@@ -328,6 +328,9 @@ export class AddProductComponent implements OnInit {
     return true;
   }
 
+  /**
+   * Open 'Add Category Dialog'.
+   */
   addCategory() {
     this.dialog
       .open(AddCategoryDialogComponent)
@@ -340,11 +343,21 @@ export class AddProductComponent implements OnInit {
       });
   }
 
+  canDeactivate() {
+    return this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: '레지스터 설정',
+        message: '이 페이지를 벗어나면 마지막 저장 후 수정된 내용은 저장되지 않습니다.'
+      }
+    }).afterClosed();
+  }
+
 
   scrollToError(): void {
-    const firstElementWithError = document.querySelector('.ng-invalid');
+    const firstElementWithError: any = document.querySelector('.mat-form-field-invalid');
     if (firstElementWithError) {
       firstElementWithError.scrollIntoView({ behavior: 'smooth' });
+      firstElementWithError.focus();
     }
   }
 

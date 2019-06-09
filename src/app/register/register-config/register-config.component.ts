@@ -3,24 +3,26 @@ import { FormControl } from '@angular/forms';
 import { MatDialog, MatDialogConfig, MatSnackBar } from '@angular/material';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
-import { startWith, map, takeUntil, debounceTime } from 'rxjs/operators';
+import { map, takeUntil, debounceTime, filter, take } from 'rxjs/operators';
 import { Register, RegisterTab, RegisterQuickProduct, Product, flattenProduct, ProductVariant } from 'pos-models';
 
 import { SingleProductEditDialogComponent } from '../quick-products/single-product-edit-dialog/single-product-edit-dialog.component';
 import { GroupProductEditDialogComponent } from '../quick-products/group-product-edit-dialog/group-product-edit-dialog.component';
-import { RegisterService, ProductService } from '../../core';
 import { TabEditDialogComponent } from '../quick-products/tab-edit-dialog/tab-edit-dialog.component';
+import { cloneDeep } from '../../shared/utils/lang';
+import { RegisterEffects } from 'src/app/stores/effects/register.effects';
 
 import * as registerActions from '../../stores/actions/register.actions';
 import * as productActions from '../../stores/actions/product.actions';
-import { cloneDeep } from '../../shared/utils/lang';
+import { CanComponentDeactivate } from 'src/app/shared/can-deactivate.guard';
+import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-register-config',
   templateUrl: './register-config.component.html',
   styleUrls: ['./register-config.component.scss']
 })
-export class RegisterConfigComponent implements OnInit, OnDestroy {
+export class RegisterConfigComponent implements OnInit, OnDestroy, CanComponentDeactivate {
 
   register: Register;
   productCtrl: FormControl;
@@ -33,9 +35,8 @@ export class RegisterConfigComponent implements OnInit, OnDestroy {
 
   constructor(private dialog: MatDialog,
     private snackBar: MatSnackBar,
-    private registerService: RegisterService,
-    private productService: ProductService,
-    private store: Store<any>) {
+    private store: Store<any>,
+    private registerEffect: RegisterEffects) {
   }
 
   ngOnInit() {
@@ -60,7 +61,6 @@ export class RegisterConfigComponent implements OnInit, OnDestroy {
         }
       });
 
-    // this.store.dispatch(new productActions.LoadProducts());
     this.store.dispatch(new registerActions.LoadRegisters());
 
     this.filteredProducts = this.productCtrl.valueChanges
@@ -120,14 +120,23 @@ export class RegisterConfigComponent implements OnInit, OnDestroy {
     const srcPosition = srcQuickProduct.position;
     const targetPosition = targetQuickProduct.position;
     let requireUpdate = false;
+
     if (this.getQuickProductAt(targetPosition).isEmpty()) {
+      // add single to an empty spot
       this.getCurrentRegisterTab().moveQuickProduct(srcPosition, targetPosition, this.currentQuickProductGroup);
       requireUpdate = true;
     } else if (this.shouldCreateGroup(targetPosition, srcPosition)) {
+      // create a group with two singles
       this.getCurrentRegisterTab().createGroupQuickProduct(targetPosition, srcPosition);
       requireUpdate = true;
     } else if (this.shouldInsertIntoGroup(targetPosition, srcPosition)) {
+      // add single to the group
       this.getCurrentRegisterTab().addQuickProductToGroup(targetPosition, srcPosition);
+      requireUpdate = true;
+    } else if (this.shouldInsertIntoGroup(srcPosition, targetPosition)) {
+      // add single to the grop and move the group to the single's position
+      this.getCurrentRegisterTab().addQuickProductToGroup(srcPosition, targetPosition);
+      this.getCurrentRegisterTab().moveQuickProduct(srcPosition, targetPosition);
       requireUpdate = true;
     }
 
@@ -142,6 +151,7 @@ export class RegisterConfigComponent implements OnInit, OnDestroy {
    */
   onTabChange(tabIndex) {
     this.currentTabIndex = tabIndex;
+    this.selectNextEmptyItem();
   }
 
   /**
@@ -248,13 +258,21 @@ export class RegisterConfigComponent implements OnInit, OnDestroy {
   }
 
   private getQuickProductAt(position: number): RegisterQuickProduct {
-    return this.getCurrentRegisterTab().quickProducts[position];
+    if (this.currentQuickProductGroup) {
+      return this.currentQuickProductGroup.members[position];
+    } else {
+      return this.getCurrentRegisterTab().quickProducts[position];
+    }
   }
 
   onSubmit(): void {
     const copy = cloneDeep(this.register);
     this.removeEmptyQuickProduct(copy);
     this.store.dispatch(new registerActions.UpdateRegister(copy));
+    this.registerEffect.updateRegister$.pipe(
+      filter(action => action.type === registerActions.UPDATE_REGISTER_SUCCESS),
+      take(1)
+    ).subscribe(() => this.snackBar.open('레지스터가 업데이트 되었습니다.', '확인', { duration: 2000 }));
   }
 
   /**
@@ -269,6 +287,15 @@ export class RegisterConfigComponent implements OnInit, OnDestroy {
       });
       tab.quickProducts = tab.quickProducts.filter(qp => qp.productId || qp.members.length);
     });
+  }
+
+  canDeactivate() {
+    return this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: '레지스터 설정',
+        message: '이 페이지를 벗어나면 마지막 저장 후 수정된 내용은 저장되지 않습니다.'
+      }
+    }).afterClosed();
   }
 }
 

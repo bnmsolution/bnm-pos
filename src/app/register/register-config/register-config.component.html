@@ -20,23 +20,23 @@
     </mat-autocomplete>
 
     <!-- SHOW NON-GROUP PRODUCTS -->
-    <div fxLayout style="max-width: 600px;" *ngIf="currentQuickProductGroup == null">
-      <app-quick-products [registerTabs]="register.tabs" [selectedTabIndex]="currentTabIndex" (clicked)="onQuickProductClick($event)"
-                          (dropped)="onQuickProductDrop($event)" (tabChange)="onTabChange($event)"
-                          [(selectedPosition)]="selectedQuickProductPosition">
+    <section class="quick-products-wrapper" *ngIf="currentQuickProductGroup == null">
+      <app-quick-products [registerTabs]="register.tabs" [selectedTabIndex]="currentTabIndex"
+                          (clicked)="onQuickProductClick($event)" (dropped)="onQuickProductDrop($event)"
+                          (tabChange)="onTabChange($event)" [(selectedPosition)]="selectedQuickProductPosition">
       </app-quick-products>
-      <button mat-icon-button type="button" (click)="openTabEditDialog()">
+      <button mat-icon-button type="button" (click)="openTabEditDialog()" matTooltip="탭 수정">
         <mat-icon svgIcon="editIcon"></mat-icon>
       </button>
-    </div>
+    </section>
 
     <!-- SHOW GROUP PRODUCTS -->
-    <div class="group-quick-products-wrapper" style="max-width: 600px;"  *ngIf="currentQuickProductGroup">
+    <section class="group-quick-products-wrapper" *ngIf="currentQuickProductGroup">
       <div class="group-header" [style.background-color]="currentQuickProductGroup.background">
         <span>{{currentQuickProductGroup.label}}</span>
         <div class="group-actions">
-          <mat-icon svgIcon="editIcon" (click)="openGroupEditDialog()"></mat-icon>
-          <mat-icon svgIcon="closeIcon" (click)="closeGroup()"></mat-icon>
+          <mat-icon svgIcon="editIcon" (click)="openGroupEditDialog()" matTooltip="그룹수정"></mat-icon>
+          <mat-icon svgIcon="closeIcon" (click)="closeGroup()" matTooltip="그룹닫기"></mat-icon>
         </div>
       </div>
       <div class="quick-products">
@@ -46,6 +46,6 @@
                            (quickProductDrop)="onQuickProductDrop($event)">
         </app-quick-product>
       </div>
-    </div>
+    </section>
   </div>
 </form>

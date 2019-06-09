@@ -1,6 +1,6 @@
-import {Component, OnInit, Input, OnChanges} from '@angular/core';
-import {isWithinInterval} from 'date-fns';
-import {DashboardPeriods, RegisterSale, getChangeRateData} from 'pos-models';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { isWithinInterval } from 'date-fns';
+import { RegisterSale, getChangeRateData } from 'pos-models';
 
 @Component({
   selector: 'app-customer-sale-count-widget',
@@ -8,10 +8,9 @@ import {DashboardPeriods, RegisterSale, getChangeRateData} from 'pos-models';
   styleUrls: ['./customer-sale-count-widget.component.scss']
 })
 export class CustomerSaleCountWidgetComponent implements OnInit, OnChanges {
-  @Input() period: DashboardPeriods;
   @Input() summary: any;
 
-  returnCustomerSalesCount: number = 0;
+  returnCustomerSalesCount = 0;
   displayData;
 
   ngOnInit() {
@@ -22,9 +21,9 @@ export class CustomerSaleCountWidgetComponent implements OnInit, OnChanges {
   }
 
   setReturnCustomerCount() {
-    const {startDate, endDate, prevStartDate, prevEndDate} = this.summary.dates;
-    const currentPeriod = {start: new Date(startDate), end: new Date(endDate)};
-    const prevPeriod = {start: new Date(prevStartDate), end: new Date(prevEndDate)};
+    const { startDate, endDate, prevStartDate, prevEndDate } = this.summary.dates;
+    const currentPeriod = { start: new Date(startDate), end: new Date(endDate) };
+    const prevPeriod = { start: new Date(prevStartDate), end: new Date(prevEndDate) };
     this.returnCustomerSalesCount = this.summary.salesInCurrentPeriod.filter((s: RegisterSale) =>
       isWithinInterval(new Date(s.salesDate), currentPeriod) && s.customerId).length;
     const previousCount = this.summary.salesInPreviousPeriod.filter((s: RegisterSale) =>

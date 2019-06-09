@@ -1,4 +1,3 @@
-<!-- Default action buttons -->
 <div class="actions">
   <button mat-button (click)="hold.emit()" [disabled]="!holdable()">
     <mat-icon svgIcon="holdIcon"></mat-icon>
@@ -18,6 +17,7 @@
         <span>고객등록</span>
       </button>
     </div>
+
     <div class="customer" fxLayout fxLayoutAlign="start center" *ngIf="sale && sale.customer">
       <mat-icon svgIcon="customerIcon" class="customer-icon"></mat-icon>
       <div fxFlex>
@@ -32,26 +32,30 @@
         <mat-icon svgIcon="closeIcon"></mat-icon>
       </button>
     </div>
-    <div class="lineItems scroller" #lineItems *ngIf="sale">
-      <ul>
-        <li *ngFor="let lineItem of sale.originalLineItems; let i = index; trackBy:lineItemTrack ">
-          <app-line-item [lineItem]="lineItem" [isOpen]="openedLineItemId === lineItem.id"></app-line-item>
-        </li>
-        <li *ngFor="let lineItem of sale.lineItems; let i = index; trackBy:lineItemTrack ">
-          <app-line-item #li [lineItem]="lineItem" [isOpen]="openedLineItemId === lineItem.id"
-                         [isReturn]="isReturnItem(lineItem.productId)"
-                         [maxReturnQuantity]="getMaxReturnQuantity(lineItem.productId)"
-                         (remove)="removeLineItem.emit($event)" (update)="updateLineItem.emit($event)"
-                         (lineItemClick)="openLineItemDetail(lineItem.id)"></app-line-item>
-        </li>
-      </ul>
+
+    <div class="lineItems-wrapper">
+      <div class="lineItems scroller" #lineItems>
+        <ul *ngIf="sale">
+          <li *ngFor="let lineItem of sale.originalLineItems; let i = index; trackBy:lineItemTrack ">
+            <app-line-item [lineItem]="lineItem" [isOpen]="openedLineItemId === lineItem.id"></app-line-item>
+          </li>
+          <li *ngFor="let lineItem of sale.lineItems; let i = index; trackBy:lineItemTrack ">
+            <app-line-item #li [lineItem]="lineItem" [isOpen]="openedLineItemId === lineItem.id"
+                           [isReturn]="isReturnItem(lineItem.productId)"
+                           [maxReturnQuantity]="getMaxReturnQuantity(lineItem.productId)"
+                           (remove)="removeLineItem.emit($event)" (update)="updateLineItem.emit($event)"
+                           (lineItemClick)="openLineItemDetail(lineItem.id)"></app-line-item>
+          </li>
+        </ul>
+      </div>
     </div>
-    <div flex></div>
 
     <mat-form-field class="note">
       <textarea matInput [(ngModel)]="note" name="note" placeholder="판매노트"></textarea>
     </mat-form-field>
+
     <app-totals [sale]="sale"></app-totals>
+
   </mat-card-content>
   <mat-card-actions>
     <div *ngIf="sale">
