@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy, OnChanges } from '@angular/core';
-
 import { RegisterSale, RegisterSaleStatus, PaymentType, getCashPaymentOptions } from 'pos-models';
+
+import { getOptions } from 'src/app/shared/config/currency-mask.config';
 
 @Component({
   selector: 'app-payment',
@@ -11,12 +12,13 @@ import { RegisterSale, RegisterSaleStatus, PaymentType, getCashPaymentOptions } 
 export class PaymentComponent implements OnChanges {
   @Input() sale: RegisterSale;
   @Output() pay = new EventEmitter();
-  @Output() close = new EventEmitter();
+  @Output() close = new EventEmitter<any>();
 
   amountToPay: any;
   numericPadValue: any = '';
   showNumericPad = false;
   paymentType = PaymentType;
+  currencyMaskOptions = getOptions;
 
   get buttonColor() {
     if (this.sale && this.sale.status === RegisterSaleStatus.Return) {

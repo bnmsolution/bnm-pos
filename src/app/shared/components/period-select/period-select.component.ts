@@ -27,7 +27,6 @@ export class PeriodSelectComponent implements OnInit {
   ngOnInit() {
     this.periodDates = getPeriodDates(this.filterPeriod);
     this.displayOptions = this.displayOptions.filter(o => this.exclude.indexOf(o) === -1);
-    console.log(this.displayOptions);
   }
 
   get currentYear(): number {

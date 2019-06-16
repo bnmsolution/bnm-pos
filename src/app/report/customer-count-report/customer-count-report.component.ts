@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -43,8 +45,8 @@ export class CustomerCountReportComponent implements OnInit {
   displayedColumns = ['index', 'type', 'count'];
   tableInitiated = false;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   constructor(
     private store: Store<any>,

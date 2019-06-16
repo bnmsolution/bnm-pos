@@ -1,10 +1,10 @@
-import {Component, Inject} from '@angular/core';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import {Store} from '@ngrx/store';
-import {filter} from 'rxjs/operators';
+import { Component, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Store, Action } from '@ngrx/store';
+import { filter } from 'rxjs/operators';
 
 import * as actions from '../../stores/actions/vendor.actions';
-import {VendorEffects} from 'src/app/stores/effects/vendor.effects';
+import { VendorEffects } from 'src/app/stores/effects/vendor.effects';
 
 @Component({
   selector: 'app-delete-vendor-dialog',
@@ -23,7 +23,7 @@ export class DeleteVendorDialogComponent {
   delete() {
     this.vendorEffects.deleteVendor$
       .pipe(
-        filter(action => action.type === actions.DELETE_VENDOR_SUCCESS)
+        filter((action: Action) => action.type === actions.DELETE_VENDOR_SUCCESS)
       ).subscribe(() => this.dialogRef.close(true));
     this.store.dispatch(new actions.DeleteVendor(this.data.vendorId));
   }

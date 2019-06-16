@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy, OnChanges, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { RegisterSaleLineItem, RegisterSale, DiscountType, DiscountMethod, DiscountCalculateMethod } from 'pos-models';
 

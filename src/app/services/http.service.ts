@@ -10,7 +10,6 @@ export class HttpService {
   private baseUrl = environment.posApiUrl;
 
   constructor(private http: HttpClient) {
-    console.log('http service');
   }
 
   get options() {

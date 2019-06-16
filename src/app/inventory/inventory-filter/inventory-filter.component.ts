@@ -15,7 +15,7 @@ import {FilterPeriod, getPeriodDates} from '../../shared/utils/filter-period';
 })
 export class InventoryFilterComponent implements OnInit, OnDestroy {
   @Input() filter$: Subject<InventoryFilter>;
-  @ViewChild('searchInput') searchInput: ElementRef;
+  @ViewChild('searchInput', { static: false }) searchInput: ElementRef;
 
   types = InventoryTransactionType;
   filterForm: FormGroup;

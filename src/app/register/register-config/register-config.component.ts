@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialog, MatDialogConfig, MatSnackBar } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { map, takeUntil, debounceTime, filter, take } from 'rxjs/operators';

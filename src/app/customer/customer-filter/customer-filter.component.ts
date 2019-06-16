@@ -16,7 +16,7 @@ export class CustomerFilterComponent implements OnInit {
 
   @Input() filter$: Subject<CustomerFilter>;
   @Output() addCustomer = new EventEmitter();
-  @ViewChild('searchInput') searchInput: ElementRef;
+  @ViewChild('searchInput', { static: false }) searchInput: ElementRef;
 
   filterForm: FormGroup;
 

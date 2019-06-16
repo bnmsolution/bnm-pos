@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, ViewChild } from '@angular/core';
-import Chart from 'chart.js';
+import * as Chart from 'chart.js';
 import { format } from 'date-fns';
 
 import { DashboardData } from 'src/app/dashboard/dashboard-data-generator';
@@ -18,7 +18,7 @@ export class CustomerCountWidgetComponent implements OnChanges {
   @Input() filterPeriod: FilterPeriod;
   @Input() dashboardData: DashboardData;
   @Input() height = 200;
-  @ViewChild('chart') chartElement: ElementRef;
+  @ViewChild('chart', { static: true }) chartElement: ElementRef;
 
   chartInstance;
   displayValue: number;

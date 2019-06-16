@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { RegisterSale } from 'pos-models';
 import { DiscountDialogComponent } from '../discount-dialog/discount-dialog.component';
 

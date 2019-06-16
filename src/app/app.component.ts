@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MatIconRegistry } from '@angular/material';
+import { MatIconRegistry } from '@angular/material/icon';
 
 import { AuthService } from './auth/auth.service';
 import { LocalDbService } from './core';

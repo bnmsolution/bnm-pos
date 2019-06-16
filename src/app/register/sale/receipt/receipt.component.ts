@@ -1,8 +1,9 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { RegisterSale, getTotalTaxablePrice, PaymentType } from 'pos-models';
+import { RegisterSale, getTotalTaxablePrice, PaymentType, PosStore } from 'pos-models';
 
 import * as registerSaleActions from '../../../stores/actions/register-sale.actions';
+import { AppState } from 'src/app/core';
 
 @Component({
   selector: 'app-receipt',
@@ -15,7 +16,12 @@ export class ReceiptComponent {
   getTotalTaxablePrice = getTotalTaxablePrice;
 
   constructor(
-    private store: Store<any>) {
+    private store: Store<any>,
+    private appState: AppState) {
+  }
+
+  get currentStore(): PosStore {
+    return this.appState.currentStore;
   }
 
   // Temporary code

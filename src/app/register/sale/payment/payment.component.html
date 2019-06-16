@@ -7,7 +7,7 @@
       <button mat-icon-button (click)="showNumericPad = !showNumericPad;">
         <mat-icon svgIcon="indicator"></mat-icon>
       </button>
-      <input type="number" matInput [(ngModel)]="amountToPay" currencyMask />
+      <input matInput [(ngModel)]="amountToPay" currencyMask [options]="currencyMaskOptions()" />
       <div class="numeric-pad-wrapper ">
         <app-numeric-pad [value]="numericPadValue" (change)="amountToPay=$event;" *ngIf="showNumericPad && needPayOrRefund()"></app-numeric-pad>
       </div>

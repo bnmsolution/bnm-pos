@@ -1,6 +1,7 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { MatSidenav, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSidenav } from '@angular/material/sidenav';
 import { Store } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
@@ -25,7 +26,7 @@ export class RegisterSaleComponent implements OnInit, OnDestroy {
   currentSale: RegisterSale;
   unsubscribe$ = new Subject();
 
-  @ViewChild('sidenav') sidenav: MatSidenav;
+  @ViewChild('sidenav', { static: false }) sidenav: MatSidenav;
 
   constructor(
     private dialog: MatDialog,

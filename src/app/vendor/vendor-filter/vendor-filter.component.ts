@@ -15,7 +15,7 @@ import { VendorFilter } from 'src/app/vendor';
 export class VendorFilterComponent implements OnInit {
 
   @Input() filter$: Subject<VendorFilter>;
-  @ViewChild('searchInput') searchInput: ElementRef;
+  @ViewChild('searchInput', { static: false }) searchInput: ElementRef;
 
   filterForm: FormGroup;
 

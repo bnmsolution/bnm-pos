@@ -1,5 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatPaginator, MatSnackBar, MatSort, MatTableDataSource, PageEvent } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { filter, takeUntil, tap } from 'rxjs/operators';
@@ -33,8 +37,8 @@ export class CategoryListComponent implements OnInit, OnDestroy {
     sortDirection: 'asc'
   };
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
   constructor(private dialog: MatDialog,
     private snackBar: MatSnackBar,

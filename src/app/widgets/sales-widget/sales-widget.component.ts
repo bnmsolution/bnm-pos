@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
-import Chart from 'chart.js';
+import * as Chart from 'chart.js';
 import { format } from 'date-fns';
 
 import { AppState } from '../../core';
@@ -24,7 +24,7 @@ export class SalesWidgetComponent implements OnInit, OnChanges {
   @Input() dashboardData: DashboardData;
   @Input() chartType: SalesChartTypes;
   @Input() height = 200;
-  @ViewChild('chart') chartElement: ElementRef;
+  @ViewChild('chart', { static: true }) chartElement: ElementRef;
   chartInstance;
   displayValue: number;
   changeRateData;

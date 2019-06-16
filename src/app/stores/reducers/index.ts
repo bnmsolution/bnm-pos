@@ -11,7 +11,7 @@ import {
  * exception will be thrown. This is useful during development mode to
  * ensure that none of the reducers accidentally mutates the state.
  */
-import { storeFreeze } from 'ngrx-store-freeze';
+
 
 import { environment } from '../../../environments/environment';
 import { categoryListReducer, CategoryListState } from './category-list.reducer';
@@ -74,7 +74,7 @@ export function logger(reducer: ActionReducer<State>): ActionReducer<State> {
  * that will be composed to form the root meta-reducer.
  */
 export const metaReducers: MetaReducer<State>[] = !environment.production
-  ? [logger, storeFreeze] : [];
+  ? [logger] : [];
 
 export function getInitialState() {
   return {

@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Store } from '@ngrx/store';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -53,8 +55,8 @@ export class SalesComponent implements OnInit, OnDestroy {
   tableInitiated = false;
   expandedElement;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   constructor(
     private router: Router,

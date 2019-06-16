@@ -58,7 +58,7 @@ import { ReportModule } from './report/report.module';
     WidgetsModule,
     ReportModule,
     // CloudinaryModule.forRoot({ Cloudinary }, { cloud_name: environment.cloudinary.cloud_name } as CloudinaryConfiguration)
-    StoreModule.forRoot(reducers, { metaReducers, initialState: getInitialState }),
+    StoreModule.forRoot(reducers, { metaReducers, initialState: getInitialState, runtimeChecks: { strictStateImmutability: true, strictActionImmutability: true } }),
     EffectsModule.forRoot(effects),
 
   ],

@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import {NgForm} from '@angular/forms';
 import {Store} from '@ngrx/store';
 import {merge} from 'rxjs';
@@ -22,7 +22,7 @@ export class AddEmployeeComponent implements OnInit {
     id: uuid()
   } as Employee;
   isNewEmployee = true;
-  @ViewChild('form') form: NgForm;
+  @ViewChild('form', { static: false }) form: NgForm;
 
   constructor(
     private route: ActivatedRoute,

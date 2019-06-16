@@ -1,16 +1,16 @@
-import {Injectable} from '@angular/core';
-import {Actions, Effect} from '@ngrx/effects';
-import {share, mergeMap, map, filter} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { Actions, Effect, ofType } from '@ngrx/effects';
+import { share, mergeMap, map, filter } from 'rxjs/operators';
 
 import * as employeeActions from '../actions/employee.actions';
-import {EmployeeService} from 'src/app/core';
+import { EmployeeService } from 'src/app/core';
 
 @Injectable()
 export class EmployeeEffects {
 
   @Effect() getEmployees$ = this.actions$
-    .ofType(employeeActions.LOAD_EMPLOYEES)
     .pipe(
+      ofType(employeeActions.LOAD_EMPLOYEES),
       mergeMap((action: employeeActions.LoadEmployees) => {
         return this.employeeService.getAll();
       }),
@@ -19,8 +19,8 @@ export class EmployeeEffects {
 
 
   @Effect() addEmployee$ = this.actions$
-    .ofType(employeeActions.ADD_EMPLOYEE)
     .pipe(
+      ofType(employeeActions.ADD_EMPLOYEE),
       mergeMap((action: employeeActions.AddEmployee) => {
         return this.employeeService.addItem(action.payload);
       }),
@@ -29,8 +29,8 @@ export class EmployeeEffects {
     );
 
   @Effect() updateEmployee$ = this.actions$
-    .ofType(employeeActions.UPDATE_EMPLOYEE)
     .pipe(
+      ofType(employeeActions.UPDATE_EMPLOYEE),
       mergeMap((action: employeeActions.UpdateEmployee) => {
         return this.employeeService.updateItem(action.payload);
       }),
@@ -39,8 +39,8 @@ export class EmployeeEffects {
     );
 
   @Effect() deleteEmployee$ = this.actions$
-    .ofType(employeeActions.DELETE_EMPLOYEE)
     .pipe(
+      ofType(employeeActions.DELETE_EMPLOYEE),
       mergeMap((action: employeeActions.DeleteEmployee) => {
         return this.employeeService.deleteItem(action.payload);
       }),

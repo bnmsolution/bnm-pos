@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { takeUntil } from 'rxjs/operators';
@@ -39,8 +41,8 @@ export class SalesReportComponent implements OnInit {
   displayedColumnsForTotals = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
   tableInitiated = false;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   constructor(
     private router: Router,

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
 
 import { getOptions } from 'src/app/shared/config/currency-mask.config';
 

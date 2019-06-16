@@ -1,6 +1,8 @@
 <section *ngIf="sale">
   <div class="header">
-    <pre>아티제 디큐브 시티점<br/>220-87-92541 이재영<br/>02-2618-2080<br/>서울 구로구 경인로 662 (신도림동)<br/>현대백화점 디큐브시티 지하2층</pre>
+    <div>{{currentStore.name}} {{currentStore.phoneNumber}}</div>
+    <div>{{currentStore.address}}</div>
+    <div>{{currentStore.representative}} {{currentStore.businessNumber}}</div>
   </div>
   <div class="line-items-header">
     <div class="name">상품명</div>

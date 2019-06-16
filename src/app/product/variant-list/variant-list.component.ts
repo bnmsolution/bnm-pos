@@ -1,5 +1,9 @@
 import { Input, Component, OnDestroy, OnInit, ViewChild, OnChanges } from '@angular/core';
-import { MatDialog, MatPaginator, MatSnackBar, MatSort, MatTableDataSource } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Product, ProductVariant } from 'pos-models';
 
 @Component({
@@ -10,8 +14,8 @@ import { Product, ProductVariant } from 'pos-models';
 export class VariantListComponent implements OnInit {
 
   @Input() product: Product;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   dataSource: MatTableDataSource<ProductVariant>;
   displayedColumns = ['retailPrice'];

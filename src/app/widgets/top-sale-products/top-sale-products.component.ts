@@ -32,6 +32,5 @@ export class TopSaleProductsComponent implements OnInit, OnChanges {
       }
     });
     this.topSalesProductsByCount = topSalesProducts.slice(0, 5);
-    console.log(topSalesProducts);
   }
 }

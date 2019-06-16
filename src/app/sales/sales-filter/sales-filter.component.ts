@@ -14,7 +14,7 @@ import { FilterPeriod, getPeriodDates, FilterPeriodChage, Period } from '../../s
 })
 export class SalesFilterComponent implements OnInit {
   @Input() filter$: Subject<SalesFilter>;
-  @ViewChild('searchInput') searchInput: ElementRef;
+  @ViewChild('searchInput', { static: false }) searchInput: ElementRef;
 
   salesStatus: any = RegisterSaleStatus;
   filterForm: FormGroup;

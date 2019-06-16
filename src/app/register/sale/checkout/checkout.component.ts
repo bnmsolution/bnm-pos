@@ -10,7 +10,7 @@ import {
   ViewChildren,
   QueryList,
 } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 import { RegisterSale, RegisterSaleStatus, canHoldSale, canVoidSale } from 'pos-models';
 import { AddCustomerDialogComponent } from '../add-customer-dialog/add-customer-dialog.component';
@@ -39,9 +39,9 @@ export class CheckoutComponent implements AfterViewInit {
   @Output() updateLineItem = new EventEmitter();
   @Output() updateLineItemAddons = new EventEmitter();
 
-  @ViewChild('lineItems') lineItems: ElementRef;
+  @ViewChild('lineItems', { static: false }) lineItems: ElementRef;
   @ViewChildren('li') lineItemComponents: QueryList<LineItemComponent>;
-  @ViewChild('quantityEdit') quantityEditComponent: ElementRef;
+  @ViewChild('quantityEdit', { static: false }) quantityEditComponent: ElementRef;
 
   openedLineItemId: string;
   isNoteOpen: boolean;

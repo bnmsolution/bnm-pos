@@ -1,5 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSnackBar, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
@@ -29,8 +33,8 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   displayedColumns = ['name', 'phone', 'currentStorePoint', 'totalSalesAmount', 'averageSalesAmount', 'actions'];
   tableInitiated = false;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   constructor(
     private dialog: MatDialog,

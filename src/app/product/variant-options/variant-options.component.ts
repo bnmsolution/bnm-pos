@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
-import { MatChipInputEvent, MatTableDataSource } from '@angular/material';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { MatTableDataSource } from '@angular/material/table';
 import { ENTER, COMMA } from '@angular/cdk/keycodes';
 import { ProductVariant, ProductVariantOption } from 'pos-models';
 

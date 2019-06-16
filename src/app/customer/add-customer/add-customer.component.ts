@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
-import { Store } from '@ngrx/store';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Store, Action } from '@ngrx/store';
 import { merge } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { Customer, CustomerType } from 'pos-models';
@@ -70,7 +70,7 @@ export class AddCustomerComponent implements OnInit {
     if (this.customerForm.valid) {
       merge(this.customerEffects.addCustomer$, this.customerEffects.updateCustomer$)
         .pipe(
-          filter(ac => ac.type === actions.ADD_CUSTOMER_SUCCESS || ac.type === actions.UPDATE_CUSTOMER_SUCCESS),
+          filter((ac: Action) => ac.type === actions.ADD_CUSTOMER_SUCCESS || ac.type === actions.UPDATE_CUSTOMER_SUCCESS),
           take(1)
         )
         .subscribe(ac => {

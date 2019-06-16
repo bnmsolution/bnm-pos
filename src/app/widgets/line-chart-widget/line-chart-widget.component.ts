@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit, Input, ViewChild, ElementRef, OnChanges } from '@angular/core';
-import Chart from 'chart.js';
+import * as Chart from 'chart.js';
 
 @Component({
   selector: 'app-line-chart-widget',
@@ -11,7 +11,7 @@ export class LineChartWidgetComponent implements OnInit, OnChanges {
 
   @Input() chartData;
   @Input() chartOptions;
-  @ViewChild('chart') chartElement: ElementRef;
+  @ViewChild('chart', { static: false }) chartElement: ElementRef;
   chartInstance;
 
   ngOnInit() {

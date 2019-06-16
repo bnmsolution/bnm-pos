@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Store } from '@ngrx/store';
 import { merge } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
@@ -29,10 +30,10 @@ import { ConfirmDialogComponent } from 'src/app/shared/components/confirm-dialog
 })
 export class AddProductComponent implements OnInit {
 
-  @ViewChild(VariantOptionsComponent)
+  @ViewChild(VariantOptionsComponent, { static: false })
   variantOptionComponent: VariantOptionsComponent;
 
-  @ViewChild(ProductAddonsComponent)
+  @ViewChild(ProductAddonsComponent, { static: false })
   addonComponent: ProductAddonsComponent;
 
   productForm: FormGroup;

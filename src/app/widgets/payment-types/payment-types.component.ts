@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit, Input, ViewChild, ElementRef, OnChanges } from '@angular/core';
-import Chart from 'chart.js';
+import * as Chart from 'chart.js';
 
 @Component({
   selector: 'app-payment-types',
@@ -8,7 +8,7 @@ import Chart from 'chart.js';
 })
 export class PaymentTypesComponent implements OnInit, OnChanges {
   @Input() paymentData;
-  @ViewChild('chart') chartElement: ElementRef;
+  @ViewChild('chart', { static: true }) chartElement: ElementRef;
   chartInstance;
 
   ngOnInit() {

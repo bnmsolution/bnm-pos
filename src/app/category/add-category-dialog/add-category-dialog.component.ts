@@ -1,14 +1,14 @@
-import {Component, Inject, ViewChild} from '@angular/core';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import {NgForm} from '@angular/forms';
-import {Store} from '@ngrx/store';
-import {merge} from 'rxjs';
-import {filter} from 'rxjs/operators';
-import {Category} from 'pos-models';
+import { Component, Inject, ViewChild } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { NgForm } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { merge } from 'rxjs';
+import { filter } from 'rxjs/operators';
+import { Category } from 'pos-models';
 import * as uuid from 'uuid/v1';
 
 import * as actions from '../../stores/actions/category.actions';
-import {CategoryEffects} from 'src/app/stores/effects/category.effects';
+import { CategoryEffects } from 'src/app/stores/effects/category.effects';
 
 @Component({
   selector: 'app-add-category-dialog',
@@ -20,7 +20,7 @@ export class AddCategoryDialogComponent {
     id: uuid()
   } as Category;
   isNewCategory = true;
-  @ViewChild('form') form: NgForm;
+  @ViewChild('form', { static: false }) form: NgForm;
 
   constructor(
     private dialogRef: MatDialogRef<AddCategoryDialogComponent>,

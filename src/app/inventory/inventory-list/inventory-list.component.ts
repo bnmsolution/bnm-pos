@@ -1,6 +1,9 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {MatPaginator, MatSnackBar, MatSort, MatTableDataSource} from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import {Store} from '@ngrx/store';
 import {Observable, Subject} from 'rxjs';
 import {map, tap} from 'rxjs/operators';
@@ -37,8 +40,8 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   productName: Observable<string>;
   types = InventoryTransactionType;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: false }) sort: MatSort;
 
   constructor(
     private route: ActivatedRoute,

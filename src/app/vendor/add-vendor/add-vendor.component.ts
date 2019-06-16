@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
-import { Store } from '@ngrx/store';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Store, Action } from '@ngrx/store';
 import { merge } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { Vendor } from 'pos-models';
@@ -56,7 +56,7 @@ export class AddVendorComponent implements OnInit {
     if (this.vendorForm.valid) {
       merge(this.vendorEffects.addVendor$, this.vendorEffects.updateVendor$)
         .pipe(
-          filter(action1 => action1.type === actions.ADD_VENDOR_SUCCESS || action1.type === actions.UPDATE_VENDOR_SUCCESS),
+          filter((action1: Action) => action1.type === actions.ADD_VENDOR_SUCCESS || action1.type === actions.UPDATE_VENDOR_SUCCESS),
           take(1)
         )
         .subscribe(action2 => {

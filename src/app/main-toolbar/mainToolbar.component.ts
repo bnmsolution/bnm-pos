@@ -36,7 +36,8 @@ export class MainToolbarComponent implements OnInit {
   }
 
   logout() {
-    this.authService.logout();
+    // this.authService.logout();
+    this.authService.renewToken();
   }
 
   requestFullScreen() {

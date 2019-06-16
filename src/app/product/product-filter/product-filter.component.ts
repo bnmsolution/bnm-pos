@@ -17,7 +17,7 @@ import { VendorService } from '../../services/vendor.service';
 })
 export class ProductFilterComponent implements OnInit, OnDestroy {
   @Input() filter$: Subject<ProductFilter>;
-  @ViewChild('searchInput') searchInput: ElementRef;
+  @ViewChild('searchInput', { static: false }) searchInput: ElementRef;
 
   categories: Category[] = [];
   vendors: Vendor[] = [];

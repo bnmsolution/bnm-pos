@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {Actions, Effect} from '@ngrx/effects';
-import {share, mergeMap, map, filter} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { Actions, Effect, ofType } from '@ngrx/effects';
+import { share, mergeMap, map, filter } from 'rxjs/operators';
 
 import { RegisterService } from 'src/app/core';
 import * as registerActions from '../actions/register.actions';
@@ -9,8 +9,8 @@ import * as registerActions from '../actions/register.actions';
 export class RegisterEffects {
 
   @Effect() getRegisters$ = this.actions$
-    .ofType(registerActions.LOAD_REGISTERS)
     .pipe(
+      ofType(registerActions.LOAD_REGISTERS),
       mergeMap((action: registerActions.LoadRegisters) => {
         return this.registerService.getAll();
       }),
@@ -19,8 +19,8 @@ export class RegisterEffects {
 
 
   @Effect() addRegister$ = this.actions$
-    .ofType(registerActions.ADD_REGISTER)
     .pipe(
+      ofType(registerActions.ADD_REGISTER),
       mergeMap((action: registerActions.AddRegister) => {
         return this.registerService.addItem(action.payload);
       }),
@@ -29,8 +29,8 @@ export class RegisterEffects {
     );
 
   @Effect() updateRegister$ = this.actions$
-    .ofType(registerActions.UPDATE_REGISTER)
     .pipe(
+      ofType(registerActions.UPDATE_REGISTER),
       mergeMap((action: registerActions.UpdateRegister) => {
         return this.registerService.updateItem(action.payload);
       }),
@@ -39,8 +39,8 @@ export class RegisterEffects {
     );
 
   @Effect() deleteRegister$ = this.actions$
-    .ofType(registerActions.DELETE_REGISTER)
     .pipe(
+      ofType(registerActions.DELETE_REGISTER),
       mergeMap((action: registerActions.DeleteRegister) => {
         return this.registerService.deleteItem(action.payload);
       }),

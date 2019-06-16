@@ -27,7 +27,7 @@ import * as productActions from '../stores/actions/product.actions';
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  @ViewChild('chart') chartElement: ElementRef;
+  @ViewChild('chart', { static: false }) chartElement: ElementRef;
 
   filterPeriod: FilterPeriod;
   period: Period;

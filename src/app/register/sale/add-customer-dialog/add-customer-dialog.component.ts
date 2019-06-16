@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material/dialog';
 import { Customer } from 'pos-models';
 
 import inputMasks from '../../../shared/constants/input-masks';
@@ -13,7 +13,7 @@ import { CustomerService } from '../../../core';
 })
 export class AddCustomerDialogComponent implements OnInit {
 
-  @ViewChild('form') form: NgForm;
+  @ViewChild('form', { static: false }) form: NgForm;
 
   masks = inputMasks;
   name = '';

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Actions, Effect} from '@ngrx/effects';
+import {Actions, Effect, ofType} from '@ngrx/effects';
 import {share, mergeMap, map, filter} from 'rxjs/operators';
 
 import * as customerActions from '../actions/customer.actions';
@@ -9,8 +9,8 @@ import {CustomerService} from 'src/app/core';
 export class CustomerEffects {
 
   @Effect() getCustomers$ = this.actions$
-    .ofType(customerActions.LOAD_CUSTOMERS)
     .pipe(
+      ofType(customerActions.LOAD_CUSTOMERS),
       mergeMap((action: customerActions.LoadCustomers) => {
         return this.customerService.getAll();
       }),
@@ -18,8 +18,8 @@ export class CustomerEffects {
     );
 
   @Effect() addCustomer$ = this.actions$
-    .ofType(customerActions.ADD_CUSTOMER)
     .pipe(
+      ofType(customerActions.ADD_CUSTOMER),
       mergeMap((action: customerActions.AddCustomer) => {
         return this.customerService.addItem(action.payload);
       }),
@@ -28,8 +28,8 @@ export class CustomerEffects {
     );
 
   @Effect() updateCustomer$ = this.actions$
-    .ofType(customerActions.UPDATE_CUSTOMER)
     .pipe(
+      ofType(customerActions.UPDATE_CUSTOMER),
       mergeMap((action: customerActions.UpdateCustomer) => {
         return this.customerService.updateItem(action.payload);
       }),
@@ -38,8 +38,8 @@ export class CustomerEffects {
     );
 
   @Effect() deleteCustomer$ = this.actions$
-    .ofType(customerActions.DELETE_CUSTOMER)
     .pipe(
+      ofType(customerActions.DELETE_CUSTOMER),
       mergeMap((action: customerActions.DeleteCustomer) => {
         return this.customerService.deleteItem(action.payload);
       }),

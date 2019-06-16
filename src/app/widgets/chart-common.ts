@@ -21,7 +21,7 @@ export const getDefaultDataset = (color: string) => {
   };
 };
 
-export const getDefaultOptions = () => {
+export const getDefaultOptions = (): any => {
   return {
     legend: {
       display: true,

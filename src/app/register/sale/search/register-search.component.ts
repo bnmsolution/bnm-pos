@@ -20,7 +20,7 @@ import * as customerActions from 'src/app/stores/actions/customer.actions';
 export class RegisterSearchComponent implements OnInit, OnDestroy {
   @Output() productSelect = new EventEmitter();
   @Output() customerSelect = new EventEmitter();
-  @ViewChild('searchInput') searchInput: ElementRef;
+  @ViewChild('searchInput', { static: false }) searchInput: ElementRef;
 
   searchCtrl: FormControl;
   filteredProducts = [];

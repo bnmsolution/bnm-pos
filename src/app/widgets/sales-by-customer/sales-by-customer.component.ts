@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
-import Chart from 'chart.js';
+import * as Chart from 'chart.js';
 import 'chartjs-plugin-datalabels';
 import {getDisplayData, RegisterSale} from 'pos-models';
 
@@ -14,7 +14,7 @@ export class SalesByCustomerComponent implements OnInit, OnChanges {
   @Input() salesInCurrentPeriod: RegisterSale[];
   @Input() salesInPreviousPeriod: RegisterSale[];
 
-  @ViewChild('chart') chartElement: ElementRef;
+  @ViewChild('chart', { static: false }) chartElement: ElementRef;
   chartInstance: any = null;
   salesAmountByCustomer = 0;
   salesAmountByNoneCustomer = 0;

@@ -25,9 +25,16 @@ export class AuthService {
   });
   profile$: BehaviorSubject<any>;
 
+  timerWoker: Worker;
+
   constructor(private router: Router) {
     const profile = localStorage.getItem('profile');
     this.profile$ = new BehaviorSubject<UserProfile>(profile ? JSON.parse(profile) : null);
+    this.timerWoker = new Worker('assets/scripts/timer-worker.js');
+    this.timerWoker.onmessage = eventMessage => {
+      this.renewToken();
+      this.scheduleRenewal();
+    };
     this.scheduleRenewal();
   }
 
@@ -47,15 +54,15 @@ export class AuthService {
 
   private setProfile(profile) {
     const namespace = environment.auth0.namespace;
-    const app_metadata = profile[namespace + 'app_metadata'];
-    if (app_metadata) {
-      profile.tenantId = app_metadata.tenantId;
+    const appMetadata = profile[namespace + 'app_metadata'];
+    if (appMetadata) {
+      profile.tenantId = appMetadata.tenantId;
     }
     localStorage.setItem('profile', JSON.stringify(profile));
     this.profile$.next(profile);
   }
 
-  private renewToken() {
+  renewToken() {
     this.auth0.checkSession({}, (err, result) => {
       if (err) {
         console.log(err);
@@ -69,25 +76,24 @@ export class AuthService {
     if (!this.isAuthenticated()) {
       return;
     }
-    this.unscheduleRenewal();
+    // this.unscheduleRenewal();
 
     const expiresAt = JSON.parse(window.localStorage.getItem('expires_at'));
     const now = Date.now();
-    const time = Math.max(1000, expiresAt - now);
+    const time = Math.max(1000, expiresAt - 3600000 - now);
 
-    console.log(`[AuthService] Renewal token after ${time}ms`);
-    this.refreshSubscription = timer(time)
-      .subscribe(() => {
-        this.renewToken();
-        this.scheduleRenewal();
-      }
-      );
+    console.log(`[AuthService] Renewal token after ${time / 60000} minutes`);
+    this.timerWoker.postMessage({
+      method: 'registerTimer',
+      args: ['renewal_token', time]
+    });
   }
 
   private unscheduleRenewal() {
-    if (this.refreshSubscription) {
-      this.refreshSubscription.unsubscribe();
-    }
+    this.timerWoker.postMessage({
+      method: 'unregisterTimer',
+      args: ['renewal_token']
+    });
   }
 
   login(): void {
@@ -100,6 +106,8 @@ export class AuthService {
     localStorage.removeItem('expires_at');
     localStorage.removeItem('profile');
     this.unscheduleRenewal();
+
+    // redirect to auth0 login page
     this.auth0.authorize();
   }
 
@@ -112,7 +120,9 @@ export class AuthService {
 
 
   private setSession(authResult): void {
+    console.log('Setting new session');
     const expTime = authResult.expiresIn * 1000 + Date.now();
+    console.log('expire at: ' + new Date(expTime).toString());
     localStorage.setItem('access_token', authResult.accessToken);
     localStorage.setItem('expires_at', JSON.stringify(expTime));
     this.scheduleRenewal();

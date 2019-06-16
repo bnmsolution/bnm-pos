@@ -15,7 +15,7 @@ export class CategoryFilterComponent implements OnInit {
 
   @Input() filter$: Subject<CategoryFilter>;
   @Output() addCategory = new EventEmitter();
-  @ViewChild('searchInput') searchInput: ElementRef;
+  @ViewChild('searchInput', { static: false }) searchInput: ElementRef;
 
   filterForm: FormGroup;
 
