@@ -7,19 +7,19 @@ import { Store } from '@ngrx/store';
 import { Subject, BehaviorSubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { isWithinInterval, endOfDay, startOfDay } from 'date-fns';
-import { RegisterSale, RegisterSaleStatus, PaymentType } from 'pos-models';
+import { RegisterSale, RegisterSaleStatus, PaymentType, Customer } from 'pos-models';
+import * as moment from 'moment';
 
 import * as salesListActions from '../stores/actions/sales.actions';
 import * as salesActions from '../stores/actions/register-sale.actions';
 import { detailExpand } from '../shared/utils/animation';
-import { CustomerService } from '../services/customer.service';
 import { AppState } from '../core';
 import { FilterPeriod } from '../shared/utils/filter-period';
 
 export interface SalesFilter {
   search: string;
   status: RegisterSaleStatus | string;
-  customerId: string;
+  customer: Customer;
   userId: string;
   startDate: Date;
   endDate: Date;
@@ -29,7 +29,7 @@ export interface SalesFilter {
 export const defaultFilter = {
   search: '',
   status: '',
-  customerId: '',
+  customer: null,
   userId: '',
   startDate: startOfDay(new Date()),
   endDate: endOfDay(new Date()),
@@ -55,16 +55,21 @@ export class SalesComponent implements OnInit, OnDestroy {
   tableInitiated = false;
   expandedElement;
 
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private store: Store<any>,
-    private customerService: CustomerService,
+
     private appState: AppState) {
     this.filter$ = new BehaviorSubject(defaultFilter);
+  }
+
+  get customerInfo(): string {
+    const { customer } = this.filter$.getValue();
+    return customer ? `(고객: ${customer.name} ${customer.phone})` : '';
   }
 
   ngOnInit() {
@@ -120,15 +125,13 @@ export class SalesComponent implements OnInit, OnDestroy {
   }
 
   /**
-  * Filter funtion for string search.
-  * @param sale
-  * @param filter
-  */
+   * Filter funtion for string search.
+   */
   private saleFilterFunction(sale: RegisterSale, filter: string): boolean {
     const filterObject: SalesFilter = JSON.parse(filter);
-    const { startDate, endDate, status, customerId } = filterObject;
+    const { startDate, endDate, status, customer } = filterObject;
 
-    if (!isWithinInterval(new Date(sale.salesDate), { start: new Date(startDate), end: new Date(endDate) })) {
+    if (startDate && endDate && !moment(sale.salesDate).isBetween(startDate, endDate)) {
       return false;
     }
 
@@ -136,7 +139,7 @@ export class SalesComponent implements OnInit, OnDestroy {
       return false;
     }
 
-    if (customerId && sale.customerId !== customerId) {
+    if (customer && sale.customerId !== customer.id) {
       return false;
     }
 

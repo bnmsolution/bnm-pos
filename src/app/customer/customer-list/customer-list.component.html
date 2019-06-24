@@ -1,6 +1,6 @@
 <section fxLayout="column">
 
-  <div class="list-header">
+  <div class="table-view-header">
     <div>고객 목록</div>
     <span fxFlex></span>
     <button mat-icon-button [matMenuTriggerFor]="menu">
@@ -19,24 +19,15 @@
   </div>
 
   <mat-card>
-    <app-customer-filter [filter$]="filter$"></app-customer-filter>
+    <app-customer-filter [filter$]="filter$" (addCustomer)="openAddCustomerDialog()"></app-customer-filter>
     <section class="table-container">
       <mat-progress-bar mode="indeterminate" *ngIf="!tableInitiated"></mat-progress-bar>
-      <table mat-table [dataSource]="dataSource" matSort>
+      <table mat-table [dataSource]="dataSource" matSort [matSortActive]="tableSettings.sortActive"
+             [matSortDirection]="tableSettings.sortDirection">
 
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>고객명</th>
           <td mat-cell *matCellDef="let row">{{row.name || '-'}}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="phone">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>전화번호</th>
-          <td mat-cell *matCellDef="let row">{{row.phone}}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="currentStorePoint">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>포인트</th>
-          <td mat-cell *matCellDef="let row">{{row.currentStorePoint | number}}</td>
         </ng-container>
 
         <ng-container matColumnDef="totalSalesAmount">
@@ -49,22 +40,46 @@
           <td mat-cell *matCellDef="let row">{{row.averageSalesAmount | appCurrency}}</td>
         </ng-container>
 
+        <ng-container matColumnDef="totalSalesCount">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>구매</th>
+          <td mat-cell *matCellDef="let row">{{row.totalSalesCount | number}}</td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="totalStorePoint">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>누적포인트</th>
+          <td mat-cell *matCellDef="let row">{{row.totalStorePoint | number}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="currentStorePoint">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>현재포인트</th>
+          <td mat-cell *matCellDef="let row">{{row.currentStorePoint | number}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="lastPurchasedDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>마지막 구매</th>
+          <td mat-cell *matCellDef="let row">{{row.lastPurchasedDate | appDate : 'YY-MM-DD'}}</td>
+        </ng-container>
+
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell class="actions" *matCellDef="let row">
-            <mat-icon class="editIcon" svgIcon="previewIcon" matTooltip="자세히" (click)="openCustomerInfoDialog(row.id)"></mat-icon>
-            <mat-icon class="listIcon" svgIcon="viewListIcon" matTooltip="고객매출" [routerLink]="'/sales'" [queryParams]="{customerId: row.id}"></mat-icon>
-            <mat-icon class="editIcon" svgIcon="editIcon" matTooltip="수정" [routerLink]="'/customer/edit/' + row.id"></mat-icon>
+            <mat-icon class="editIcon" svgIcon="previewIcon" matTooltip="자세히" (click)="openCustomerInfoDialog(row.id)">
+            </mat-icon>
+            <mat-icon class="listIcon" svgIcon="viewListIcon" matTooltip="고객매출" [routerLink]="'/sales'"
+                      [queryParams]="{customerId: row.id}"></mat-icon>
+            <mat-icon class="editIcon" svgIcon="editIcon" matTooltip="수정" (click)="openAddCustomerDialog(row)">
+            </mat-icon>
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
 
         <tr mat-row *matRowDef="let row; columns: displayedColumns;">
         </tr>
 
       </table>
-      <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
+      <mat-paginator #paginator [pageSize]="tableSettings.pageSize" [pageSizeOptions]="[5, 10, 20, 50, 100]">
       </mat-paginator>
     </section>
   </mat-card>

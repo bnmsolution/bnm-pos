@@ -26,11 +26,34 @@
       </mat-form-field>
 
 
+      <button mat-button [disabled]="isFilterEmpty()" (click)="clearFilter()">필터제거</button>
+
 
     </div>
 
+    <div class="filters">
+      <mat-form-field class="search" appearance="outline" floatLabel="always">
+        <mat-label>직원명</mat-label>
+        <mat-icon matPrefix svgIcon="searchIcon"></mat-icon>
+        <input matInput formControlName="search" #searchInput>
+        <button mat-button type="button" *ngIf="filterForm.value.search" matSuffix mat-icon-button
+                (click)="removeSearchText()">
+          <mat-icon svgIcon="closeIcon"></mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-form-field class="search" appearance="outline" floatLabel="always">
+        <mat-label>고객명</mat-label>
+        <mat-icon matPrefix svgIcon="searchIcon"></mat-icon>
+        <input matInput formControlName="search" #searchInput>
+        <button mat-button type="button" *ngIf="filterForm.value.search" matSuffix mat-icon-button
+                (click)="removeSearchText()">
+          <mat-icon svgIcon="closeIcon"></mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+
   </form>
-  <button mat-button [disabled]="isFilterEmpty()" (click)="clearFilter()">필터제거</button>
 </section>
 
 <section fxLayout>

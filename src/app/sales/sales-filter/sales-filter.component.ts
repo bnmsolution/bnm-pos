@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component, ElementRef, Input, OnDestroy, OnIni
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, forkJoin, Subscription, fromEvent } from 'rxjs';
-import { RegisterSaleStatus } from 'pos-models';
+import { RegisterSaleStatus, Customer } from 'pos-models';
 
 import { SalesFilter, defaultFilter } from '../sales.component';
 import { FilterPeriod, getPeriodDates, FilterPeriodChage, Period } from '../../shared/utils/filter-period';
+import { CustomerService } from 'src/app/services/customer.service';
 
 @Component({
   selector: 'app-sales-filter',
@@ -23,7 +24,8 @@ export class SalesFilterComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private customerService: CustomerService,
   ) {
     this.createForm();
   }
@@ -31,21 +33,15 @@ export class SalesFilterComponent implements OnInit {
   ngOnInit() {
     this.route.queryParams
       .subscribe(params => {
-        // const customerId = params.customerId;
-        // if (customerId) {
-        //   this.filter.customerId = customerId;
-        //   this.setFilter();
-        //   this.customerService.getItemById(customerId)
-        //     .subscribe((customer: Customer) => {
-        //       this.desc = `(고객명: ${customer.name} 연락처: ${customer.phone})`;
-        //     });
-        // }
-
-        // this.filterForm.patchValue({
-        //   search: '',
-        //   categoryId: params.category || '',
-        //   vendorId: params.vendor || ''
-        // });
+        const customerId = params.customerId;
+        if (customerId) {
+          this.customerService.getItemById(customerId)
+            .subscribe((customer: Customer) => {
+              this.filterForm.patchValue({
+                customer
+              });
+            });
+        }
       });
   }
 
@@ -81,14 +77,9 @@ export class SalesFilterComponent implements OnInit {
   }
 
   periodChange(change: FilterPeriodChage) {
-    if (change.filterPeriod === FilterPeriod.All) {
-      // this.period.endDate = this.sales[0].salesDate;
-      // this.period.startDate = this.sales[this.sales.length - 1].salesDate;
-    } else {
-      this.filterForm.patchValue({
-        startDate: change.period.startDate,
-        endDate: change.period.endDate
-      });
-    }
+    this.filterForm.patchValue({
+      startDate: change.period.startDate,
+      endDate: change.period.endDate
+    });
   }
 }

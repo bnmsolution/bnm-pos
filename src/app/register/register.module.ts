@@ -17,7 +17,6 @@ import { QuickProductComponent } from './quick-products/quick-product/quick-prod
 import { LineItemComponent } from './sale/checkout/line-item/line-item.component';
 import { TotalsComponent } from './sale/checkout/totals/totals.component';
 import { TabEditDialogComponent } from './quick-products/tab-edit-dialog/tab-edit-dialog.component';
-import { AddCustomerDialogComponent } from './sale/add-customer-dialog/add-customer-dialog.component';
 import { ProductViewDialogComponent } from './product-view-dialog/product-view-dialog.component';
 import { CustomerViewDialogComponent } from '../customer/customer-view-dialog/customer-view-dialog.component';
 import { VariantSelectDialogComponent } from './sale/variant-select-dialog/variant-select-dialog.component';
@@ -30,7 +29,7 @@ import { DiscountDialogComponent } from './sale/checkout/discount-dialog/discoun
   imports: [
     SharedModule,
     WidgetsModule,
-    RegisterRoutingModule
+    RegisterRoutingModule,
   ],
   declarations: [
     RegisterComponent,
@@ -56,7 +55,6 @@ import { DiscountDialogComponent } from './sale/checkout/discount-dialog/discoun
     RegisterSearchComponent,
     LineItemComponent,
     TotalsComponent,
-    AddCustomerDialogComponent,
     VariantSelectDialogComponent,
     CustomerQuickEditDialogComponent,
     CustomerViewDialogComponent,
@@ -71,11 +69,10 @@ import { DiscountDialogComponent } from './sale/checkout/discount-dialog/discoun
     GroupProductEditDialogComponent,
     SingleProductEditDialogComponent,
     TabEditDialogComponent,
-    AddCustomerDialogComponent,
     CustomerViewDialogComponent,
     VariantSelectDialogComponent,
     CustomerQuickEditDialogComponent,
-    DiscountDialogComponent
+    DiscountDialogComponent,
   ],
   providers: [
     // ShiftGuardService,

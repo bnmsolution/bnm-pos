@@ -11,12 +11,15 @@ export class AppDatePipe implements PipeTransform {
   }
 
   transform(value: string, format: string): string {
-    const date = moment(value);
-    if (format) {
-      return date.format(format);
-    } else {
-      return date.format(this.appState.currentStore.dateFormat);
+    if (value) {
+      const date = moment(value);
+      if (format) {
+        return date.format(format);
+      } else {
+        return date.format(this.appState.currentStore.dateFormat);
+      }
     }
+    return '-';
   }
 
 }

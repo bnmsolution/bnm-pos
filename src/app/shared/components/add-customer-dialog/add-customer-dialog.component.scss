@@ -1,0 +1,38 @@
+@import '../../common-style';
+
+.gender {
+  display: flex;
+  align-items: center;
+  padding-left: 2px;
+  padding-bottom: 1.34375em;
+  margin: .25em 0;
+
+  label {
+    font-size: 16px;
+    margin-right: 18px;
+    color: rgba(0,0,0,.6);
+  }
+}
+
+mat-radio-button {
+  font-size: 16px;
+  margin-right: 18px;
+}
+
+.form-field-group {
+  display: flex;
+  mat-form-field {
+    &:first-child {
+      padding-right: 12px;
+    }
+    &:last-child {
+      padding-left: 12px;
+    }
+  }
+}
+
+mat-dialog-content {
+  padding: 12px 24px 0 24px;
+  border-top: $border;
+  border-bottom: $border;
+}

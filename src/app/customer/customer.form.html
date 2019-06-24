@@ -20,16 +20,30 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline">
+            <mat-label>전화번호</mat-label>
+            <input matInput formControlName="phone" required>
+            <mat-error *ngIf="customerForm.controls['phone'].errors">전화번호는 필수입니다.</mat-error>
+          </mat-form-field>
+
+          <!-- <mat-form-field appearance="outline">
             <mat-label>성별</mat-label>
             <mat-select formControlName="gender">
               <mat-option value="male">남성</mat-option>
               <mat-option value="female">여성</mat-option>
             </mat-select>
-          </mat-form-field>
+          </mat-form-field> -->
+
+          <div class="gender">
+            <label>성별</label>
+            <mat-radio-group formControlName="gender">
+              <mat-radio-button value="male">남성</mat-radio-button>
+              <mat-radio-button value="female">여성</mat-radio-button>
+            </mat-radio-group>
+          </div>
 
           <mat-form-field appearance="outline">
             <mat-label>생년월일</mat-label>
-            <input matInput [matDatepicker]="birthDay" formControlName="birthDay">
+            <input matInput [matDatepicker]="birthDay" formControlName="dateOfBirth">
             <mat-datepicker-toggle matSuffix [for]="birthDay"></mat-datepicker-toggle>
             <mat-datepicker #birthDay></mat-datepicker>
           </mat-form-field>
@@ -41,10 +55,7 @@
             <mat-datepicker #dateOfJoin></mat-datepicker>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>전화번호</mat-label>
-            <input matInput formControlName="phone">
-          </mat-form-field>
+
 
           <mat-form-field appearance="outline">
             <mat-label>이메일</mat-label>

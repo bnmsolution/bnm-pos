@@ -4,14 +4,14 @@
 @import "material";
 @import "form";
 
-// button,
-// select,
-// html,
-// textarea,
-// input,
-// .mat-chips {
-//   font-family: "Nanum Gothic", sans-serif !important;
-// }
+button,
+select,
+html,
+textarea,
+input,
+.mat-chips {
+  font-family: $base-font-family !important;
+}
 
 body {
   margin: 0;

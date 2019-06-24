@@ -31,6 +31,7 @@ import { ProductValidator } from './validators/product.validator';
 import { PeriodSelectComponent } from './components/period-select/period-select.component';
 import { GroupBySelectComponent } from './components/group-by-select/group-by-select.component';
 import { CreateContentFooterComponent } from './components/create-content-footer/create-content-footer.component';
+import { AddCustomerDialogComponent } from './components/add-customer-dialog/add-customer-dialog.component';
 
 @NgModule({
   imports: [
@@ -79,7 +80,9 @@ import { CreateContentFooterComponent } from './components/create-content-footer
 
     // Pipes
     AppCurrencyPipe,
-    AppDatePipe
+    AppDatePipe,
+
+    AddCustomerDialogComponent
   ],
   declarations: [
     // Components
@@ -112,12 +115,16 @@ import { CreateContentFooterComponent } from './components/create-content-footer
     // Pipes
     AppCurrencyPipe,
     AppDatePipe,
+
+    //
+    AddCustomerDialogComponent
   ],
   providers: [
     ProductValidator
   ],
   entryComponents: [
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    AddCustomerDialogComponent
   ]
 })
 export class SharedModule {

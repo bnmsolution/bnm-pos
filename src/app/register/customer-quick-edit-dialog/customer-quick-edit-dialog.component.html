@@ -8,7 +8,7 @@
 
     <mat-form-field appearance="fill" class="dense">
       <mat-label>생일</mat-label>
-      <input matInput [matDatepicker]="picker" [(ngModel)]="customer.birthDay">
+      <input matInput [matDatepicker]="picker" [(ngModel)]="customer.dateOfBirth">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker touchUi #picker></mat-datepicker>
     </mat-form-field>
@@ -52,7 +52,7 @@
       </div>
       <div class="detail-line">
         <div>마지막 방문</div>
-        <div>{{customer.lastPurchasedDate}}</div>
+        <div>{{customer.lastPurchasedDate | appDate}}</div>
       </div>
     </div>
     <div fxLayout>

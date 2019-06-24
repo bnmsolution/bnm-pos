@@ -25,7 +25,7 @@
 
             <mat-form-field appearance="outline" #nameField>
               <mat-label>상품명</mat-label>
-              <input matInput formControlName="name" [readonly]="readonly" tabindex=1>
+              <input matInput formControlName="name" [readonly]="readonly" tabindex=1 required>
               <mat-error *ngIf="!getFormControlValidity('name', 'required')">상품명은 필수입니다.</mat-error>
             </mat-form-field>
 
@@ -112,7 +112,7 @@
             <mat-form-field appearance="outline" #retailPriceField>
               <mat-label>판매가</mat-label>
               <input matInput currencyMask [options]="currencyMaskOptions()" formControlName="retailPrice"
-                     [readonly]="readonly" tabindex=8>
+                     [readonly]="readonly" tabindex=8 required>
               <mat-error *ngIf="!getFormControlValidity('retailPrice', 'required')">판매가는 필수입니다.</mat-error>
             </mat-form-field>
 

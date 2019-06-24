@@ -5,7 +5,7 @@
         <mat-label>상품명, 재고 관리코드, 바코드 검색</mat-label>
         <mat-icon matPrefix svgIcon="searchIcon"></mat-icon>
         <input matInput formControlName="search" #searchInput>
-        <button mat-button type="button" *ngIf="filterForm.value.search" matSuffix mat-icon-button aria-label="Clear"
+        <button mat-button type="button" *ngIf="filterForm.value.search" matSuffix mat-icon-button
                 (click)="removeSearchText()">
           <mat-icon svgIcon="closeIcon"></mat-icon>
         </button>

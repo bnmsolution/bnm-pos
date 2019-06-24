@@ -13,12 +13,12 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 
 import { RegisterSale, RegisterSaleStatus, canHoldSale, canVoidSale } from 'pos-models';
-import { AddCustomerDialogComponent } from '../add-customer-dialog/add-customer-dialog.component';
 import { LineItemComponent } from './line-item/line-item.component';
 import { CustomerViewDialogComponent } from '../../../customer/customer-view-dialog/customer-view-dialog.component';
 import { CustomerService } from '../../../services/customer.service';
 import { CustomerQuickEditDialogComponent } from '../../customer-quick-edit-dialog/customer-quick-edit-dialog.component';
 import { DiscountDialogComponent } from './discount-dialog/discount-dialog.component';
+import { AddCustomerDialogComponent } from 'src/app/shared/components/add-customer-dialog/add-customer-dialog.component';
 
 
 @Component({

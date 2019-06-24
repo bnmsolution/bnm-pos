@@ -40,8 +40,8 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   productName: Observable<string>;
   types = InventoryTransactionType;
 
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
     private route: ActivatedRoute,

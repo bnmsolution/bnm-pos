@@ -21,7 +21,7 @@
   <mat-list>
     <mat-list-item>
       <mat-icon mat-list-icon svgIcon="calendar"></mat-icon>
-      <h4 mat-line>{{customer.dateOfJoin | appDate}}</h4>
+      <h4 mat-line>{{customer.dateOfJoin | appDate : 'LL'}}</h4>
       <div mat-line>등록일</div>
     </mat-list-item>
     <mat-list-item>
@@ -49,24 +49,3 @@
   </mat-list>
 </section>
 
-
-<!--{-->
-<!--"_id": "customer_5ccf2dc6-56e1-4300-ae2b-44c6f342d9db",-->
-<!--"_rev": "34-e4ca399969d906a41b9a0105ff2c215c",-->
-<!--"activated": true,-->
-<!--"id": "5ccf2dc6-56e1-4300-ae2b-44c6f342d9db",-->
-<!--"type": "individual",-->
-<!--"dateOfJoin": "2018-05-21T14:53:25.736Z",-->
-<!--"barcode": "bill-0929",-->
-<!--"totalStorePoint": 1676716,-->
-<!--"currentStorePoint": 1676716,-->
-<!--"totalSalesCount": 24,-->
-<!--"totalSalesAmount": 16767160,-->
-<!--"name": "Bill",-->
-<!--"phone": "6474497129",-->
-<!--"address": "1017 Cobble Hill Dr",-->
-<!--"email": "bill.jh.kim@gmail.com",-->
-<!--"created": "2018-05-21T14:54:09.970Z",-->
-<!--"fromRemote": true,-->
-<!--"lastPurchasedDate": "2018-09-13T03:06:01.707Z"-->
-<!--}-->

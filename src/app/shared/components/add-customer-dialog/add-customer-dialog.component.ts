@@ -1,40 +1,46 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Store, Action } from '@ngrx/store';
 import { merge } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
-import { Customer, CustomerType } from 'pos-models';
-import * as uuid from 'uuid/v1';
+import { Customer } from 'pos-models';
+import * as moment from 'moment';
 
-import { getCustomerForm } from '../customer.form';
-import * as actions from '../../stores/actions/customer.actions';
+import { getCustomerForm } from '../../../customer/customer.form';
+import * as actions from '../../../stores/actions/customer.actions';
 import { CustomerEffects } from 'src/app/stores/effects/customer.effects';
 import { CustomerService } from 'src/app/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+
+
+export interface AddCustomerDialogData {
+  customer: Customer;
+}
 
 @Component({
-  selector: 'app-add-customer',
-  templateUrl: '../customer.form.html'
+  selector: 'app-add-customer-dialog',
+  templateUrl: './add-customer-dialog.component.html',
+  styleUrls: ['./add-customer-dialog.component.scss']
 })
-export class AddCustomerComponent implements OnInit {
+export class AddCustomerDialogComponent {
 
   customerForm: FormGroup;
   isNewCustomer = true;
   customer = {} as Customer;
-  type = CustomerType;
-  readonly = false;
-  formType = 'add';
 
   constructor(
     private fb: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
+    private dialogRef: MatDialogRef<AddCustomerDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) private data: AddCustomerDialogData,
     private snackBar: MatSnackBar,
     private store: Store<any>,
     private customerService: CustomerService,
     private customerEffects: CustomerEffects) {
     this.createForm();
+    if (data && data.customer) {
+      this.initEditCustomer(data.customer);
+    }
   }
 
   get title(): string {
@@ -43,22 +49,18 @@ export class AddCustomerComponent implements OnInit {
 
   createForm() {
     this.customerForm = this.fb.group(getCustomerForm(this.customerService));
-  }
-
-  get customerType() {
-    return this.customerForm.get('type').value;
-  }
-
-  ngOnInit() {
-    this.route.data
-      .subscribe((data) => {
-        if (data.editCustomer) {
-          this.setCustomerForEdit(data.editCustomer);
+    this.customerForm.controls.dateOfBirth.valueChanges
+      .subscribe(value => {
+        if (value) {
+          const yearToday = moment().year();
+          const yearAtBirth = moment(value).year();
+          const ageGroup = Math.floor((yearToday - yearAtBirth) / 10) * 10;
+          this.customerForm.controls.ageGroup.setValue(ageGroup);
         }
       });
   }
 
-  setCustomerForEdit(customer) {
+  initEditCustomer(customer: Customer) {
     this.isNewCustomer = false;
     this.customer = customer;
     this.customerForm.patchValue(customer);
@@ -76,7 +78,7 @@ export class AddCustomerComponent implements OnInit {
         .subscribe(ac => {
           const message = ac.type === actions.ADD_CUSTOMER_SUCCESS ? '고객이 추가되었습니다' : '고객이 업데이트 되었습니다';
           this.snackBar.open(message, '확인', { duration: 2000 });
-          this.router.navigate(['./customer']);
+          this.dialogRef.close(this.customer);
         });
 
       const action = this.isNewCustomer ?
@@ -84,4 +86,5 @@ export class AddCustomerComponent implements OnInit {
       this.store.dispatch(action);
     }
   }
+
 }

@@ -2,3 +2,8 @@
 :host {
   @extend .gridViewContainer;
 }
+
+.mat-column-actions {
+  width: 93px;
+  padding-right: 12px !important;
+}

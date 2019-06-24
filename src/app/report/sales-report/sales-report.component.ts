@@ -41,8 +41,8 @@ export class SalesReportComponent implements OnInit {
   displayedColumnsForTotals = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
   tableInitiated = false;
 
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
     private router: Router,

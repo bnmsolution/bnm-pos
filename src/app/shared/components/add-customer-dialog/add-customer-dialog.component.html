@@ -1,0 +1,134 @@
+<form class="app-form" [formGroup]="customerForm" (ngSubmit)="onSubmit()" novalidate>
+  <h1 mat-dialog-title>{{isNewCustomer ? '고객 추가' : '고객 수정'}}</h1>
+  <mat-dialog-content>
+
+    <mat-form-field appearance="outline">
+      <mat-label>전화번호</mat-label>
+      <input matInput formControlName="phone" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>고객명</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+
+
+    <div class="form-field-group">
+      <mat-form-field appearance="outline">
+        <mat-label>생년월일</mat-label>
+        <input matInput [matDatepicker]="birthDay" formControlName="dateOfBirth">
+        <mat-datepicker-toggle matSuffix [for]="birthDay"></mat-datepicker-toggle>
+        <mat-datepicker #birthDay></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>등록일</mat-label>
+        <input matInput [matDatepicker]="dateOfJoin" formControlName="dateOfJoin">
+        <mat-datepicker-toggle matSuffix [for]="dateOfJoin"></mat-datepicker-toggle>
+        <mat-datepicker #dateOfJoin></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div class="form-field-group">
+      <mat-form-field appearance="outline">
+        <mat-label>성별</mat-label>
+        <mat-select formControlName="gender">
+          <mat-option value="male">남성</mat-option>
+          <mat-option value="female">여성</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>연령대</mat-label>
+        <mat-select formControlName="ageGroup">
+          <mat-option [value]="10">10대</mat-option>
+          <mat-option [value]="20">20대</mat-option>
+          <mat-option [value]="30">30대</mat-option>
+          <mat-option [value]="40">40대</mat-option>
+          <mat-option [value]="50">50대</mat-option>
+          <mat-option [value]="60">60대+</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>이메일</mat-label>
+      <input matInput type="email" formControlName="email">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>주소</mat-label>
+      <input matInput formControlName="address">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" #descriptionField>
+      <mat-label>메모</mat-label>
+      <textarea matInput formControlName="note" maxlength="500"></textarea>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button type="button" mat-button color="primary" mat-dialog-close>취소</button>
+    <button mat-button color="primary">저장</button>
+  </mat-dialog-actions>
+</form>
+
+<!--
+
+
+<app-create-content-header [title]="isNewCustomer ? '고객 추가' : '고객 수정'" returnUrl="/customer">
+</app-create-content-header>
+<div class="cardWidthDescription">
+  <div fxFlex *ngIf="customerType === type.Individual">
+    <mat-card>
+      <mat-card-content>
+        <mat-form-field appearance="outline">
+          <mat-label>고객분류</mat-label>
+          <mat-select formControlName="type">
+            <mat-option [value]="type.Individual">개인</mat-option>
+            <mat-option [value]="type.Business">사업자</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div fxFlex *ngIf="customerType === type.Business">
+    <mat-card>
+      <mat-card-content>
+        <mat-form-field>
+          <mat-select formControlName="type" placeholder="고객분류">
+            <mat-option [value]="type.Individual">개인</mat-option>
+            <mat-option [value]="type.Business">사업자</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput formControlName="businessName" placeholder="사업자명">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput formControlName="name" placeholder="대표명">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput formControlName="phone" placeholder="전화번호">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput type="email" formControlName="email" placeholder="이메일">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput formControlName="address" placeholder="주소">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput formControlName="web" placeholder="홈페이지">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput formControlName="contactName" placeholder="담당자 이름">
+        </mat-form-field>
+        <mat-form-field>
+          <input matInput formControlName="contactPhone" placeholder="담당자 연락처">
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div fxFlex>
+  </div>
+</div> -->

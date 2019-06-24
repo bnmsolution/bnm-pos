@@ -1,4 +1,4 @@
-@import '../../assets/styles/variables';
+@import "../../assets/styles/variables";
 
 .fixed-full-screen {
   position: fixed;
@@ -43,10 +43,10 @@
   }
   .listIcon:hover,
   .editIcon:hover {
-    color: #81C784;
+    color: #81c784;
   }
   .deleteIcon:hover {
-    color: #E57373;
+    color: #e57373;
   }
 }
 
@@ -66,14 +66,25 @@
 //   border-bottom-color: transparent;
 // }
 
-.list-header {
+//
+.table-view-header {
   padding: 12px 0;
   display: flex;
   align-items: center;
 
   > div:first-child {
     font-size: 18px;
+    display: flex;
+    align-items: baseline;
+
+    > span {
+      margin-left: 8px;
+      font-size: 14px;
+      color: $text-color-secondary;
+    }
   }
+
+
 }
 
 .table-action-container {
@@ -81,7 +92,6 @@
   justify-content: flex-end;
   padding: 12px 12px 12px 24px;
 }
-
 
 // Filter stlye in table
 .table-filter-container {
@@ -92,10 +102,10 @@
   .filters {
     display: flex;
     flex-wrap: wrap;
-     mat-form-field {
-       margin-right: 14px;
-     }
-   }
+    mat-form-field {
+      margin-right: 14px;
+    }
+  }
 
   .search {
     width: 300px;
@@ -105,5 +115,3 @@
 .filter-actions {
   padding-bottom: 1.34375em;
 }
-
-

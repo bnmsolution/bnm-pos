@@ -14,8 +14,8 @@ import { Product, ProductVariant } from 'pos-models';
 export class VariantListComponent implements OnInit {
 
   @Input() product: Product;
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: false }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   dataSource: MatTableDataSource<ProductVariant>;
   displayedColumns = ['retailPrice'];

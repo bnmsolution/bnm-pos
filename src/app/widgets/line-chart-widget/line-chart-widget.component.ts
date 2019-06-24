@@ -11,7 +11,7 @@ export class LineChartWidgetComponent implements OnInit, OnChanges {
 
   @Input() chartData;
   @Input() chartOptions;
-  @ViewChild('chart', { static: false }) chartElement: ElementRef;
+  @ViewChild('chart', { static: true }) chartElement: ElementRef;
   chartInstance;
 
   ngOnInit() {
